@@ -4,13 +4,17 @@ import { Routes,
 
 import { DashboardComponent } from './dashboard.component';
 
+// Yuri
+import { AuthGuard } from '../../_guards';
+
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
     data: {
       title: 'Dashboard'
-    }
+    },
+    canActivate: [AuthGuard]
   }
 ];
 

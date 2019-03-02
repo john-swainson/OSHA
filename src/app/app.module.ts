@@ -20,6 +20,15 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 
+// Yuri
+import {ApiService} from './_services/api.service';
+import { fakeBackendProvider }                      from './_helpers';
+import { JwtInterceptor, ErrorInterceptor }         from './_helpers';
+import { HttpClientModule, HTTP_INTERCEPTORS }      from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule }         from '@angular/forms';
+import { CommonModule }                             from '@angular/common';
+import { HttpModule } from '@angular/http';
+
 const APP_CONTAINERS = [
   DefaultLayoutComponent
 ];
@@ -39,6 +48,8 @@ import { AppRoutingModule } from './app.routing';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import {ToastModule} from 'ng6-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -52,7 +63,14 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     PerfectScrollbarModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    
+    //Yuri
+    HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ToastModule,
+    BrowserAnimationsModule
   ],
   declarations: [
     AppComponent,
@@ -63,9 +81,19 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     RegisterComponent
   ],
   providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }],
-  bootstrap: [ AppComponent ]
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    ApiService,
+    fakeBackendProvider
+  ],
+  bootstrap: [ AppComponent ],
+  exports:[
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
+  ]
 })
 export class AppModule { }

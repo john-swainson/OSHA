@@ -1,0 +1,123 @@
+<div class="row">
+    <div class="col-12">
+        <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary btn-sm float-right" routerLinkActive="active">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Add new Facility
+        </a>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-12">
+        <ngx-loading [show]="facilityService.is_loading" [template]="customLoadingTemplate"></ngx-loading>
+        <table datatable class="row-border hover" *ngIf="facilityService.facility_ids.length>0">
+            <thead>
+                <tr class="text-center" class="text-center">
+                    <th>Facility Record Number</th>
+                    <th>Name of facility</th>
+                    <th>Full Address</th>
+                    <th>Phone number</th>
+                    <th>Active</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let id of facilityService.facility_ids" class="text-center">
+                    <td>
+                        <a (click)="open(create, 1, id)" href="javascript:void(0)">
+                            {{facilityService.facilites.data[id].Name}}
+                        </a>
+                    </td>
+                    <td>{{facilityService.facilites.data[id].Name_of_facility}}</td>
+                    <td>{{facilityService.facilites.data[id].Address_Full}}</td>
+                    <td>{{facilityService.facilites.data[id].Phone_number}}</td>
+                    <td *ngIf="facilityService.facilites.data[id].Active==1">True</td>
+                    <td *ngIf="facilityService.facilites.data[id].Active==0">False</td>
+                    <td>
+                        <a (click)="open(create, 2, id)" href="javascript:void(0)">Edit</a> | 
+                        <a (click)="delete(id)" href="javascript:void(0)">Del</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+
+
+<ng-template #create let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==0">Create New Facility</h4>
+    <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==1">Facility</h4>
+    <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==2">Edit Facility</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="row">
+        <div class="form-group col-md-6">
+            <label for="Name_of_facility">Name of facility</label>
+            <input type="text" formControlName="Name_of_facility" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Name_of_facility.errors }" [class.disabled]="mode==1"/>
+            <div *ngIf="submitted && f.Name_of_facility.errors" class="invalid-feedback">
+                <div *ngIf="f.Name_of_facility.errors.required">Name of facility is required</div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Address_Full">Full Address</label>
+            <input type="text" formControlName="Address_Full" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Address_Full.errors }" [class.disabled]="mode==1"/>
+            <div *ngIf="submitted && f.Address_Full.errors" class="invalid-feedback">
+                <div *ngIf="f.Address_Full.errors.required">Full Address is required</div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Active">City</label>
+            <input type="text" formControlName="City" class="form-control float-left" [ngClass]="{ 'is-invalid': submitted && f.City.errors }" [class.disabled]="mode==1"/>
+            <div *ngIf="submitted && f.City.errors" class="invalid-feedback">
+                <div *ngIf="f.City.errors.required">City is required</div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="State">State</label>
+            <input type="text" formControlName="State" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.State.errors }" [class.disabled]="mode==1"/>
+            <div *ngIf="submitted && f.State.errors" class="invalid-feedback">
+                <div *ngIf="f.State.errors.required">State is required</div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Zip_Code">Zip Code</label>
+            <input type="text" formControlName="Zip_Code" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Zip_Code.errors }" [class.disabled]="mode==1"/>
+            <div *ngIf="submitted && f.Zip_Code.errors" class="invalid-feedback">
+                <div *ngIf="f.Zip_Code.errors.required">Zip code is required</div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Number_of_staff">Number of staff</label>
+            <input type="text" formControlName="Number_of_staff" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Number_of_staff.errors }" [class.disabled]="mode==1"/>
+            <div *ngIf="submitted && f.Number_of_staff.errors" class="invalid-feedback">
+                <div *ngIf="f.Number_of_staff.errors.required">Number of staff is required</div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Active">Active</label>
+            <input type="checkbox" formControlName="Active" class="form-check-label" [checked]="f.Active.value" [class.disabled]="mode==1"/>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Phone_number">Phone number</label>
+            <input type="text" formControlName="Phone_number" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Phone_number.errors }" [class.disabled]="mode==1"/>
+            <div *ngIf="submitted && f.Phone_number.errors" class="invalid-feedback">
+                <div *ngIf="f.Phone_number.errors.required">Phone number is required</div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <button *ngIf="mode!=1" [disabled]="loading_submit" type="submit" class="btn btn-primary float-right">
+                <i class="fa fa-dot-circle-o"></i>
+                Save
+                <img *ngIf="loading_submit" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            </button>
+            
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <!--<button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Save</button>-->
+  </div>
+</ng-template>
