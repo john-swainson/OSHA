@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService, FacilityService } from '../../_services';
+import { AlertService, OshaService } from '../../_services';
 import { Router } from '@angular/router';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
@@ -20,13 +20,13 @@ export class DashboardComponent implements OnInit {
   public doughnutChartData: number[] = [350, 450];
   public doughnutChartType = 'doughnut';
 
-  public facility_info: number;
-  constructor(private alertService: AlertService, private facilityService: FacilityService) {
+  public facility_info: number = 0;
+  constructor(private alertService: AlertService, private oshaService: OshaService) {
 
   }
   ngOnInit(): void {
-    this.facilityService.get_facilities().subscribe( res => {
-      this.facility_info = Object.keys(res.data).length
-    })
+    // this.facilityService.get_facilities().subscribe( res => {
+    //   this.facility_info = Object.keys(res.data).length
+    // })
   }
 }

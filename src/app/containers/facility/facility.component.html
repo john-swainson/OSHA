@@ -8,8 +8,8 @@
 </div>
 <div class="row mt-1">
     <div class="col-12">
-        <ngx-loading [show]="facilityService.is_loading"></ngx-loading>
-        <table datatable class="row-border hover" *ngIf="facilityService.facility_ids.length>0">
+        <ngx-loading [show]="is_loading"></ngx-loading>
+        <table datatable class="row-border hover" *ngIf="facility_ids.length>0">
             <thead>
                 <tr class="text-center" class="text-center">
                     <th>Facility Record Number</th>
@@ -21,17 +21,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let id of facilityService.facility_ids" class="text-center">
+                <tr *ngFor="let id of facility_ids" class="text-center">
                     <td>
                         <a (click)="open(create, 1, id)" href="javascript:void(0)">
-                            {{facilityService.facilites.data[id].Name}}
+                            {{facilites.data[id].Name}}
                         </a>
                     </td>
-                    <td>{{facilityService.facilites.data[id].Name_of_facility}}</td>
-                    <td>{{facilityService.facilites.data[id].Address_Full}}</td>
-                    <td>{{facilityService.facilites.data[id].Phone_number}}</td>
-                    <td *ngIf="facilityService.facilites.data[id].Active==1">True</td>
-                    <td *ngIf="facilityService.facilites.data[id].Active==0">False</td>
+                    <td>{{facilites.data[id].Name_of_facility}}</td>
+                    <td>{{facilites.data[id].Address_Full}}</td>
+                    <td>{{facilites.data[id].Phone_number}}</td>
+                    <td *ngIf="facilites.data[id].Active==1">True</td>
+                    <td *ngIf="facilites.data[id].Active==0">False</td>
                     <td>
                         <a (click)="open(create, 2, id)" href="javascript:void(0)">Edit</a> | 
                         <a (click)="delete(id)" href="javascript:void(0)">Del</a>

@@ -9,38 +9,20 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({ providedIn: 'root' })
 
-export class FacilityService {
+export class OshaService {
 
     currentUser: User;
-    facilites: any;
-    facility_ids: Array<string> = [];
-    is_loading: boolean = true;
 
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
         private router: Router, private alertService: AlertService, private modalService: NgbModal) {
         this.currentUser = this.authenticationService.currentUserValue;
-        this.render_facility();
     }
 
-    render_facility(){
-        this.is_loading = true;
-        this.get_facilities().subscribe( res => {
-            this.facilites = res; 
-            this.facility_ids = [];
-            for(var key in res.data) {
-                this.facility_ids.push(key);
-                if(this.facilites.data[key].Active == "true")
-                    this.facilites.data[key].Active = 1
-                else
-                    this.facilites.data[key].Active = 0    
-            }
-            console.log(this.facilites);
-            this.is_loading = false;
-            var script = document.createElement('script');
-            script.src = '/assets/js/resize.js';
-            document.head.appendChild(script); 
-        })
+    get_object_fields(tableName): Observable<any>{
+        let queryURL = `https://fierce-atoll-29878.herokuapp.com/index.php/crud?tableName=${tableName}`
+        return this.http.get( queryURL ).map((res: any) => res);
     }
+
     get_facilities(): Observable<any>{
         let queryURL = `https://hipaadev.us/api/1.0/index.php/facility/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
@@ -68,7 +50,6 @@ export class FacilityService {
                 if(response['status'] == "success")
                 {
                     alert(response['message']);
-                    this.render_facility();
                     this.modalService.dismissAll();
                 }  
                 else if (response['status'] == "error")
@@ -80,14 +61,6 @@ export class FacilityService {
                 this.alertService.error(response['message']);
             }
         });
-        // let queryURL = `https://hipaadev.us/api/1.0/index.php/facility?access_token=` + this.currentUser.access_token;
-        // let headers = new HttpHeaders();
-        // headers.append('Content-Type', 'application/json');
-        // headers.append('Accept', 'application/json');
-        // let optionsH = {
-        //     headers:headers
-        // };
-        // return this.http.post( queryURL, form, optionsH ).map((res: any) => res);
     }
     update_facility(form): any {
         jQuery.ajax({
@@ -105,7 +78,6 @@ export class FacilityService {
                 if(response['status'] == "success")
                 {
                     alert(response['message']);
-                    this.render_facility();
                     this.modalService.dismissAll();
                 }  
                 else if(response['status'] == "error")
