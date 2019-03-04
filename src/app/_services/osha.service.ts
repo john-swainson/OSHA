@@ -19,12 +19,17 @@ export class OshaService {
     }
 
     get_object_fields(tableName): Observable<any>{
-        let queryURL = `https://fierce-atoll-29878.herokuapp.com/index.php/crud?tableName=${tableName}`
-        return this.http.get( queryURL ).map((res: any) => res);
+        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud?tableName=${tableName}`;
+        let headers = new HttpHeaders();
+        headers.append('Accept', 'application/json');
+        let optionsH = {
+            headers:headers
+        };
+        return this.http.get( queryURL, optionsH ).map((res: any) => res);
     }
 
-    get_facilities(): Observable<any>{
-        let queryURL = `https://hipaadev.us/api/1.0/index.php/facility/all?access_token=` + this.currentUser.access_token;
+    get_objects(api_url): Observable<any>{
+        let queryURL = `https://hipaadev.us/api/1.0/index.php/${api_url}/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
@@ -34,9 +39,9 @@ export class OshaService {
         return this.http.get( queryURL, optionsH ).map((res: any) => res);
     }
 
-    add_facility(form): any {
+    add_object(form, api_url): any {
         jQuery.ajax({
-            url: `https://hipaadev.us/api/1.0/index.php/facility?access_token=` + this.currentUser.access_token,
+            url: `https://hipaadev.us/api/1.0/index.php/${api_url}?access_token=` + this.currentUser.access_token,
             type: "POST",
             data: JSON.stringify(form),
             dataType: "json",
@@ -62,9 +67,9 @@ export class OshaService {
             }
         });
     }
-    update_facility(form): any {
+    update_object(form, api_url): any {
         jQuery.ajax({
-            url: `https://hipaadev.us/api/1.0/index.php/facility/?access_token=` + this.currentUser.access_token,
+            url: `https://hipaadev.us/api/1.0/index.php/${api_url}/?access_token=` + this.currentUser.access_token,
             type: "POST",
             data: JSON.stringify(form),
             dataType: "json",
@@ -90,9 +95,9 @@ export class OshaService {
             }
         });
     }
-    delete_facility(id){
+    delete_object(id, api_url){
         jQuery.ajax({
-            url: `https://hipaadev.us/api/1.0/index.php/facility/${id}?access_token=` + this.currentUser.access_token,
+            url: `https://hipaadev.us/api/1.0/index.php/${api_url}/${id}?access_token=` + this.currentUser.access_token,
             type: "DELETE",
             contentType: 'application/json',
             crossDomain: false,

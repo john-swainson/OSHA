@@ -21,6 +21,7 @@ export class FacilityComponent implements OnInit {
   facilites: any;
   facility_ids: Array<string> = [];
   is_loading: boolean = true;
+  fields: any;
 
   tableName: string;  //Table Name
   api_url_value: string;  //API url path
@@ -38,27 +39,31 @@ export class FacilityComponent implements OnInit {
       this.loading_submit = false;
       this.mode = -1;
       this.index = '';
-
-      this.addForm = this.formBuilder.group({
-        Name_of_facility: ['', Validators.required],
-        Active: ['', Validators.required],
-        Address_Full: ['', Validators.required],
-        City: ['', Validators.required],
-        Number_of_staff: ['', Validators.required],
-        Phone_number: ['', Validators.required],
-        State: ['', Validators.required],
-        Zip_Code: ['', Validators.required],
-        Org_Facility: ['a0C550000001a0tEAA', Validators.required],
-      });  
    }
 
   ngOnInit() {
     this.render_object();
+
+    this.oshaService.get_object_fields(this.tableName).subscribe( res=>{
+      this.fields = res;
+    });
+
+    this.addForm = this.formBuilder.group({
+      Name_of_facility: ['', Validators.required],
+      Active: ['', Validators.required],
+      Address_Full: ['', Validators.required],
+      City: ['', Validators.required],
+      Number_of_staff: ['', Validators.required],
+      Phone_number: ['', Validators.required],
+      State: ['', Validators.required],
+      Zip_Code: ['', Validators.required],
+      Org_Facility: ['a0C550000001a0tEAA', Validators.required],
+    });  
   }
 
   render_object(){
     this.is_loading = true;
-    this.oshaService.get_facilities().subscribe( res => {
+    this.oshaService.get_objects(this.api_url_value).subscribe( res => {
         this.facilites = res; 
         this.facility_ids = [];
         for(var key in res.data) {
@@ -93,7 +98,7 @@ export class FacilityComponent implements OnInit {
     if(this.mode == 0)
     {
       let request_form = [{"id": "", "data": this.addForm.value}];
-      this.oshaService.add_facility(request_form);
+      this.oshaService.add_object(request_form, this.api_url_value);
     }
     else if(this.mode == 2)
     {
@@ -106,14 +111,14 @@ export class FacilityComponent implements OnInit {
                                                       State: this.f.State.value,
                                                       Zip_Code: this.f.Zip_Code.value }}];
       console.log(request_form);
-      this.oshaService.update_facility(request_form);
+      this.oshaService.update_object(request_form, this.api_url_value);
     } 
     this.loading_submit = false;
     
   }
 
   delete(id){
-    this.oshaService.delete_facility(id);
+    this.oshaService.delete_object(id, this.api_url_value);
   }
 
   get f() { return this.addForm.controls; }
