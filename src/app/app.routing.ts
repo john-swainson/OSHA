@@ -51,11 +51,6 @@ export const routes: Routes = [
       title: 'Home'
     },
     children: [
-      { 
-        path: 'facility', 
-        loadChildren:'./containers/facility/facility.module#FacilityModule',
-        canActivate: [AuthGuard] 
-      },
       {
         path: 'base',
         loadChildren: './views/base/base.module#BaseModule'
@@ -87,10 +82,15 @@ export const routes: Routes = [
       {
         path: 'widgets',
         loadChildren: './views/widgets/widgets.module#WidgetsModule'
-      }
+      },
+      { 
+        path: '**', 
+        loadChildren:'./containers/facility/facility.module#FacilityModule',
+        canActivate: [AuthGuard] 
+      },
     ]
   },
-  { path: '**', component: P404Component }
+  // { path: '**', component: P404Component }
 ];
 
 @NgModule({

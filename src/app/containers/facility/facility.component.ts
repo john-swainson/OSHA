@@ -16,12 +16,18 @@ export class FacilityComponent implements OnInit {
   loading_submit: boolean;
   mode: number;
   index: string;
-  
-  //===== =============
-  facilites: any;
-  facility_ids: Array<string> = [];
   is_loading: boolean = true;
+  
+  view_index: string = '';
+  //=====================
+  objects: any;
+  object_ids: Array<string> = [];
   fields: any;
+  items_page_order: Array<any> = [];
+  view_display_order: Array<any> = [];
+  insert_display_order: Array<any> = [];
+  //===== reference ======
+  references: Array<any> = [];
 
   tableName: string;  //Table Name
   api_url_value: string;  //API url path
@@ -42,42 +48,88 @@ export class FacilityComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.render_object();
-
-    this.oshaService.get_object_fields(this.tableName).subscribe( res=>{
+      this.oshaService.get_object_fields(this.tableName).subscribe( res=>{
       this.fields = res;
+
+      this.sort_fields_by('items_page_order');
+      for (let field of this.fields){
+        if(field.type == 'reference')
+        {
+          var temp_url:string = field.type_value;
+
+          temp_url = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase();
+    
+          if(temp_url == 'hipaa_contact') //Exception For Hipaa_contact__c
+          {
+            temp_url = 'contact';
+          }
+
+          else if (temp_url == 'vendors') //Exception For Organization_info__c
+          {
+            temp_url = 'vendor'
+          }
+          this.oshaService.get_objects(temp_url).subscribe( res => {
+            this.references[field.name] = res;
+          });
+        }
+        if(field.items_page_order != '0')
+        {
+          this.items_page_order.push(field);
+        }
+      }
+
+      this.sort_fields_by('view_display_order');
+      for (let field of this.fields){
+        if(field.view_display_order != '0')
+          this.view_display_order.push(field);
+      }
+
+      this.sort_fields_by('insert_display_order');
+      for (let field of this.fields){
+        if(field.insert_display_order != '0')
+          this.insert_display_order.push(field);
+      }
+      // console.log(this.items_page_order);
+      // console.log(this.view_display_order);
+      // console.log(this.insert_display_order);
+
+      //===== Get All Objects ===================
+      this.render_object();
     });
 
-    this.addForm = this.formBuilder.group({
-      Name_of_facility: ['', Validators.required],
-      Active: ['', Validators.required],
-      Address_Full: ['', Validators.required],
-      City: ['', Validators.required],
-      Number_of_staff: ['', Validators.required],
-      Phone_number: ['', Validators.required],
-      State: ['', Validators.required],
-      Zip_Code: ['', Validators.required],
-      Org_Facility: ['a0C550000001a0tEAA', Validators.required],
-    });  
+    // this.addForm = this.formBuilder.group({
+    //   Name_of_facility: ['', Validators.required],
+    //   Active: ['', Validators.required],
+    //   Address_Full: ['', Validators.required],
+    //   City: ['', Validators.required],
+    //   Number_of_staff: ['', Validators.required],
+    //   Phone_number: ['', Validators.required],
+    //   State: ['', Validators.required],
+    //   Zip_Code: ['', Validators.required],
+    //   Org_Facility: ['a0C550000001a0tEAA', Validators.required],
+    // });  
   }
 
   render_object(){
     this.is_loading = true;
     this.oshaService.get_objects(this.api_url_value).subscribe( res => {
-        this.facilites = res; 
-        this.facility_ids = [];
+        this.objects = res; 
+        this.object_ids = [];
         for(var key in res.data) {
-            this.facility_ids.push(key);
-            if(this.facilites.data[key].Active == "true")
-                this.facilites.data[key].Active = 1
+            this.object_ids.push(key);
+            if(this.objects.data[key].Active == "true")
+                this.objects.data[key].Active = 1
             else
-                this.facilites.data[key].Active = 0    
+                this.objects.data[key].Active = 0    
         }
-        console.log(this.facilites);
+        console.log(this.objects);
         this.is_loading = false;
         var script = document.createElement('script');
         script.src = '/assets/js/resize.js';
         document.head.appendChild(script); 
+    },
+    err => {
+      this.router.navigateByUrl('/404');
     })
   }
 
@@ -133,7 +185,7 @@ export class FacilityComponent implements OnInit {
     }
     else if (mode == 1) // show modal
     {
-      this.set_values(index);
+      this.view_index = index;
       this.modalService.open(content, { size: 'lg' });
     }
     else if (mode == 2) // edit modal
@@ -157,14 +209,59 @@ export class FacilityComponent implements OnInit {
     }
     else
     {
-      this.f.Name_of_facility.setValue(this.facilites.data[index].Name_of_facility);
-      this.f.Address_Full.setValue(this.facilites.data[index].Address_Full);
-      this.f.City.setValue(this.facilites.data[index].City);
-      this.f.State.setValue(this.facilites.data[index].State);
-      this.f.Zip_Code.setValue(this.facilites.data[index].Zip_Code);
-      this.f.Number_of_staff.setValue(this.facilites.data[index].Number_of_staff);
-      this.f.Active.setValue(this.facilites.data[index].Active);
-      this.f.Phone_number.setValue(this.facilites.data[index].Phone_number);
+      this.f.Name_of_facility.setValue(this.objects.data[index].Name_of_facility);
+      this.f.Address_Full.setValue(this.objects.data[index].Address_Full);
+      this.f.City.setValue(this.objects.data[index].City);
+      this.f.State.setValue(this.objects.data[index].State);
+      this.f.Zip_Code.setValue(this.objects.data[index].Zip_Code);
+      this.f.Number_of_staff.setValue(this.objects.data[index].Number_of_staff);
+      this.f.Active.setValue(this.objects.data[index].Active);
+      this.f.Phone_number.setValue(this.objects.data[index].Phone_number);
     }
+  }
+
+  sort_fields_by(key){
+    if ( key == 'items_page_order' )
+    {
+      this.fields.sort((n1, n2) => {
+        return this.naturalCompare(n1.items_page_order.toString(), n2.items_page_order.toString());
+      });
+    }
+    else if ( key == 'view_display_order' )
+    {
+      this.fields.sort((n1, n2) => {
+        return this.naturalCompare(n1.view_display_order.toString(), n2.view_display_order.toString());
+      });
+    }
+    else if ( key == 'insert_display_order' )
+    {
+      this.fields.sort((n1, n2) => {
+        return this.naturalCompare(n1.insert_display_order.toString(), n2.insert_display_order.toString());
+      });
+    }
+  }
+
+  naturalCompare(a, b) {
+    var ax = [], bx = [];
+ 
+    a.replace(/(\d+)|(\D+)/g, function (_, $1, $2) { ax.push([$1 || Infinity, $2 || ""]) });
+    b.replace(/(\d+)|(\D+)/g, function (_, $1, $2) { bx.push([$1 || Infinity, $2 || ""]) });
+ 
+    while (ax.length && bx.length) {
+      var an = ax.shift();
+      var bn = bx.shift();
+      var nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
+      if (nn) return nn;
+    }
+ 
+    return ax.length - bx.length;
+  }
+
+  remove__c(string){
+    return string.replace(/\__c/gi, "");
+  }
+
+  afterDot(string){
+    return string.substring(string.indexOf('.')+1, string.length);
   }
 }

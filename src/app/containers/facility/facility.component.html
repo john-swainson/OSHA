@@ -2,36 +2,40 @@
     <div class="col-12">
         <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary btn-sm float-right" routerLinkActive="active">
             <i class="fa fa-plus" aria-hidden="true"></i>
-            Add new Facility
+            Create new {{tableName | titlecase}}
         </a>
     </div>
 </div>
-<div class="row mt-1">
+<div class="row mt-1">  
     <div class="col-12">
         <ngx-loading [show]="is_loading"></ngx-loading>
-        <table datatable class="row-border hover" *ngIf="facility_ids.length>0">
+        <table datatable class="row-border hover" *ngIf="object_ids.length>0 && items_page_order.length>0">
             <thead>
                 <tr class="text-center" class="text-center">
-                    <th>Facility Record Number</th>
-                    <th>Name of facility</th>
-                    <th>Full Address</th>
-                    <th>Phone number</th>
-                    <th>Active</th>
+                    <th *ngFor="let item of items_page_order">{{item.label}}</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let id of facility_ids" class="text-center">
-                    <td>
-                        <a (click)="open(create, 1, id)" href="javascript:void(0)">
-                            {{facilites.data[id].Name}}
+                <tr *ngFor="let id of object_ids" class="text-center">  
+                    <td *ngFor="let item of items_page_order">
+                        <a *ngIf="item.name == 'Name'" (click)="open(view, 1, id)" href="javascript:void(0)" > {{objects.data[id][remove__c(item.name)]}} </a>
+
+                        <a *ngIf="item.name != 'Name' && item.type == 'reference'">
+                            <span *ngIf="references.hasOwnProperty(item.name) && objects.data[id][remove__c(item.name)] != null">
+                                {{references[item.name]['data'][objects.data[id][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}
+                            </span>
+                        </a>
+                        
+                        <a *ngIf="item.name != 'Name' && item.type == 'boolean' ">
+                            <span *ngIf="objects.data[id][remove__c(item.name)] == 1">Yes</span>
+                            <span *ngIf="objects.data[id][remove__c(item.name)] == 0">No</span>
+                        </a>
+                        
+                        <a *ngIf="item.name != 'Name' && item.type != 'reference' ">
+                            {{objects.data[id][remove__c(item.name)]}}
                         </a>
                     </td>
-                    <td>{{facilites.data[id].Name_of_facility}}</td>
-                    <td>{{facilites.data[id].Address_Full}}</td>
-                    <td>{{facilites.data[id].Phone_number}}</td>
-                    <td *ngIf="facilites.data[id].Active==1">True</td>
-                    <td *ngIf="facilites.data[id].Active==0">False</td>
                     <td>
                         <a (click)="open(create, 2, id)" href="javascript:void(0)">Edit</a> | 
                         <a (click)="delete(id)" href="javascript:void(0)">Del</a>
@@ -42,11 +46,32 @@
     </div>    
 </div>
 
+<ng-template #view let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==1">{{tableName | titlecase}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngFor="let item of view_display_order" class="form-group col-12">
+        <label> {{item.label}} </label>
+        <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]" [class.disabled]="true"/>
+        
+        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
+                value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
+        
+        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
+                value="" [class.disabled]="true" />
+
+        <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #create let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==0">Create New Facility</h4>
-    <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==1">Facility</h4>
     <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==2">Edit Facility</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
