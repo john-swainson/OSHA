@@ -2,7 +2,7 @@
     <div class="col-12">
         <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary btn-sm float-right" routerLinkActive="active">
             <i class="fa fa-plus" aria-hidden="true"></i>
-            Create new {{tableName | titlecase}}
+            Create new {{replace_space(tableName) | titlecase}}
         </a>
     </div>
 </div>
@@ -32,7 +32,7 @@
                             <span *ngIf="objects.data[id][remove__c(item.name)] == 0">No</span>
                         </a>
                         
-                        <a *ngIf="item.name != 'Name' && item.type != 'reference' ">
+                        <a *ngIf="item.name != 'Name' && item.type != 'reference' && item.type != 'boolean' ">
                             {{objects.data[id][remove__c(item.name)]}}
                         </a>
                     </td>
@@ -54,17 +54,19 @@
     </button>
   </div>
   <div class="modal-body">
-    <div *ngFor="let item of view_display_order" class="form-group col-12">
-        <label> {{item.label}} </label>
-        <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]" [class.disabled]="true"/>
+    <div *ngFor="let item of view_display_order" class="form-group row">
+        <label class="col-md-3 col-form-label"> {{item.label}} </label>
+        <div class="col-md-9">
+             <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]" [class.disabled]="true"/>
         
-        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
-                value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
-        
-        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
-                value="" [class.disabled]="true" />
+            <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
+                    value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
+            
+            <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
+                    value="" [class.disabled]="true" />
 
-        <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+            <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+        </div>
     </div>
   </div>
 </ng-template>
@@ -78,71 +80,47 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="row">
-        <div class="form-group col-md-6">
-            <label for="Name_of_facility">Name of facility</label>
-            <input type="text" formControlName="Name_of_facility" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Name_of_facility.errors }" [class.disabled]="mode==1"/>
-            <div *ngIf="submitted && f.Name_of_facility.errors" class="invalid-feedback">
-                <div *ngIf="f.Name_of_facility.errors.required">Name of facility is required</div>
-            </div>
+    <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="form-horizontal ng-untouched ng-pristine ng-valid">
+        <div *ngFor="let item of insert_display_order" class="form-group">
+            <div class="row" *ngIf="item.type!='root'">
+                <label class="col-md-3 col-form-label" for="Name_of_facility">{{item.label}}</label>
+                <div class="col-md-9">
+                    
+                    <!-- Add field by item.type -->
+                    <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'" type="text" 
+                            formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
+                    
+                    <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
+                    
+                    <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} class="form-check-label"/>
+                    
+                    <mat-form-field *ngIf="item.type=='datetime'" class="example-full-width">
+                        <input matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
+                        <mat-datepicker-toggle matSuffix [for]="picker">
+                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} class="form-control">
+                        <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
+                    </select> 
+
+                    <span class="help-block"><small>{{item.inlineHelpText}}</small></span>
+                    <div *ngIf="submitted && f[remove__c(item.name)].errors" class="invalid-feedback">
+                        <div *ngIf="f[remove__c(item.name)].errors">{{print(remove__c(item.name), f[remove__c(item.name)].errors)}}</div>
+                    </div>
+                </div>   
+            </div>    
         </div>
-        <div class="form-group col-md-6">
-            <label for="Address_Full">Full Address</label>
-            <input type="text" formControlName="Address_Full" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Address_Full.errors }" [class.disabled]="mode==1"/>
-            <div *ngIf="submitted && f.Address_Full.errors" class="invalid-feedback">
-                <div *ngIf="f.Address_Full.errors.required">Full Address is required</div>
-            </div>
-        </div>
-        <div class="form-group col-md-6">
-            <label for="Active">City</label>
-            <input type="text" formControlName="City" class="form-control float-left" [ngClass]="{ 'is-invalid': submitted && f.City.errors }" [class.disabled]="mode==1"/>
-            <div *ngIf="submitted && f.City.errors" class="invalid-feedback">
-                <div *ngIf="f.City.errors.required">City is required</div>
-            </div>
-        </div>
-        <div class="form-group col-md-6">
-            <label for="State">State</label>
-            <input type="text" formControlName="State" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.State.errors }" [class.disabled]="mode==1"/>
-            <div *ngIf="submitted && f.State.errors" class="invalid-feedback">
-                <div *ngIf="f.State.errors.required">State is required</div>
-            </div>
-        </div>
-        <div class="form-group col-md-6">
-            <label for="Zip_Code">Zip Code</label>
-            <input type="text" formControlName="Zip_Code" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Zip_Code.errors }" [class.disabled]="mode==1"/>
-            <div *ngIf="submitted && f.Zip_Code.errors" class="invalid-feedback">
-                <div *ngIf="f.Zip_Code.errors.required">Zip code is required</div>
-            </div>
-        </div>
-        <div class="form-group col-md-6">
-            <label for="Number_of_staff">Number of staff</label>
-            <input type="text" formControlName="Number_of_staff" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Number_of_staff.errors }" [class.disabled]="mode==1"/>
-            <div *ngIf="submitted && f.Number_of_staff.errors" class="invalid-feedback">
-                <div *ngIf="f.Number_of_staff.errors.required">Number of staff is required</div>
-            </div>
-        </div>
-        <div class="form-group col-md-6">
-            <label for="Active">Active</label>
-            <input type="checkbox" formControlName="Active" class="form-check-label" [checked]="f.Active.value" [class.disabled]="mode==1"/>
-        </div>
-        <div class="form-group col-md-6">
-            <label for="Phone_number">Phone number</label>
-            <input type="text" formControlName="Phone_number" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Phone_number.errors }" [class.disabled]="mode==1"/>
-            <div *ngIf="submitted && f.Phone_number.errors" class="invalid-feedback">
-                <div *ngIf="f.Phone_number.errors.required">Phone number is required</div>
-            </div>
-        </div>
+        
         <div class="form-group col-md-12">
             <button *ngIf="mode!=1" [disabled]="loading_submit" type="submit" class="btn btn-primary float-right">
                 <i class="fa fa-dot-circle-o"></i>
                 Save
-                <img *ngIf="loading_submit" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-            </button>
-            
+                <img *ngIf="oshaService.loading_submit" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            </button>   
         </div>
     </form>
-  </div>
-  <div class="modal-footer">
-    <!--<button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Save</button>-->
   </div>
 </ng-template>

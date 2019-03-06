@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject } from '@angular/core';
 import { AlertService, OshaService } from '../../_services';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModalConfig, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -28,7 +28,9 @@ export class FacilityComponent implements OnInit {
   insert_display_order: Array<any> = [];
   //===== reference ======
   references: Array<any> = [];
-
+  //===== root name ======
+  root_field_name: string = '';
+  //===== table name =====
   tableName: string;  //Table Name
   api_url_value: string;  //API url path
 
@@ -93,21 +95,41 @@ export class FacilityComponent implements OnInit {
       // console.log(this.view_display_order);
       // console.log(this.insert_display_order);
 
+      //===== Initialize Add Form ===============
+      this.addForm = this.formBuilder.group({});
+      for (let field of this.insert_display_order)
+      {
+        let control_name = '';
+        //=== Check Type If root 
+        if( field.type != 'root' )
+        {
+          control_name = this.remove__c(field.name);
+        }
+        else
+        {
+          this.root_field_name = this.remove__c(field.name);
+          continue;
+        }
+        
+        //=== Add Control to Add Form 
+        this.addForm.addControl(control_name, this.formBuilder.control(''));
+        if( field.nillable == '0' )
+        {
+          this.f[control_name].setValidators([Validators.required]);
+        } 
+        if( field.length != null)
+        {
+          this.f[control_name].setValidators(Validators.maxLength(field.length));
+        }
+        if( field.type == 'double')
+        {
+          this.f[control_name].setValidators(Validators.maxLength(5));
+        }
+      }
+      console.log(this.references);
       //===== Get All Objects ===================
       this.render_object();
     });
-
-    // this.addForm = this.formBuilder.group({
-    //   Name_of_facility: ['', Validators.required],
-    //   Active: ['', Validators.required],
-    //   Address_Full: ['', Validators.required],
-    //   City: ['', Validators.required],
-    //   Number_of_staff: ['', Validators.required],
-    //   Phone_number: ['', Validators.required],
-    //   State: ['', Validators.required],
-    //   Zip_Code: ['', Validators.required],
-    //   Org_Facility: ['a0C550000001a0tEAA', Validators.required],
-    // });  
   }
 
   render_object(){
@@ -141,16 +163,24 @@ export class FacilityComponent implements OnInit {
     }
     this.loading_submit = true;
 
-    if(this.addForm.value['Active'] == true)
-      this.addForm.get("Active").setValue(1);
-    else
-      this.addForm.get("Active").setValue(0);
+    for( let field in this.addForm.controls )
+    {
+      if(this.f[field].value == true)
+        this.f[field].setValue(1);
+      else if(this.f[field].value == false)
+        this.f[field].setValue(0);
+    }
 
-    
     if(this.mode == 0)
     {
+      this.addForm.addControl(this.root_field_name, this.formBuilder.control(''));
+      let root_value = this.objects.data[this.object_ids[0]][this.root_field_name];
+      this.f[this.root_field_name].setValue(root_value);
+      
+      console.log(this.addForm.value);
       let request_form = [{"id": "", "data": this.addForm.value}];
       this.oshaService.add_object(request_form, this.api_url_value);
+      this.addForm.removeControl(this.root_field_name);
     }
     else if(this.mode == 2)
     {
@@ -198,14 +228,10 @@ export class FacilityComponent implements OnInit {
   set_values(index){
     if (index == null)
     {
-      this.f.Name_of_facility.setValue('');
-      this.f.Address_Full.setValue('');
-      this.f.City.setValue('');
-      this.f.State.setValue('');
-      this.f.Zip_Code.setValue('');
-      this.f.Number_of_staff.setValue('');
-      this.f.Active.setValue('');
-      this.f.Phone_number.setValue('');
+      for( let field in this.addForm.controls)
+      {
+        this.f[field].setValue('');
+      }
     }
     else
     {
@@ -263,5 +289,25 @@ export class FacilityComponent implements OnInit {
 
   afterDot(string){
     return string.substring(string.indexOf('.')+1, string.length);
+  }
+
+  replace_space(string){
+    return string.replace(/\_/gi, " ");
+  }
+
+  print(control_name, err){
+    if(err.hasOwnProperty('maxlength')){
+      return `${control_name} has wrong length! Required length: ${err.maxlength.requiredLength}`;
+    }
+    else if(err.hasOwnProperty('required')){
+      return `${control_name} is required!`;
+    }
+  }
+  make_keys(item_name){
+    let _keys: Array<string> = [];
+    for(var key in this.references[item_name].data) {
+      _keys.push(key);
+    }
+    return _keys;
   }
 }

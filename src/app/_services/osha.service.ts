@@ -12,7 +12,7 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class OshaService {
 
     currentUser: User;
-
+    loading_submit: boolean = false;
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
         private router: Router, private alertService: AlertService, private modalService: NgbModal) {
         this.currentUser = this.authenticationService.currentUserValue;
@@ -40,6 +40,7 @@ export class OshaService {
     }
 
     add_object(form, api_url): any {
+        this.loading_submit = true;
         jQuery.ajax({
             url: `https://hipaadev.us/api/1.0/index.php/${api_url}?access_token=` + this.currentUser.access_token,
             type: "POST",
@@ -61,13 +62,16 @@ export class OshaService {
                 {
                     alert(response['message']);
                 }
+                this.loading_submit = false;
             },
             error: (response) => {
                 this.alertService.error(response['message']);
+                this.loading_submit = false;
             }
         });
     }
     update_object(form, api_url): any {
+        this.loading_submit = true;
         jQuery.ajax({
             url: `https://hipaadev.us/api/1.0/index.php/${api_url}/?access_token=` + this.currentUser.access_token,
             type: "POST",
@@ -89,9 +93,11 @@ export class OshaService {
                 {
                     alert(response['message']);
                 }
+                this.loading_submit = false;
             },
             error: (response) => {
                 this.alertService.error(response['message']);
+                this.loading_submit = false;
             }
         });
     }
