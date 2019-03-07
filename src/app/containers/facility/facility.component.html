@@ -1,5 +1,8 @@
 <div class="row">
     <div class="col-12">
+        <ngb-alert *ngIf="oshaService.success_alert!=''" (close)="oshaService.success_alert = ''">{{oshaService.success_alert}}</ngb-alert>
+    </div>
+    <div class="col-12">
         <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary btn-sm float-right" routerLinkActive="active">
             <i class="fa fa-plus" aria-hidden="true"></i>
             Create new {{replace_space(tableName) | titlecase}}
@@ -9,6 +12,7 @@
 <div class="row mt-1">  
     <div class="col-12">
         <ngx-loading [show]="is_loading"></ngx-loading>
+        <h1 class="text-center" *ngIf="is_loading==false&&object_ids.length==0">No Data</h1>
         <table datatable class="row-border hover" *ngIf="object_ids.length>0 && items_page_order.length>0">
             <thead>
                 <tr class="text-center" class="text-center">
@@ -54,10 +58,9 @@
         </button>
     </div>
     <div class="modal-body">
-        <ngb-alert *ngIf="oshaService.alert!=''" (close)="staticAlertClosed = true">{{oshaService.alert}}</ngb-alert>
         <div *ngFor="let item of view_display_order" class="form-group row">
-            <label class="col-md-3 col-form-label"> {{item.label}} </label>
-            <div class="col-md-9">
+            <label class="col-md-4 col-form-label"> {{item.label}} </label>
+            <div class="col-md-8">
                 <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]" [class.disabled]="true"/>
             
                 <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
@@ -74,19 +77,19 @@
 
 <ng-template #create let-c="close" let-d="dismiss">
     <div class="modal-header bg-success">
-        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==0">Create New {{tableName | titlecase}}</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==0">Create New {{replace_space(tableName) | titlecase}}</h4>
         <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==2">Edit Facility</h4>
         <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <ngb-alert *ngIf="oshaService.alert!=''" (close)="oshaService.alert = ''">{{oshaService.alert}}</ngb-alert>
+        <ngb-alert *ngIf="oshaService.error_alert!=''" (close)="oshaService.error_alert = ''">{{oshaService.error_alert}}</ngb-alert>
         <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="form-horizontal ng-untouched ng-pristine ng-valid">
             <div *ngFor="let item of insert_display_order" class="form-group">
                 <div class="row" *ngIf="item.type!='root'">
-                    <label class="col-md-3 col-form-label" for="Name_of_facility">{{item.label}}</label>
-                    <div class="col-md-9">
+                    <label class="col-md-4 col-form-label" for="Name_of_facility">{{item.label}}</label>
+                    <div class="col-md-8">
                         
                         <!-- Add field by item.type -->
                         <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'" type="text" 
@@ -97,7 +100,7 @@
                         <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} class="form-check-label"/>
                         
                         <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
-                            <input matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
+                            <input [attr.required]="false" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
                             <mat-datepicker-toggle matSuffix [for]="picker">
                                 <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
                             </mat-datepicker-toggle>

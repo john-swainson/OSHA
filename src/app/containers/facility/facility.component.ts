@@ -126,7 +126,6 @@ export class FacilityComponent implements OnInit {
           this.f[control_name].setValidators(Validators.maxLength(5));
         }
       }
-      console.log(this.references);
       //===== Get All Objects ===================
       this.render_object();
     });
@@ -174,20 +173,26 @@ export class FacilityComponent implements OnInit {
     if(this.mode == 0)
     {
       this.addForm.addControl(this.root_field_name, this.formBuilder.control(''));
-      let root_value = this.objects.data[this.object_ids[0]][this.root_field_name];
+      // let root_value = this.objects.data[this.object_ids[0]][this.root_field_name];
+      let root_value = 'a0C550000001a0tEAA'; //temporary
       this.f[this.root_field_name].setValue(root_value);
-      
+      console.log(this.root_field_name);
       console.log(this.addForm.value);
       let request_form = [{"id": "", "data": this.addForm.value}];
       this.oshaService.add_object(request_form, this.api_url_value);
       this.addForm.removeControl(this.root_field_name);
+      
     }
     else if(this.mode == 2)
     {
       let request_form = [{"id": this.index, "data": this.addForm.value}];
       console.log(request_form);
       this.oshaService.update_object(request_form, this.api_url_value);
+      
     } 
+    setTimeout(()=>{ this.render_object(); }, 
+      5000
+    );
     this.loading_submit = false;
     
   }

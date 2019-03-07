@@ -64,3 +64,9 @@ table thead tr {
     background: #2f353a;
     color:white;
 }
+
+@media (min-width: 992px){
+    .modal-lg, .modal-xl {
+        max-width: 1070px;
+    }
+}

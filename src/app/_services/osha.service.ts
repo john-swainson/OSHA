@@ -13,7 +13,9 @@ export class OshaService {
 
     currentUser: User;
     loading_submit: boolean = false;
-    alert: string = '';
+    error_alert: string = '';
+    success_alert: string = '';
+
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
         private router: Router, private alertService: AlertService, private modalService: NgbModal) {
         this.currentUser = this.authenticationService.currentUserValue;
@@ -57,13 +59,12 @@ export class OshaService {
                 if(response['status'] == "success")
                 { 
                     this.modalService.dismissAll();
+                    this.success_alert = response['message'];
                 }  
-                this.alert = response['message'];
-                // alert(response['message']);
+                this.error_alert = response['message'];
                 this.loading_submit = false;
             },
             error: (response) => {
-                this.alertService.error(response['message']);
                 this.loading_submit = false;
             }
         });
@@ -84,15 +85,13 @@ export class OshaService {
                 
                 if(response['status'] == "success")
                 {
-                    
                     this.modalService.dismissAll();
+                    this.success_alert = response['message'];
                 }  
-                this.alert = response['message'];
-                // alert(response['message']);
+                this.error_alert = response['message'];
                 this.loading_submit = false;
             },
             error: (response) => {
-                this.alertService.error(response['message']);
                 this.loading_submit = false;
             }
         });
