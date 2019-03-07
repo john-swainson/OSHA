@@ -33,7 +33,7 @@ export class FacilityComponent implements OnInit {
   //===== table name =====
   tableName: string;  //Table Name
   api_url_value: string;  //API url path
-
+  
   constructor(private alertService: AlertService, public oshaService: OshaService,
               config: NgbModalConfig, private modalService: NgbModal, private formBuilder: FormBuilder,
               private route:ActivatedRoute, private router:Router) {
@@ -184,14 +184,7 @@ export class FacilityComponent implements OnInit {
     }
     else if(this.mode == 2)
     {
-      let request_form = [{"id": this.index, "data": { Name_of_facility: this.f.Name_of_facility.value, 
-                                                      Active: this.f.Active.value,
-                                                      Address_Full: this.f.Address_Full.value,
-                                                      City: this.f.City.value,
-                                                      Number_of_staff: this.f.Number_of_staff.value,
-                                                      Phone_number: this.f.Phone_number.value,
-                                                      State: this.f.State.value,
-                                                      Zip_Code: this.f.Zip_Code.value }}];
+      let request_form = [{"id": this.index, "data": this.addForm.value}];
       console.log(request_form);
       this.oshaService.update_object(request_form, this.api_url_value);
     } 
@@ -235,14 +228,10 @@ export class FacilityComponent implements OnInit {
     }
     else
     {
-      this.f.Name_of_facility.setValue(this.objects.data[index].Name_of_facility);
-      this.f.Address_Full.setValue(this.objects.data[index].Address_Full);
-      this.f.City.setValue(this.objects.data[index].City);
-      this.f.State.setValue(this.objects.data[index].State);
-      this.f.Zip_Code.setValue(this.objects.data[index].Zip_Code);
-      this.f.Number_of_staff.setValue(this.objects.data[index].Number_of_staff);
-      this.f.Active.setValue(this.objects.data[index].Active);
-      this.f.Phone_number.setValue(this.objects.data[index].Phone_number);
+      for( let field in this.addForm.controls)
+      {
+        this.f[field].setValue(this.objects.data[index][field]);
+      }
     }
   }
 
