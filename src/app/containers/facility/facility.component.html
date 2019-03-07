@@ -92,8 +92,8 @@
                     <div class="col-md-8">
                         
                         <!-- Add field by item.type -->
-                        <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'" type="text" 
-                                formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
+                        <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
+                                type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
                         
                         <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
                         
@@ -109,6 +109,10 @@
 
                         <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} class="form-control">
                             <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
+                        </select> 
+
+                        <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control">
+                            <option *ngFor="let key of make_picklist(item.type_value)" [value]="key">{{key}}</option>
                         </select> 
 
                         <span class="help-block"><small>{{item.inlineHelpText}}</small></span>

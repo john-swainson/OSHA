@@ -304,4 +304,7 @@ export class FacilityComponent implements OnInit {
     }
     return _keys;
   }
+  make_picklist(string){
+    return string.split('||');
+  }
 }
