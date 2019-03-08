@@ -5,7 +5,7 @@ import { AlertService, AuthenticationService } from '../_services';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map'
 import { User } from '../_models';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({ providedIn: 'root' })
 
