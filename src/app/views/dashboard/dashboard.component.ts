@@ -25,6 +25,9 @@ export class DashboardComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    // this.oshaService.getOrganization(org_id).subscribe( res=>{
+
+    // })
     // this.facilityService.get_facilities().subscribe( res => {
     //   this.facility_info = Object.keys(res.data).length
     // })

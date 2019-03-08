@@ -3,7 +3,7 @@
         <ngb-alert *ngIf="oshaService.success_alert!=''" (close)="oshaService.success_alert = ''">{{oshaService.success_alert}}</ngb-alert>
     </div>
     <div class="col-12">
-        <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary btn-sm float-right" routerLinkActive="active">
+        <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary btn-sm float-left" routerLinkActive="active">
             <i class="fa fa-plus" aria-hidden="true"></i>
             Create new {{replace_space(tableName) | titlecase}}
         </a>
@@ -22,21 +22,21 @@
             </thead>
             <tbody>
                 <tr *ngFor="let id of object_ids" class="text-center">  
-                    <td *ngFor="let item of items_page_order">
-                        <a *ngIf="item.name == 'Name'" (click)="open(view, 1, id)" href="javascript:void(0)" > {{objects.data[id][remove__c(item.name)]}} </a>
+                    <td *ngFor="let item of items_page_order; let index=index;">
+                        <a *ngIf="index==0" (click)="open(view, 1, id)" href="javascript:void(0)" > {{objects.data[id][remove__c(item.name)]}} </a>
 
-                        <a *ngIf="item.name != 'Name' && item.type == 'reference'">
+                        <a *ngIf="index!=0 && item.type == 'reference'">
                             <span *ngIf="references.hasOwnProperty(item.name) && objects.data[id][remove__c(item.name)] != null">
                                 {{references[item.name]['data'][objects.data[id][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}
                             </span>
                         </a>
                         
-                        <a *ngIf="item.name != 'Name' && item.type == 'boolean' ">
+                        <a *ngIf="index!=0 && item.type == 'boolean' ">
                             <span *ngIf="objects.data[id][remove__c(item.name)] == 1">Yes</span>
                             <span *ngIf="objects.data[id][remove__c(item.name)] == 0">No</span>
                         </a>
                         
-                        <a *ngIf="item.name != 'Name' && item.type != 'reference' && item.type != 'boolean' ">
+                        <a *ngIf="index!=0 && item.type != 'reference' && item.type != 'boolean' ">
                             {{objects.data[id][remove__c(item.name)]}}
                         </a>
                     </td>
@@ -52,7 +52,7 @@
 
 <ng-template #view let-c="close" let-d="dismiss">
     <div class="modal-header bg-primary">
-        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==1">{{tableName | titlecase}}</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==1">Detailed information</h4>
         <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
         </button>
