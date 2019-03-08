@@ -39,8 +39,14 @@ export class FacilityComponent implements OnInit {
               private route:ActivatedRoute, private router:Router) {
       
       this.tableName = this.router.url.split('/')[1];
-      this.api_url_value = this.tableName.replace(/\_/gi, "-");
-
+      if(this.tableName == 'hipaa_contact')
+      {
+        this.api_url_value = 'contact';
+      }
+      else
+      {
+        this.api_url_value = this.tableName.replace(/\_/gi, "-");
+      }
       //===== Initialize Modal Values ======================
       this.is_loading = true;
       this.submitted = false;

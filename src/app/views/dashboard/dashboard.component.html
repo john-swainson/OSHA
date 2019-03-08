@@ -104,7 +104,7 @@
                       <strong class="float-right pr-1">06/04/2018</strong>
                     </td>
                   </tr>
-                  <tr>
+                  <tr [routerLink]="['/ic_post_exposure_management']">
                     <td class="text-center">
                       <div class="avatar">
                         <i class="fa fa-code-fork fa-fw dashboard-fa-size"></i>
@@ -118,8 +118,8 @@
                       <strong class="float-right">0</strong>
                     </td>
                   </tr>
-                  <tr>
-                    <td class="text-center">
+                  <tr [routerLink]="['/ic_preventing_transmission']">
+                    <td class="text-center" >
                       <div class="avatar">
                         <i class="fa fa-code-fork fa-fw dashboard-fa-size"></i>
                         <span class="avatar-status badge-success"></span>
@@ -132,7 +132,7 @@
                       <strong class="float-right">0</strong>
                     </td>
                   </tr>
-                  <tr>
+                  <tr [routerLink]="['/ic_engineering_controls']">
                     <td class="text-center">
                       <div class="avatar">
                         <i class="fa fa-users fa-fw dashboard-fa-size"></i>
@@ -140,13 +140,13 @@
                       </div>
                     </td>
                     <td>
-                      <div>Perform Engineering Controls </div>
+                      <div>Perform Engineering Controls</div>
                     </td>
                     <td>
                       <strong class="float-right">0</strong>
                     </td>
                   </tr>
-                  <tr>
+                  <tr [routerLink]="['/ic_contact_dermatitis']">
                     <td class="text-center">
                       <div class="avatar">
                         <i class="fa fa-lock fa-fw dashboard-fa-size"></i>
@@ -160,7 +160,7 @@
                       <strong class="float-right">0</strong>
                     </td>
                   </tr>
-                  <tr>
+                  <tr [routerLink]="['/ic_records_maintenance']">
                     <td class="text-center">
                       <div class="avatar">
                         <i class="fa fa-circle fa-fw dashboard-fa-size"></i>
@@ -188,7 +188,7 @@
                       <strong class="float-right">{{facility_info}}</strong>
                     </td>
                   </tr>
-                  <tr>
+                  <tr [routerLink]="['/hipaa_contact']">
                     <td class="text-center">
                       <div class="avatar">
                         <i class="fa fa-users fa-fw dashboard-fa-size"></i>
@@ -197,6 +197,20 @@
                     </td>
                     <td>
                       <div>Employees</div>
+                    </td>
+                    <td>
+                      <strong class="float-right">0</strong>
+                    </td>
+                  </tr>
+                  <tr [routerLink]="['/safety_data_sheet']">
+                    <td class="text-center">
+                      <div class="avatar">
+                        <i class="fa fa-exclamation-triangle fa-fw dashboard-fa-size"></i>
+                        <span class="avatar-status badge-success"></span>
+                      </div>
+                    </td>
+                    <td>
+                      <div>Safety Data Sheet</div>
                     </td>
                     <td>
                       <strong class="float-right">0</strong>
@@ -242,7 +256,7 @@
             <thead class="thead-light">
             </thead>
             <tbody>
-              <tr>
+              <tr [routerLink]="['/ic_instrument_processing']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-bank fa-fw dashboard-fa-size"></i>
@@ -256,7 +270,7 @@
                   <strong class="float-right">17</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_work_practice']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-sign-in fa-fw dashboard-fa-size"></i>
@@ -270,7 +284,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_prep_packaging']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-check-square-o fa-fw dashboard-fa-size"></i>
@@ -284,7 +298,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_unwrapped_instruments']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-star fa-fw dashboard-fa-size"></i>
@@ -298,7 +312,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_implantable_devices']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-star-o fa-fw dashboard-fa-size"></i>
@@ -312,7 +326,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_sterilization_monitoring']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-bank fa-fw dashboard-fa-size"></i>
@@ -326,7 +340,7 @@
                   <strong class="float-right">17</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_sterilization_disinfection']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-sign-in fa-fw dashboard-fa-size"></i>
@@ -340,7 +354,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_managing_surfaces']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-check-square-o fa-fw dashboard-fa-size"></i>
@@ -354,7 +368,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_regulated_waste']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-star fa-fw dashboard-fa-size"></i>
@@ -368,7 +382,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_extracted_teeth']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-star-o fa-fw dashboard-fa-size"></i>
@@ -382,7 +396,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_dental_quality']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-bank fa-fw dashboard-fa-size"></i>
@@ -396,7 +410,7 @@
                   <strong class="float-right">17</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_dental_airwaterlines']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-sign-in fa-fw dashboard-fa-size"></i>
@@ -410,7 +424,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_radiography']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-check-square-o fa-fw dashboard-fa-size"></i>
@@ -424,7 +438,7 @@
                   <strong class="float-right">0</strong>
                 </td>
               </tr>
-              <tr>
+              <tr [routerLink]="['/ic_digital_radiography']">
                 <td class="text-center">
                   <div class="avatar">
                     <i class="fa fa-star fa-fw dashboard-fa-size"></i>
