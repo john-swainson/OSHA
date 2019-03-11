@@ -115,7 +115,12 @@
                       <div>Post Exposure Management</div>
                     </td>
                     <td>
-                      <strong class="float-right">0</strong>
+                      <strong *ngIf="number_object_url['ic_post_exposure_management'].isloading==false" class="float-right">{{number_object_url['ic_post_exposure_management'].number}}</strong>
+                      <strong *ngIf="number_object_url['ic_post_exposure_management'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                   <tr [routerLink]="['/ic_preventing_transmission']">
@@ -129,7 +134,12 @@
                       <div>HBV-Preventing Transmission</div>
                     </td>
                     <td>
-                      <strong class="float-right">0</strong>
+                      <strong *ngIf="number_object_url['ic_preventing_transmission'].isloading==false" class="float-right">{{number_object_url['ic_preventing_transmission'].number}}</strong>
+                      <strong *ngIf="number_object_url['ic_preventing_transmission'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                   <tr [routerLink]="['/ic_engineering_controls']">
@@ -143,7 +153,12 @@
                       <div>Perform Engineering Controls</div>
                     </td>
                     <td>
-                      <strong class="float-right">0</strong>
+                      <strong *ngIf="number_object_url['ic_engineering_controls'].isloading==false" class="float-right">{{number_object_url['ic_engineering_controls'].number}}</strong>
+                      <strong *ngIf="number_object_url['ic_engineering_controls'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                   <tr [routerLink]="['/ic_contact_dermatitis']">
@@ -157,7 +172,12 @@
                       <div>Contact and Latex Allergy</div>
                     </td>
                     <td>
-                      <strong class="float-right">0</strong>
+                      <strong *ngIf="number_object_url['ic_contact_dermatitis'].isloading==false" class="float-right">{{number_object_url['ic_contact_dermatitis'].number}}</strong>
+                      <strong *ngIf="number_object_url['ic_contact_dermatitis'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                   <tr [routerLink]="['/ic_records_maintenance']">
@@ -171,7 +191,12 @@
                       <div>Records Maintenance</div>
                     </td>
                     <td>
-                      <strong class="float-right">0</strong>
+                      <strong *ngIf="number_object_url['ic_records_maintenance'].isloading==false" class="float-right">{{number_object_url['ic_records_maintenance'].number}}</strong>
+                      <strong *ngIf="number_object_url['ic_records_maintenance'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                   <tr [routerLink]="['/facility']">
@@ -185,7 +210,12 @@
                       <div>Facilites</div>
                     </td>
                     <td>
-                      <strong class="float-right">{{facility_info}}</strong>
+                      <strong *ngIf="number_object_url['facility'].isloading==false" class="float-right">{{number_object_url['facility'].number}}</strong>
+                      <strong *ngIf="number_object_url['facility'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                   <tr [routerLink]="['/hipaa_contact']">
@@ -199,7 +229,12 @@
                       <div>Employees</div>
                     </td>
                     <td>
-                      <strong class="float-right">0</strong>
+                      <strong *ngIf="number_object_url['contact'].isloading==false" class="float-right">{{number_object_url['contact'].number}}</strong>
+                      <strong *ngIf="number_object_url['contact'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                   <tr [routerLink]="['/safety_data_sheet']">
@@ -213,7 +248,12 @@
                       <div>Safety Data Sheet</div>
                     </td>
                     <td>
-                      <strong class="float-right">0</strong>
+                      <strong *ngIf="number_object_url['safety_data_sheet'].isloading==false" class="float-right">{{number_object_url['safety_data_sheet'].number}}</strong>
+                      <strong *ngIf="number_object_url['safety_data_sheet'].isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
                     </td>
                   </tr>
                 </tbody>
@@ -267,7 +307,12 @@
                   <div>Instrument Processing</div>
                 </td>
                 <td>
-                  <strong class="float-right">17</strong>
+                  <strong *ngIf="date_object_url['ic_instrument_processing'].isloading==false" class="float-right">{{date_object_url['ic_instrument_processing'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_instrument_processing'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_work_practice']">
@@ -281,7 +326,12 @@
                   <div>Work Practice Controls</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_work_practice'].isloading==false" class="float-right">{{date_object_url['ic_work_practice'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_work_practice'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_prep_packaging']">
@@ -295,7 +345,12 @@
                   <div>Prep and Packaging</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_prep_packaging'].isloading==false" class="float-right">{{date_object_url['ic_prep_packaging'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_prep_packaging'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_unwrapped_instruments']">
@@ -309,7 +364,12 @@
                   <div>Unwrapped Instruments</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_unwrapped_instruments'].isloading==false" class="float-right">{{date_object_url['ic_unwrapped_instruments'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_unwrapped_instruments'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_implantable_devices']">
@@ -323,7 +383,12 @@
                   <div>Implantable Devices</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_implantable_devices'].isloading==false" class="float-right">{{date_object_url['ic_implantable_devices'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_implantable_devices'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_sterilization_monitoring']">
@@ -337,7 +402,12 @@
                   <div>Sterilization Monitoring</div>
                 </td>
                 <td>
-                  <strong class="float-right">17</strong>
+                  <strong *ngIf="date_object_url['ic_sterilization_monitoring'].isloading==false" class="float-right">{{date_object_url['ic_sterilization_monitoring'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_sterilization_monitoring'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_sterilization_disinfection']">
@@ -351,7 +421,12 @@
                   <div>Sterilization Disinfection Patient Items</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_sterilization_disinfection'].isloading==false" class="float-right">{{date_object_url['ic_sterilization_disinfection'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_sterilization_disinfection'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_managing_surfaces']">
@@ -365,7 +440,12 @@
                   <div>Managing Environmental Surfaces</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_managing_surfaces'].isloading==false" class="float-right">{{date_object_url['ic_managing_surfaces'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_managing_surfaces'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_regulated_waste']">
@@ -379,7 +459,12 @@
                   <div>Regulated Medical Waste</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_regulated_waste'].isloading==false" class="float-right">{{date_object_url['ic_regulated_waste'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_regulated_waste'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_extracted_teeth']">
@@ -393,7 +478,12 @@
                   <div>Extracted Teeth</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_extracted_teeth'].isloading==false" class="float-right">{{date_object_url['ic_extracted_teeth'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_extracted_teeth'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_dental_quality']">
@@ -407,7 +497,12 @@
                   <div>Dental Unit Waterlines, Biofilm, and Water Quality</div>
                 </td>
                 <td>
-                  <strong class="float-right">17</strong>
+                  <strong *ngIf="date_object_url['ic_dental_quality'].isloading==false" class="float-right">{{date_object_url['ic_dental_quality'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_dental_quality'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_dental_airwaterlines']">
@@ -421,7 +516,12 @@
                   <div>Devices Attached to Air Lines and Waterlines</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_dental_airwaterlines'].isloading==false" class="float-right">{{date_object_url['ic_dental_airwaterlines'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_dental_airwaterlines'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_radiography']">
@@ -435,7 +535,12 @@
                   <div>Dental Radiography</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_radiography'].isloading==false" class="float-right">{{date_object_url['ic_radiography'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_radiography'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
               <tr [routerLink]="['/ic_digital_radiography']">
@@ -449,7 +554,12 @@
                   <div>Digital radiography</div>
                 </td>
                 <td>
-                  <strong class="float-right">0</strong>
+                  <strong *ngIf="date_object_url['ic_digital_radiography'].isloading==false" class="float-right">{{date_object_url['ic_digital_radiography'].date}}</strong>
+                  <strong *ngIf="date_object_url['ic_digital_radiography'].isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
                 </td>
               </tr>
             </tbody>

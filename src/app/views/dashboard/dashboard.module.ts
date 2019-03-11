@@ -6,9 +6,12 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { CommonModule } from '@angular/common';  
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
+    CommonModule,
     FormsModule,
     DashboardRoutingModule,
     ChartsModule,

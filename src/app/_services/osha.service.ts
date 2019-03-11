@@ -31,7 +31,7 @@ export class OshaService {
         return this.http.get( queryURL, optionsH ).map((res: any) => res);
     }
 
-    get_objects(api_url): Observable<any>{
+    get_objects(api_url, key = null): Observable<any>{
         let queryURL = `https://hipaadev.us/api/1.0/index.php/${api_url}/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
@@ -39,7 +39,7 @@ export class OshaService {
         let optionsH = {
             headers:headers
         };
-        return this.http.get( queryURL, optionsH ).map((res: any) => res);
+        return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res, key} });
     }
 
     add_object(form, api_url): any {
