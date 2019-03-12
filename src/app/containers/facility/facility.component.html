@@ -14,7 +14,7 @@
     <div class="col-12">
         <ngx-loading [show]="is_loading"></ngx-loading>
         <h1 class="text-center" *ngIf="is_loading==false&&object_ids.length==0">No data was found</h1>
-        <table datatable class="row-border hover" *ngIf="object_ids.length>0 && items_page_order.length>0">
+        <table datatable class="row-border hover table-bordered" *ngIf="object_ids.length>0 && items_page_order.length>0">
             <thead>
                 <tr class="text-center" class="text-center">
                     <th *ngFor="let item of items_page_order">{{item.label}}</th>
@@ -42,8 +42,8 @@
                         </a>
                     </td>
                     <td>
-                        <a (click)="open(create, 2, id)" href="javascript:void(0)">Edit</a> | 
-                        <a (click)="delete(id)" href="javascript:void(0)">Del</a>
+                        <a (click)="open(create, 2, id)" href="javascript:void(0)">Edit</a>  
+                        <a *ngIf="api_url_value!='contact'" (click)="delete(id)" href="javascript:void(0)">| Del</a>
                     </td>
                 </tr>
             </tbody>
