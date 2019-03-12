@@ -28,6 +28,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS }      from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule }         from '@angular/forms';
 import { CommonModule }                             from '@angular/common';
 import { HttpModule } from '@angular/http';
+import { AlertComponent } from './_components';
 
 const APP_CONTAINERS = [
   DefaultLayoutComponent
@@ -78,7 +79,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AlertComponent
   ],
   providers: [{
       provide: LocationStrategy,

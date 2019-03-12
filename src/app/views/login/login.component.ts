@@ -65,7 +65,9 @@ export class LoginComponent {
                   this.loading = false; 
                 }
                 else
-                  this.router.navigate([this.returnUrl]);
+                {
+                    this.router.navigate([this.returnUrl]);
+                }
               },
               error => {
                   this.alertService.error(error);
