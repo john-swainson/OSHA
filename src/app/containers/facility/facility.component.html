@@ -59,6 +59,18 @@
         </button>
     </div>
     <div class="modal-body">
+        <div class="row mb-3">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-2 col-sm-6 col-12">
+                <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active" (click)="open(create, 2, view_index)" type="button">Edit</button>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12">
+                <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active" (click)="open(create, 0, view_index)" type="button">Copy</button>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
         <div *ngFor="let item of view_display_order" class="form-group row">
             <label class="col-md-4 col-form-label"> {{item.label}} </label>
             <div class="col-md-8">
@@ -79,7 +91,7 @@
 <ng-template #create let-c="close" let-d="dismiss">
     <div class="modal-header bg-success">
         <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==0">Create New {{replace_space(tableName) | titlecase}}</h4>
-        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==2">Edit Facility</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==2">Edit {{replace_space(tableName) | titlecase}}</h4>
         <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
         </button>

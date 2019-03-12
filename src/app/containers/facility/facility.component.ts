@@ -210,11 +210,15 @@ export class FacilityComponent implements OnInit {
   get f() { return this.addForm.controls; }
 
   open(content, mode, index = '') {
+    this.modalService.dismissAll();
     this.mode = mode;
     this.index = index;
     if (mode == 0) // create modal
     {
-      this.set_values(null);
+      if(index == '')
+        this.set_values(null);
+      else
+        this.set_values(index);  
       this.modalService.open(content, { size: 'lg' });
     }
     else if (mode == 1) // show modal
