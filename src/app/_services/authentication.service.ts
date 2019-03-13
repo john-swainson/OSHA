@@ -32,6 +32,8 @@ export class AuthenticationService {
                 if (user && user.access_token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('org_id', organization);
+                    localStorage.setItem('base_url', this.base_url);
                     this.currentUserSubject.next(user);
                 }
 

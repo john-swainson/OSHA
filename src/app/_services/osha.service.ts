@@ -32,7 +32,7 @@ export class OshaService {
     }
 
     get_objects(api_url, key = null): Observable<any>{
-        let queryURL = `https://hipaadev.us/api/1.0/index.php/${api_url}/all?access_token=` + this.currentUser.access_token;
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
@@ -45,7 +45,7 @@ export class OshaService {
     add_object(form, api_url): any {
         this.loading_submit = true;
         jQuery.ajax({
-            url: `https://hipaadev.us/api/1.0/index.php/${api_url}?access_token=` + this.currentUser.access_token,
+            url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}?access_token=` + this.currentUser.access_token,
             type: "POST",
             data: JSON.stringify(form),
             dataType: "json",
@@ -72,7 +72,7 @@ export class OshaService {
     update_object(form, api_url): any {
         this.loading_submit = true;
         jQuery.ajax({
-            url: `https://hipaadev.us/api/1.0/index.php/${api_url}/?access_token=` + this.currentUser.access_token,
+            url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/?access_token=` + this.currentUser.access_token,
             type: "POST",
             data: JSON.stringify(form),
             dataType: "json",
@@ -98,7 +98,7 @@ export class OshaService {
     }
     delete_object(id, api_url){
         jQuery.ajax({
-            url: `https://hipaadev.us/api/1.0/index.php/${api_url}/${id}?access_token=` + this.currentUser.access_token,
+            url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/${id}?access_token=` + this.currentUser.access_token,
             type: "DELETE",
             contentType: 'application/json',
             crossDomain: false,

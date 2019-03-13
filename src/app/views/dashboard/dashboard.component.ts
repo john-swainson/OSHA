@@ -84,7 +84,6 @@ export class DashboardComponent implements OnInit {
         }
         if(res.data.length == 0)
           date = '';
-        console.log(date);
         this.date_object_url[res.key].date = date;
       },
       err=>{

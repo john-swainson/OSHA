@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject } from '@angular/core';
-import { AlertService, OshaService } from '../../_services';
+import { AlertService, OshaService, AuthenticationService } from '../../_services';
 import { NgbModalConfig, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -36,7 +36,7 @@ export class FacilityComponent implements OnInit {
   
   constructor(private alertService: AlertService, public oshaService: OshaService,
               config: NgbModalConfig, private modalService: NgbModal, private formBuilder: FormBuilder,
-              private route:ActivatedRoute, private router:Router) {
+              private route:ActivatedRoute, private router:Router, public authenticationService: AuthenticationService) {
       
       this.tableName = this.router.url.split('/')[1];
       if(this.tableName == 'hipaa_contact')
@@ -144,11 +144,7 @@ export class FacilityComponent implements OnInit {
         this.objects = res; 
         this.object_ids = [];
         for(var key in res.data) {
-            this.object_ids.push(key);
-            // if(this.objects.data[key].Active == "true")
-            //     this.objects.data[key].Active = 1
-            // else
-            //     this.objects.data[key].Active = 0    
+            this.object_ids.push(key); 
         }
         console.log(this.objects);
         this.is_loading = false;
@@ -184,7 +180,7 @@ export class FacilityComponent implements OnInit {
     if(this.mode == 0)
     {
       this.addForm.addControl(this.root_field_name, this.formBuilder.control(''));
-      let root_value = 'a0C550000001a0tEAA'; //temporary
+      let root_value = localStorage.getItem('org_id'); //temporary
       this.f[this.root_field_name].setValue(root_value);
       console.log(this.addForm.value);
       let request_form = [{"id": "", "data": this.addForm.value}];

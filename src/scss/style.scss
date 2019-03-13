@@ -8,6 +8,7 @@
 @import "custom";
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~ng6-toastr/bundles/ng2-toastr.min.css";
 
 input[type='search']{
     height: calc(2.0625rem + 2px);
@@ -70,3 +71,21 @@ table thead tr {
         max-width: 1070px;
     }
 }
+
+.toast {
+    font-size: initial !important;
+    border: initial !important;
+    backdrop-filter: blur(0) !important;
+  }
+  .toast-success {
+    background-color: #51A351 !important;
+  }
+  .toast-error {
+    background-color: #BD362F !important;
+  }
+  .toast-info {
+    background-color: #2F96B4 !important;
+  }
+  .toast-warning {
+    background-color: #F89406 !important;
+  }

@@ -87,10 +87,9 @@ export class LoginComponent {
           .subscribe(
               data => {
                 console.log("logged in");
-                this.toastr.error("Hello");
                 if(data.hasOwnProperty('error')){
                   this.alertService.error(data.error);   
-                  this.toastr.error("Hello");  
+                  this.toastr.error(data.error);  
                 }
                 else
                 {
