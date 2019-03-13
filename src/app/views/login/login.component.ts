@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AlertService, AuthenticationService } from '../../_services';
+import { ToastsManager } from 'ng6-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,19 +11,26 @@ import { AlertService, AuthenticationService } from '../../_services';
 })
 export class LoginComponent { 
     loginForm: FormGroup;
+    orgForm: FormGroup;
+    loading_org = false;
+    submitted_org = false;
     loading = false;
     submitted = false;
     returnUrl: string;
     login_url = ["hipaadev.us", "hipaastaging.us", "acceptanceh.us", "hipaacomplete.com"]
+    orgs: any = [];
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        public toastr: ToastsManager,
+        public vcr: ViewContainerRef, 
     ) 
     {
+        this.toastr.setRootViewContainerRef(vcr);
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) { 
             this.router.navigate(['/']);
@@ -30,10 +38,13 @@ export class LoginComponent {
     }
 
     ngOnInit() {
-        this.loginForm = this.formBuilder.group({
+        this.orgForm = this.formBuilder.group({
             url: ['', Validators.required],
-            organization: ['a0C550000001a0tEAA', Validators.required],
             username: ['', Validators.required],
+        });
+
+        this.loginForm = this.formBuilder.group({
+            organization: ['', Validators.required],
             password: ['', Validators.required]
         });
 
@@ -43,6 +54,24 @@ export class LoginComponent {
 
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
+    get f_g() { return this.orgForm.controls; }
+    
+    onOrgSubmit() {
+        this.submitted_org = true;
+
+        // stop here if form is invalid
+        if (this.orgForm.invalid) {
+            return;
+        }
+
+        this.loading_org = true;
+        this.authenticationService.base_url = this.f_g.url.value;
+        this.orgs = [];
+        this.authenticationService.get_org(this.f_g.username.value).subscribe( data=> {
+            this.orgs = data;
+            this.loading_org = false;
+        });
+    }
 
     onSubmit() {
         this.submitted = true;
@@ -53,21 +82,21 @@ export class LoginComponent {
         }
 
         this.loading = true;
-        this.authenticationService.base_url = this.f.url.value;
-        this.authenticationService.login(this.f.organization.value, this.f.username.value, this.f.password.value)
+        this.authenticationService.login(this.f.organization.value, this.f_g.username.value, this.f.password.value)
           .pipe(first())
           .subscribe(
               data => {
                 console.log("logged in");
-                this.authenticationService.base_url = this.f.url.value;
+                this.toastr.error("Hello");
                 if(data.hasOwnProperty('error')){
-                  this.alertService.error(data.error);
-                  this.loading = false; 
+                  this.alertService.error(data.error);   
+                  this.toastr.error("Hello");  
                 }
                 else
                 {
                     this.router.navigate([this.returnUrl]);
                 }
+                this.loading = false; 
               },
               error => {
                   this.alertService.error(error);

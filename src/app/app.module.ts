@@ -70,7 +70,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    ToastModule,
+    ToastModule.forRoot(),
     BrowserAnimationsModule,
   ],
   declarations: [

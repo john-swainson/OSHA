@@ -138,16 +138,17 @@ export class FacilityComponent implements OnInit {
   }
 
   render_object(){
+    this.oshaService.error_alert = this.oshaService.success_alert = '';
     this.is_loading = true;
     this.oshaService.get_objects(this.api_url_value).subscribe( res => {
         this.objects = res; 
         this.object_ids = [];
         for(var key in res.data) {
             this.object_ids.push(key);
-            if(this.objects.data[key].Active == "true")
-                this.objects.data[key].Active = 1
-            else
-                this.objects.data[key].Active = 0    
+            // if(this.objects.data[key].Active == "true")
+            //     this.objects.data[key].Active = 1
+            // else
+            //     this.objects.data[key].Active = 0    
         }
         console.log(this.objects);
         this.is_loading = false;
@@ -163,26 +164,28 @@ export class FacilityComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    if (this.addForm.invalid) {
-        return;
+    if (this.addForm.invalid && this.addForm.errors != null) {
+      return;
     }
     this.loading_submit = true;
 
     for( let field in this.addForm.controls )
     {
-      if(this.f[field].value == true)
-        this.f[field].setValue(1);
-      else if(this.f[field].value == false)
-        this.f[field].setValue(0);
+      if(this.f[field].value === true)
+      {
+        this.f[field].setValue('true');
+      }
+      else if(this.f[field].value === false)
+      {
+        this.f[field].setValue('false');
+      }
     }
 
     if(this.mode == 0)
     {
       this.addForm.addControl(this.root_field_name, this.formBuilder.control(''));
-      // let root_value = this.objects.data[this.object_ids[0]][this.root_field_name];
       let root_value = 'a0C550000001a0tEAA'; //temporary
       this.f[this.root_field_name].setValue(root_value);
-      console.log(this.root_field_name);
       console.log(this.addForm.value);
       let request_form = [{"id": "", "data": this.addForm.value}];
       this.oshaService.add_object(request_form, this.api_url_value);
@@ -238,7 +241,10 @@ export class FacilityComponent implements OnInit {
     {
       for( let field in this.addForm.controls)
       {
-        this.f[field].setValue('');
+        if(this.get_field_type(field) == 'boolean')
+          this.f[field].setValue(false);
+        else
+          this.f[field].setValue('');
       }
     }
     else
@@ -316,5 +322,14 @@ export class FacilityComponent implements OnInit {
   }
   make_picklist(string){
     return string.split('||');
+  }
+
+  get_field_type(string){
+    for(let item of this.insert_display_order){
+      if(string == this.remove__c(item.name)){
+        return item.type;
+      }
+    }
+    return '';
   }
 }

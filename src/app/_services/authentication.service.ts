@@ -39,6 +39,16 @@ export class AuthenticationService {
             }));
     }
 
+    get_org(email: string) {
+        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud/orgs_by_email?email=${email}`;
+        let headers = new HttpHeaders();
+        headers.append('Accept', 'application/json');
+        let optionsH = {
+            headers:headers
+        };
+        return this.http.get( queryURL, optionsH ).map((res: any) => res);
+    }
+
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');

@@ -6,31 +6,37 @@
           <div class="card-group">
             <div class="card p-4">
               <div class="card-body">
-                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <form [formGroup]="orgForm" (ngSubmit)="onOrgSubmit()">
                   <h1>Login</h1>
                   <p class="text-muted">Sign In to your account</p>
                   <div class="form-group">
-                    <select id="url" formControlName="url" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.url.errors }">
+                    <select id="url" formControlName="url" class="form-control" [ngClass]="{ 'is-invalid': submitted_org && f_g.url.errors }">
                         <option *ngFor="let url of login_url" [value]="url">{{ url }}</option>
                     </select> 
-                    <div *ngIf="submitted && f.url.errors" class="invalid-feedback">
-                        <div *ngIf="f.url.errors.required">Login Url is required</div>
+                    <div *ngIf="submitted_org && f_g.url.errors" class="invalid-feedback">
+                        <div *ngIf="f_g.url.errors.required">Login Url is required</div>
                     </div>
                   </div>
-                  <!--<div class="form-group">
-                    <input type="text" formControlName="organization" class="form-control" placeholder="Organization" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                        <div *ngIf="f.password.errors.required">Organization is required</div>
-                    </div>
-                  </div>-->
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="icon-user"></i></span>
                     </div>
-                    <input type="text" class="form-control" formControlName="username" placeholder="Email" autocomplete="email" required>
-                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback d-inline">
-                      <div *ngIf="f.username.errors.required">Username is required</div>
+                    <input type="text" class="form-control" formControlName="username" placeholder="Email" autocomplete="email" required [ngClass]="{ 'is-invalid': submitted_org && f_g.username.errors }">
+                    <div *ngIf="submitted_org && f_g.username.errors" class="invalid-feedback d-inline">
+                      <div *ngIf="f_g.username.errors.required">Username is required</div>
                     </div>
+                  </div>
+                  <div class="form-group">
+                    <button [disabled]="loading_org" class="btn btn-primary px-4">Search for Company</button>
+                    <img *ngIf="loading_org" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                  </div>
+                </form>
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [ngClass]="(orgs.length==0)?'d-none':''">
+                  <div class="input-group mb-4">
+                    <span>Connected Organization</span>
+                    <select id="organization" formControlName="organization" class="form-control w-100" [ngClass]="{ 'is-invalid': submitted && f.organization.errors }">
+                      <option *ngFor="let org of orgs" [value]="org.org_id">{{ org.org_name__c }}</option>
+                    </select> 
                   </div>
                   <div class="input-group mb-4">
                     <div class="input-group-prepend">

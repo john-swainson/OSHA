@@ -33,8 +33,8 @@
                         </a>
                         
                         <a *ngIf="index!=0 && item.type == 'boolean' ">
-                            <span *ngIf="objects.data[id][remove__c(item.name)] == 1">Yes</span>
-                            <span *ngIf="objects.data[id][remove__c(item.name)] == 0">No</span>
+                            <span *ngIf="objects.data[id][remove__c(item.name)] == 'true'">Yes</span>
+                            <span *ngIf="objects.data[id][remove__c(item.name)] == 'false'">No</span>
                         </a>
                         
                         <a *ngIf="index!=0 && item.type != 'reference' && item.type != 'boolean' ">
@@ -74,7 +74,7 @@
         <div *ngFor="let item of view_display_order" class="form-group row">
             <label class="col-md-4 col-form-label"> {{item.label}} </label>
             <div class="col-md-8">
-                <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]" [class.disabled]="true"/>
+                <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
             
                 <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
                         value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
@@ -110,7 +110,7 @@
                         
                         <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
                         
-                        <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} class="form-check-label"/>
+                        <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} [checked]="f[remove__c(item.name)].value=='true'" class="form-check-label"/>
                         
                         <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
                             <input [attr.required]="false" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
