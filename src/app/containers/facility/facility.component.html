@@ -81,7 +81,7 @@
                 
                 <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
                         value="" [class.disabled]="true" />
-
+                
                 <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
             </div>
         </div>

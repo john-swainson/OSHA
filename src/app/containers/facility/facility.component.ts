@@ -88,7 +88,7 @@ export class FacilityComponent implements OnInit {
 
       this.sort_fields_by('view_display_order');
       for (let field of this.fields){
-        if(field.view_display_order != '0')
+        if(field.view_display_order != '0' && field.type != 'root')
           this.view_display_order.push(field);
       }
 
@@ -153,7 +153,7 @@ export class FacilityComponent implements OnInit {
         document.head.appendChild(script); 
     },
     err => {
-      this.router.navigateByUrl('/404');
+      // this.router.navigateByUrl('/');
     })
   }
 
@@ -238,7 +238,7 @@ export class FacilityComponent implements OnInit {
       for( let field in this.addForm.controls)
       {
         if(this.get_field_type(field) == 'boolean')
-          this.f[field].setValue(false);
+          this.f[field].setValue('false');
         else
           this.f[field].setValue('');
       }
@@ -290,7 +290,7 @@ export class FacilityComponent implements OnInit {
   }
 
   remove__c(string){
-    return string.replace(/\__c/gi, "");
+    return string.trim().replace(/\__c/gi, "");
   }
 
   afterDot(string){

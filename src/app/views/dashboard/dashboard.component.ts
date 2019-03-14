@@ -47,11 +47,18 @@ export class DashboardComponent implements OnInit {
                       'ic_digital_radiography':{isloading: false, date: -1},
                     };
   public facility_info: number = 0;
+  public org_name: string = '';
   constructor(private alertService: AlertService, private oshaService: OshaService) {
-
+    
+    let org_words = localStorage.getItem('org_name').split(' ');
+    let temp_org = '';
+    for(let word of org_words)
+    {
+      temp_org += word.charAt(0).toUpperCase() + word.slice(1) + ' ';
+    }
+    this.org_name = temp_org;
   }
   ngOnInit(): void {
-
     for(var key in this.number_object_url) {
       let api_url = key.replace(/\_/gi, "-");
       this.number_object_url[key].isloading = true;

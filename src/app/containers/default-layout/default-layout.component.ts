@@ -26,6 +26,8 @@ export class DefaultLayoutComponent implements OnDestroy {
       attributes: true,
       attributeFilter: ['class']
     });
+
+    this.navItems .unshift( { name: 'Dashboard', url: '/dashboard', icon: 'icon-speedometer', badge: { variant: 'info', text: 'NEW' } } );
   }
 
   ngOnDestroy(): void {
