@@ -64,7 +64,6 @@ export class DashboardComponent implements OnInit {
       this.number_object_url[key].isloading = true;
       
       this.oshaService.get_objects(api_url, key).subscribe(res => {
-        console.log(res);
         this.number_object_url[res.key].isloading = false;
         let message = res.message;
         this.number_object_url[res.key].number = message.split(' ')[0];

@@ -21,8 +21,9 @@ export class AuthenticationService {
     }
 
     login(organization: string, username: string, password: string, org_name: string): Observable<any> {
+        let orgs = organization.split('/');
         const body = new HttpParams()
-            .set('org_id', organization)
+            .set('org_id', orgs[0])
             .set('username', username)
             .set('password', password);
         return this.http.post<any>(`https://${this.base_url}/api/1.0/login.php`,body.toString(), 
@@ -32,9 +33,10 @@ export class AuthenticationService {
                 if (user && user.access_token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
-                    localStorage.setItem('org_id', organization);
+                    localStorage.setItem('org_id', orgs[0]);
                     localStorage.setItem('base_url', this.base_url);
                     localStorage.setItem('org_name', org_name);
+                    localStorage.setItem('contact_name', orgs[1]);
                     this.currentUserSubject.next(user);
                 }
 
@@ -55,6 +57,10 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('org_id');
+        localStorage.removeItem('base_url');
+        localStorage.removeItem('org_name');
+        localStorage.removeItem('contact_name');
         this.currentUserSubject.next(null);
     }
 }

@@ -26,8 +26,23 @@ export class DefaultLayoutComponent implements OnDestroy {
       attributes: true,
       attributeFilter: ['class']
     });
+  }
 
-    this.navItems .unshift( { name: 'Dashboard', url: '/dashboard', icon: 'icon-speedometer', badge: { variant: 'info', text: 'NEW' } } );
+  ngOnInit(){
+    if(localStorage.getItem('currentUser') !== null )
+    {
+      for(let item of this.navItems){
+        if(item.url == '/logout')
+        {
+          return;
+        }
+      }
+      this.navItems .unshift( { name: localStorage.getItem('contact_name'), 
+                                url: '/logout', 
+                                icon: 'icon-logout', 
+                                badge: { variant: 'danger', text: 'OUT' } } 
+      );
+    }
   }
 
   ngOnDestroy(): void {

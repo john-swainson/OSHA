@@ -43,6 +43,10 @@ export class FacilityComponent implements OnInit {
       {
         this.api_url_value = 'contact';
       }
+      else if(this.tableName == 'logout')
+      {
+        this.logout();
+      }
       else
       {
         this.api_url_value = this.tableName.replace(/\_/gi, "-");
@@ -146,14 +150,13 @@ export class FacilityComponent implements OnInit {
         for(var key in res.data) {
             this.object_ids.push(key); 
         }
-        console.log(this.objects);
         this.is_loading = false;
         var script = document.createElement('script');
         script.src = '/assets/js/resize.js';
         document.head.appendChild(script); 
     },
     err => {
-      // this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/404');
     })
   }
 
@@ -182,7 +185,6 @@ export class FacilityComponent implements OnInit {
       this.addForm.addControl(this.root_field_name, this.formBuilder.control(''));
       let root_value = localStorage.getItem('org_id'); //temporary
       this.f[this.root_field_name].setValue(root_value);
-      console.log(this.addForm.value);
       let request_form = [{"id": "", "data": this.addForm.value}];
       this.oshaService.add_object(request_form, this.api_url_value);
       this.addForm.removeControl(this.root_field_name);
@@ -191,7 +193,6 @@ export class FacilityComponent implements OnInit {
     else if(this.mode == 2)
     {
       let request_form = [{"id": this.index, "data": this.addForm.value}];
-      console.log(request_form);
       this.oshaService.update_object(request_form, this.api_url_value);
       
     } 
@@ -327,5 +328,10 @@ export class FacilityComponent implements OnInit {
       }
     }
     return '';
+  }
+
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
   }
 }

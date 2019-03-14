@@ -35,7 +35,7 @@
                   <div class="input-group mb-4">
                     <span>Connected Organization</span>
                     <select id="organization" formControlName="organization" class="form-control w-100" [ngClass]="{ 'is-invalid': submitted && f.organization.errors }">
-                      <option *ngFor="let org of orgs" [value]="org.org_id">{{ org.org_name__c }}</option>
+                      <option *ngFor="let org of orgs" [value]="org.org_id+'/'+org.full_name__c">{{ org.org_name__c }}</option>
                     </select> 
                   </div>
                   <div class="input-group mb-4">
