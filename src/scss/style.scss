@@ -72,6 +72,18 @@ table thead tr {
     }
 }
 
+@media (max-width: 576px){
+    .container-fluid {
+        padding: 0 5px !important; 
+    }
+    h1{
+        font-size: 1.1rem;
+    }
+    .card-body{
+        padding: 1rem 0.5rem !important;
+    }
+}
+
 .toast {
     font-size: initial !important;
     border: initial !important;
