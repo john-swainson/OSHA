@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
   public doughnutChartData: number[] = [350, 450];
   public doughnutChartType = 'doughnut';
   // Dashboard Kind
-  public current_dashboard_type = 'OSHA'; // default OSHA
+  public current_dashboard_type; // default OSHA
   public dashboardItems = dashboardItems;
   public org_name: string = '';
 

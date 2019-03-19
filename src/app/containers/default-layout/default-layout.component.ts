@@ -16,7 +16,7 @@ export class DefaultLayoutComponent implements OnDestroy {
 
   //Dashboard
   public dashboard_switch=['OSHA', 'HIPAA', 'PCI'];
-  public current_dashboard_type = 'OSHA'; // default OSHA
+  public current_dashboard_type; // default OSHA
 
   constructor(private router: Router, private authenticationService: AuthenticationService, private oshaService: OshaService
     , @Inject(DOCUMENT) _document?: any) {
@@ -29,6 +29,14 @@ export class DefaultLayoutComponent implements OnDestroy {
       attributes: true,
       attributeFilter: ['class']
     });
+    if(localStorage.getItem('dashboard') === null)
+    {
+      this.current_dashboard_type = 'OSHA';
+    }
+    else
+    {
+      this.current_dashboard_type = localStorage.getItem('dashboard');
+    }
   }
 
   ngOnInit(){
@@ -68,5 +76,6 @@ export class DefaultLayoutComponent implements OnDestroy {
     this.setBoardType();
     this.addLogout();
     this.router.navigateByUrl('/dashboard');
+    localStorage.setItem('dashboard', this.current_dashboard_type);
   }
 }

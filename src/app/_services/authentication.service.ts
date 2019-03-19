@@ -61,6 +61,7 @@ export class AuthenticationService {
         localStorage.removeItem('base_url');
         localStorage.removeItem('org_name');
         localStorage.removeItem('contact_name');
+        localStorage.removeItem('dashboard');
         this.currentUserSubject.next(null);
     }
 }

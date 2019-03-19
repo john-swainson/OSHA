@@ -39,17 +39,9 @@ export class FacilityComponent implements OnInit {
               private route:ActivatedRoute, private router:Router, public authenticationService: AuthenticationService) {
       
       this.tableName = this.router.url.split('/')[1];
-      if(this.tableName == 'hipaa_contact')
-      {
-        this.api_url_value = 'contact';
-      }
-      else if(this.tableName == 'logout')
+      if(this.tableName == 'logout')
       {
         this.logout();
-      }
-      else
-      {
-        this.api_url_value = this.tableName.replace(/\_/gi, "-");
       }
       //===== Initialize Modal Values ======================
       this.is_loading = true;
@@ -65,6 +57,7 @@ export class FacilityComponent implements OnInit {
 
       this.sort_fields_by('items_page_order');
       for (let field of this.fields){
+        this.api_url_value = field.api_url_value;
         if(field.type == 'reference')
         {
           var temp_url:string = field.type_value;
