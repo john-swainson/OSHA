@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/map'
 import { User } from '../_models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { map ,  distinctUntilChanged } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 
@@ -15,6 +17,8 @@ export class OshaService {
     loading_submit: boolean = false;
     error_alert: string = '';
     success_alert: string = '';
+    current_dashboard_type_subject = new BehaviorSubject<string>({} as string);
+    current_dashboard_type = this.current_dashboard_type_subject.asObservable().pipe(distinctUntilChanged());
 
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
         private router: Router, private alertService: AlertService, private modalService: NgbModal) {
@@ -31,7 +35,7 @@ export class OshaService {
         return this.http.get( queryURL, optionsH ).map((res: any) => res);
     }
 
-    get_objects(api_url, key = null): Observable<any>{
+    get_objects(api_url, index = null, type = null): Observable<any>{
         let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
@@ -39,7 +43,7 @@ export class OshaService {
         let optionsH = {
             headers:headers
         };
-        return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res, key} });
+        return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res, index, type} });
     }
 
     add_object(form, api_url): any {
@@ -100,17 +104,17 @@ export class OshaService {
         jQuery.ajax({
             url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/${id}?access_token=` + this.currentUser.access_token,
             type: "DELETE",
-            contentType: 'application/json',
-            crossDomain: false,
+            crossDomain: true,
             headers: {          
-                Accept: 'application/json',
+                'Accept': 'application/json',
+                'Access-Control-Max-Age': 'OPTION'
                 // 'Content-Type': 'application/json'
             },
             success: (response) => {
                 alert("adsf");
             },
             error: (response) => {
-                this.alertService.error(response['message']);
+                // this.alertService.error(response['message']);
             }
         });
     }

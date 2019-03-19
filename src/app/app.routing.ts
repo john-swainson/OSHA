@@ -53,7 +53,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'base',
-        loadChildren: './views/base/base.module#BaseModule'
+        loadChildren: './views/base/base.module#BaseModule',
       },
       {
         path: 'buttons',
