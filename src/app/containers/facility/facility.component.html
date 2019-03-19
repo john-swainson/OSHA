@@ -113,24 +113,27 @@
                         <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} [checked]="f[remove__c(item.name)].value=='true'" class="form-check-label"/>
                         
                         <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
-                            <input [attr.required]="false" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
+                            <input [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
                             <mat-datepicker-toggle matSuffix [for]="picker">
                                 <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
                             </mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
 
-                        <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} class="form-control">
+                        <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} 
+                                class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
                             <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
                         </select> 
 
-                        <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control">
+                        <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control" 
+                                [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
                             <option *ngFor="let key of make_picklist(item.type_value)" [value]="key">{{key}}</option>
                         </select> 
 
                         <span class="help-block"><small>{{item.inlineHelpText}}</small></span>
                         <div *ngIf="submitted && f[remove__c(item.name)].errors" class="invalid-feedback">
                             <div *ngIf="f[remove__c(item.name)].errors">{{print(remove__c(item.name), f[remove__c(item.name)].errors)}}</div>
+                            <!--<div *ngIf="f[remove__c(item.name)].errors.required">required</div>-->
                         </div>
                     </div>   
                 </div>    

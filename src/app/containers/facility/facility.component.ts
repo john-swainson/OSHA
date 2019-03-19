@@ -66,19 +66,15 @@ export class FacilityComponent implements OnInit {
         {
           var temp_url:string = field.type_value;
 
-          temp_url = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase();
+          var temp_table_name = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase();
     
-          if(temp_url == 'hipaa_contact') //Exception For Hipaa_contact__c
-          {
-            temp_url = 'contact';
-          }
-
-          else if (temp_url == 'vendors') //Exception For Organization_info__c
-          {
-            temp_url = 'vendor'
-          }
-          this.oshaService.get_objects(temp_url).subscribe( res => {
-            this.references[field.name] = res;
+          this.oshaService.get_object_fields(temp_table_name).subscribe( data=>{
+            if(data.length > 0)
+            {
+              this.oshaService.get_objects(data[0].api_url_value).subscribe( res => {
+                this.references[field.name] = res;
+              });
+            }
           });
         }
         if(field.items_page_order != '0')
@@ -122,22 +118,25 @@ export class FacilityComponent implements OnInit {
         }
         
         //=== Add Control to Add Form 
-        this.addForm.addControl(control_name, this.formBuilder.control(''));
-        if( field.nillable == '0' )
+        
+        let validator = [];
+        if( field.nillable == 0)
         {
-          this.f[control_name].setValidators([Validators.required]);
+          validator.push(Validators.required);
         } 
-        if( field.length != null)
+        if( field.length > 0 )
         {
-          this.f[control_name].setValidators(Validators.maxLength(field.length));
+          validator.push(Validators.maxLength(field.length));
         }
         if( field.type == 'double')
         {
-          this.f[control_name].setValidators(Validators.maxLength(5));
+          validator.push(Validators.maxLength(5));
         }
+        this.addForm.addControl(control_name, new FormControl('', validator));
       }
       //===== Get All Objects ===================
       this.render_object();
+      console.log(this.addForm);
     });
   }
 
@@ -146,7 +145,6 @@ export class FacilityComponent implements OnInit {
     this.is_loading = true;
     this.oshaService.get_objects(this.api_url_value).subscribe( res => {
         this.objects = res;
-        console.log(res); 
         this.object_ids = [];
         for(var key in res.data) {
             this.object_ids.push(key); 
@@ -164,7 +162,7 @@ export class FacilityComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    if (this.addForm.invalid && this.addForm.errors != null) {
+    if (this.addForm.invalid || this.addForm.errors != null) {
       return;
     }
     this.loading_submit = true;
@@ -183,9 +181,12 @@ export class FacilityComponent implements OnInit {
 
     if(this.mode == 0)
     {
-      this.addForm.addControl(this.root_field_name, this.formBuilder.control(''));
-      let root_value = localStorage.getItem('org_id'); //temporary
-      this.f[this.root_field_name].setValue(root_value);
+      if(this.root_field_name != '')
+      {
+        this.addForm.addControl(this.root_field_name, this.formBuilder.control(''));
+        let root_value = localStorage.getItem('org_id'); //temporary
+        this.f[this.root_field_name].setValue(root_value);
+      }
       let request_form = [{"id": "", "data": this.addForm.value}];
       this.oshaService.add_object(request_form, this.api_url_value);
       this.addForm.removeControl(this.root_field_name);

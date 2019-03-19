@@ -169,7 +169,7 @@ export const navItems: any = {
         },
         {
           name: 'Security Reminders',
-          url: '/ic_preventing_transmission',
+          url: '/reminders',
         },
         {
           name: 'Media Sanitization Authority',
@@ -192,7 +192,7 @@ export const navItems: any = {
         },
         {
           name: 'Customer Organizations',
-          url: '/ic_preventing_transmission',
+          url: '/organization_info',
         },
         {
           name: 'Market Offerings',
