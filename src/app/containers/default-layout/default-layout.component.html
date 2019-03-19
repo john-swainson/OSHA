@@ -59,11 +59,11 @@
     <cui-breadcrumb>
       <!-- Breadcrumb Menu-->
       <li class="breadcrumb-menu">
-        <div class="btn-group d-md-down-none" role="group" aria-label="Button group with nested dropdown">
+        <!--<div class="btn-group d-md-down-none" role="group" aria-label="Button group with nested dropdown">
           <a class="btn" href="#"><i class="icon-speech"></i></a>
           <a class="btn" [routerLink]="['/dashboard']"><i class="icon-graph"></i> &nbsp;Dashboard</a>
           <a class="btn" href="#"><i class="icon-settings"></i> &nbsp;Settings</a>
-        </div>
+        </div>-->
         <select style="margin-top:-7px;float:right;" (change)="onChange($event.target.value)">
           <option *ngFor="let dash of dashboard_switch" [selected]="dash === current_dashboard_type" [value]="dash">{{dash}}</option>
         </select>
