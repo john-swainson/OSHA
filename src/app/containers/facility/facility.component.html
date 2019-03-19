@@ -4,7 +4,7 @@
         <h2 class="text-primary">{{replace_space(tableName) | titlecase}} Management</h2>
     </div>
     <div class="col-12">
-        <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary float-left" routerLinkActive="active">
+        <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary float-left" routerLinkActive="active" *ngIf="can_insert==1">
             <i class="fa fa-plus" aria-hidden="true"></i>
             Create new {{replace_space(tableName) | titlecase}}
         </a>
@@ -23,7 +23,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let id of object_ids" class="text-center">  
-                    <td *ngFor="let item of items_page_order; let index=index;">
+                    <td width="{{item.items_page_display_proportion}}%" *ngFor="let item of items_page_order; let index=index;">
                         <a *ngIf="index==0" (click)="open(view, 1, id)" href="javascript:void(0)" > {{objects.data[id][remove__c(item.name)]}} </a>
 
                         <a *ngIf="index!=0 && item.type == 'reference'">
@@ -38,12 +38,12 @@
                         </a>
                         
                         <a *ngIf="index!=0 && item.type != 'reference' && item.type != 'boolean' ">
-                            {{objects.data[id][remove__c(item.name)]}}
+                            <p [innerHtml]="objects.data[id][remove__c(item.name)]"></p>
                         </a>
                     </td>
                     <td>
-                        <a (click)="open(create, 2, id)" href="javascript:void(0)">Edit </a>  
-                        <a *ngIf="api_url_value!='contact'" (click)="delete(id)" href="javascript:void(0)">| Del</a>
+                        <a (click)="open(create, 2, id)" href="javascript:void(0)" *ngIf="can_edit==1">Edit </a>  
+                        <a (click)="delete(id)" href="javascript:void(0)" *ngIf="can_delete==1">| Del</a>
                     </td>
                 </tr>
             </tbody>

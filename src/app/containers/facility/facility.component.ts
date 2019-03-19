@@ -33,6 +33,10 @@ export class FacilityComponent implements OnInit {
   //===== table name =====
   tableName: string;  //Table Name
   api_url_value: string;  //API url path
+  //===== action requires =====
+  can_edit: number = 0;
+  can_insert: number = 0;
+  can_delete: number = 0;
   
   constructor(private alertService: AlertService, public oshaService: OshaService,
               config: NgbModalConfig, private modalService: NgbModal, private formBuilder: FormBuilder,
@@ -81,6 +85,9 @@ export class FacilityComponent implements OnInit {
         {
           this.items_page_order.push(field);
         }
+        this.can_insert = field.insert;
+        this.can_edit = field.edit;
+        this.can_delete = field.delete;
       }
 
       this.sort_fields_by('view_display_order');
@@ -138,7 +145,8 @@ export class FacilityComponent implements OnInit {
     this.oshaService.error_alert = this.oshaService.success_alert = '';
     this.is_loading = true;
     this.oshaService.get_objects(this.api_url_value).subscribe( res => {
-        this.objects = res; 
+        this.objects = res;
+        console.log(res); 
         this.object_ids = [];
         for(var key in res.data) {
             this.object_ids.push(key); 
