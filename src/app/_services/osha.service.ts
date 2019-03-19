@@ -25,14 +25,14 @@ export class OshaService {
         this.currentUser = this.authenticationService.currentUserValue;
     }
 
-    get_object_fields(tableName): Observable<any>{
+    get_object_fields(tableName, index = null, type = null): Observable<any>{
         let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud?tableName=${tableName}`;
         let headers = new HttpHeaders();
         headers.append('Accept', 'application/json');
         let optionsH = {
             headers:headers
         };
-        return this.http.get( queryURL, optionsH ).map((res: any) => res);
+        return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res, index, type}});
     }
 
     get_objects(api_url, index = null, type = null): Observable<any>{

@@ -53,40 +53,44 @@ export class DashboardComponent implements OnInit {
   doDashboard(){
     let index = 0;
     for(var item of this.dashboardItems[this.current_dashboard_type]) {
-      let api_url = item.url.replace(/\_/gi, "-");
-      //Exception
-      if(api_url == '/hipaa-contact'){
-        api_url = 'contact';
-      }
+      
+      let table_name = item.url.replace( '/', '' );
       item.isloading = true;
       
-      this.oshaService.get_objects(api_url, index, this.current_dashboard_type).subscribe(res => {
+      this.oshaService.get_object_fields(table_name, index, this.current_dashboard_type).subscribe( data=>{
+
+        
+        let api_url = data[0].api_url_value;
+        this.oshaService.get_objects(api_url, data.index, data.type).subscribe(res => {
        
-        this.dashboardItems[res.type][res.index].isloading = false;
-        // Integer
-        if(this.dashboardItems[res.type][res.index].type == 'integer'){
-  
-          let message = res.message;
-          this.dashboardItems[res.type][res.index].data = message.split(' ')[0];
-        }
-        // Date
-        else if(this.dashboardItems[res.type][res.index].type == 'date'){
-          var date='1945-05-09';
-          // Review_Date
-          for(var key in res.data) {
-            if( new Date(date).valueOf() < new Date(res.data[key].Review_Date).valueOf() )
-            {
-              date = res.data[key].Review_Date;
-            }
+          this.dashboardItems[res.type][res.index].isloading = false;
+          // Integer
+          if(this.dashboardItems[res.type][res.index].type == 'integer'){
+    
+            let message = res.message;
+            this.dashboardItems[res.type][res.index].data = message.split(' ')[0];
           }
-          if(res.data.length == 0)
-            date = '';
-          this.dashboardItems[res.type][res.index].data = date;
-        }
-      },
-      err=>{
-        console.log(err);
-      })
+          // Date
+          else if(this.dashboardItems[res.type][res.index].type == 'date'){
+            var date='1945-05-09';
+            // Review_Date
+            for(var key in res.data) {
+              if( new Date(date).valueOf() < new Date(res.data[key].Review_Date).valueOf() )
+              {
+                date = res.data[key].Review_Date;
+              }
+            }
+            if(res.data.length == 0)
+              date = '';
+            this.dashboardItems[res.type][res.index].data = date;
+          }
+        },
+        err=>{
+          console.log(err);
+        })
+
+      });
+      
       index++;
     }
   }

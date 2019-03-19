@@ -204,7 +204,7 @@ export const dashboardItems: any={
     'HIPAA':[
         // Left
         {
-            'url': '/',
+            'url': '/ic_engineering_controls',
             'name': 'Last Date of Yearly Risk Analysis',
             'icon': 'fa fa-fire fa-fw dashboard-fa-size',
             'isloading': false,
@@ -213,7 +213,7 @@ export const dashboardItems: any={
             'pos': 'left'
         },
         {
-            'url': '/ic_post_exposure_management',
+            'url': '/security_incident',
             'name': 'Under 500 Breaches this year',
             'icon': 'fa fa-code-fork fa-fw dashboard-fa-size',
             'isloading': false,
@@ -222,7 +222,7 @@ export const dashboardItems: any={
             'pos': 'left'
         },
         {
-            'url': '/ic_preventing_transmission',
+            'url': '/security_incident',
             'name': '500 or Over Breaches this year',
             'icon': 'fa fa-code-fork fa-fw dashboard-fa-size',
             'isloading': false,
@@ -240,7 +240,7 @@ export const dashboardItems: any={
             'pos': 'left'
         },
         {
-            'url': '/ic_contact_dermatitis',
+            'url': '/security_incident',
             'name': 'Open Security Incidents',
             'icon': 'fa fa-lock fa-fw dashboard-fa-size',
             'isloading': false,
@@ -249,7 +249,7 @@ export const dashboardItems: any={
             'pos': 'left'
         },
         {
-            'url': '/ic_records_maintenance',
+            'url': '/security_incident',
             'name': 'Open Breach Incidents',
             'icon': 'fa fa-circle fa-fw dashboard-fa-size',
             'isloading': false,
@@ -258,7 +258,7 @@ export const dashboardItems: any={
             'pos': 'left'
         },
         {
-            'url': '/facility',
+            'url': '/change_request',
             'name': 'Open Change Requests',
             'icon': 'fa fa-code-fork fa-fw dashboard-fa-size',
             'isloading': false,
@@ -267,7 +267,7 @@ export const dashboardItems: any={
             'pos': 'left'
         },
         {
-            'url': '/hipaa_contact',
+            'url': '/security_incident',
             'name': 'Reportable Breaches this year',
             'icon': 'fa fa-users fa-fw dashboard-fa-size',
             'isloading': false,
@@ -277,7 +277,7 @@ export const dashboardItems: any={
         },
          // Right
          {
-            'url': '/ic_instrument_processing',
+            'url': '/vendors',
             'name': 'Active Business Associates (BAs)',
             'icon': 'fa fa-bank fa-fw dashboard-fa-size',
             'isloading': false,
@@ -286,7 +286,7 @@ export const dashboardItems: any={
             'pos': 'right'
         },
         {
-            'url': '/ic_work_practice',
+            'url': '/baa',
             'name': 'BAs with unsigned BAA',
             'icon': 'fa fa-sign-in fa-fw dashboard-fa-size',
             'isloading': false,
@@ -295,7 +295,7 @@ export const dashboardItems: any={
             'pos': 'right'
         },
         {
-            'url': '/ic_prep_packaging',
+            'url': '/vendor_review',
             'name': 'BA reviews sent out',
             'icon': 'fa fa-check-square-o fa-fw dashboard-fa-size',
             'isloading': false,
@@ -304,7 +304,7 @@ export const dashboardItems: any={
             'pos': 'right'
         },
         {
-            'url': '/ic_unwrapped_instruments',
+            'url': '/vendor_review',
             'name': 'BA reviews completed',
             'icon': 'fa fa-star fa-fw dashboard-fa-size',
             'isloading': false,
@@ -313,7 +313,7 @@ export const dashboardItems: any={
             'pos': 'right'
         },
         {
-            'url': '/ic_implantable_devices',
+            'url': '/vendor_review',
             'name': 'BAs failed review',
             'icon': 'fa fa-star-o fa-fw dashboard-fa-size',
             'isloading': false,
