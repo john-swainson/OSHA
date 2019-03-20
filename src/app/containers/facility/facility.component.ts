@@ -22,7 +22,7 @@ export class FacilityComponent implements OnInit {
   //=====================
   objects: any;
   object_ids: Array<string> = [];
-  fields: any;
+  fields: any = [];
   items_page_order: Array<any> = [];
   view_display_order: Array<any> = [];
   insert_display_order: Array<any> = [];
@@ -57,7 +57,7 @@ export class FacilityComponent implements OnInit {
 
   ngOnInit() {
       this.oshaService.get_object_fields(this.tableName).subscribe( res=>{
-      this.fields = res;
+      this.fields = res.fields;
 
       this.sort_fields_by('items_page_order');
       for (let field of this.fields){
@@ -69,9 +69,9 @@ export class FacilityComponent implements OnInit {
           var temp_table_name = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase();
     
           this.oshaService.get_object_fields(temp_table_name).subscribe( data=>{
-            if(data.length > 0)
+            if(data.fields.length > 0)
             {
-              this.oshaService.get_objects(data[0].api_url_value).subscribe( res => {
+              this.oshaService.get_objects(data.fields[0].api_url_value).subscribe( res => {
                 this.references[field.name] = res;
               });
             }
@@ -162,7 +162,7 @@ export class FacilityComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    if (this.addForm.invalid || this.addForm.errors != null) {
+    if (this.addForm.invalid && this.addForm.errors != null) {
       return;
     }
     this.loading_submit = true;

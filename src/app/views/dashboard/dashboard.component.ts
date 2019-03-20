@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
       this.oshaService.get_object_fields(table_name, index, this.current_dashboard_type).subscribe( data=>{
 
         
-        let api_url = data[0].api_url_value;
+        let api_url = data.fields[0].api_url_value;
         this.oshaService.get_objects(api_url, data.index, data.type).subscribe(res => {
        
           this.dashboardItems[res.type][res.index].isloading = false;

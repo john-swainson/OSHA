@@ -32,7 +32,7 @@ export class OshaService {
         let optionsH = {
             headers:headers
         };
-        return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res, index, type}});
+        return this.http.get( queryURL, optionsH ).map((res: any) => { return { fields:res, index, type }});
     }
 
     get_objects(api_url, index = null, type = null): Observable<any>{
