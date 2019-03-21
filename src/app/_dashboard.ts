@@ -1,5 +1,61 @@
 export const dashboardItems: any={
     'OSHA':[
+        // Top
+        {
+            'url': '/',
+            'name': 'WEEKLY TASKS DUE',
+            'icon': 'icon-user-follow',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'bg_color': 'bg-success',
+        },
+        {
+            'url': '/',
+            'name': 'MONTHLY TASKS DUE',
+            'icon': 'icon-basket-loaded',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'bg_color': 'bg-warning',
+        },
+        {
+            'url': '/',
+            'name': 'EXPOSURE AND INJURIES',
+            'icon': 'icon-pie-chart',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'bg_color': 'bg-primary'
+        },
+        {
+            'url': '/',
+            'name': 'YEARLY TRAININGS DUE',
+            'icon': 'icon-speedometer',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'bg_color': 'bg-danger'
+        },
+        {
+            'url': '/',
+            'name': 'COMPLIANCE TASKS DUE',
+            'icon': 'icon-speech',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'bg_color': 'bg-info',
+        },
         // Left
         {
             'url': '/',
@@ -202,6 +258,62 @@ export const dashboardItems: any={
         }      
     ],
     'HIPAA':[
+        // Top
+        {
+            'url': '/',
+            'name': 'OPEN CHANGE REQUESTS',
+            'icon': 'icon-user-follow',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'bg_color': 'bg-warning',
+        },
+        {
+            'url': '/',
+            'name': 'PENDING SANITIZATION REQUESTS',
+            'icon': 'icon-basket-loaded',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'bg_color': 'bg-success',
+        },
+        {
+            'url': '/',
+            'name': 'SUBMITTED SANITIZATION',
+            'icon': 'icon-pie-chart',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'bg_color': 'bg-info'
+        },
+        {
+            'url': '/',
+            'name': 'OPEN BREACH INCIDENTS',
+            'icon': 'icon-speedometer',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'bg_color': 'bg-danger'
+        },
+        {
+            'url': '/',
+            'name': 'FAILED BAA REVIEWS',
+            'icon': 'icon-speech',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'bg_color': 'bg-primary',
+        },
         // Left
         {
             'url': '/ic_engineering_controls',
