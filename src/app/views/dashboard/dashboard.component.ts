@@ -41,7 +41,6 @@ export class DashboardComponent implements OnInit {
         if(type.length > 0){
           this.doDashboard();
         }
-        
       }
     );
   }

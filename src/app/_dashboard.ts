@@ -260,7 +260,7 @@ export const dashboardItems: any={
     'HIPAA':[
         // Top
         {
-            'url': '/',
+            'url': '/change_request',
             'name': 'OPEN CHANGE REQUESTS',
             'icon': 'icon-user-follow',
             'isloading': false,
@@ -271,7 +271,7 @@ export const dashboardItems: any={
             'bg_color': 'bg-warning',
         },
         {
-            'url': '/',
+            'url': '/media_sanitization',
             'name': 'PENDING SANITIZATION REQUESTS',
             'icon': 'icon-basket-loaded',
             'isloading': false,
@@ -282,7 +282,7 @@ export const dashboardItems: any={
             'bg_color': 'bg-success',
         },
         {
-            'url': '/',
+            'url': '/media_sanitization',
             'name': 'SUBMITTED SANITIZATION',
             'icon': 'icon-pie-chart',
             'isloading': false,
@@ -293,7 +293,7 @@ export const dashboardItems: any={
             'bg_color': 'bg-info'
         },
         {
-            'url': '/',
+            'url': '/security_incident',
             'name': 'OPEN BREACH INCIDENTS',
             'icon': 'icon-speedometer',
             'isloading': false,
@@ -304,7 +304,7 @@ export const dashboardItems: any={
             'bg_color': 'bg-danger'
         },
         {
-            'url': '/',
+            'url': '/vendor_review',
             'name': 'FAILED BAA REVIEWS',
             'icon': 'icon-speech',
             'isloading': false,

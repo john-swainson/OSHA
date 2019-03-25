@@ -37,6 +37,9 @@ export class DefaultLayoutComponent implements OnDestroy {
     {
       this.current_dashboard_type = localStorage.getItem('dashboard');
     }
+    var script = document.createElement('script');
+    script.src = '/assets/js/resize.js';
+    document.head.appendChild(script); 
   }
 
   ngOnInit(){
