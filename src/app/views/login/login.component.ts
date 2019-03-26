@@ -82,7 +82,7 @@ export class LoginComponent {
         }
 
         this.loading = true;
-        this.authenticationService.login(this.f.organization.value, this.f_g.username.value, this.f.password.value, $('#organization').text())
+        this.authenticationService.login(this.f.organization.value, this.f_g.username.value, this.f.password.value)
           .pipe(first())
           .subscribe(
               data => {

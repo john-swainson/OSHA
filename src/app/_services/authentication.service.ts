@@ -20,7 +20,7 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    login(organization: string, username: string, password: string, org_name: string): Observable<any> {
+    login(organization: string, username: string, password: string): Observable<any> {
         let orgs = organization.split('/');
         const body = new HttpParams()
             .set('org_id', orgs[0])
@@ -35,7 +35,7 @@ export class AuthenticationService {
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('org_id', orgs[0]);
                     localStorage.setItem('base_url', this.base_url);
-                    localStorage.setItem('org_name', org_name);
+                    localStorage.setItem('org_name', orgs[2]);
                     localStorage.setItem('contact_name', orgs[1]);
                     this.currentUserSubject.next(user);
                 }
