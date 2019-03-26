@@ -19,7 +19,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
             if (err.status === 501) {
                 // auto logout if 501 response returned from api
-                this.router.navigateByUrl('/404');
+                // this.router.navigateByUrl('/404');
             }
             
             const error = err.error.message || err.statusText;
