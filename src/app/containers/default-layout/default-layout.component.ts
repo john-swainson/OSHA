@@ -43,8 +43,11 @@ export class DefaultLayoutComponent implements OnDestroy {
   }
 
   ngOnInit(){
-    this.setBoardType();
-    this.addLogout();
+    if(navItems.hasOwnProperty(this.current_dashboard_type))
+    {
+      this.setBoardType();
+      this.addLogout();
+    }
   }
 
   ngOnDestroy(): void {
@@ -65,7 +68,7 @@ export class DefaultLayoutComponent implements OnDestroy {
         if(item.url == '/logout')
         {
           return;
-        }
+        } 
       }
       this.navItems .unshift( { name: localStorage.getItem('contact_name'), 
                                 url: '/logout', 
@@ -76,8 +79,11 @@ export class DefaultLayoutComponent implements OnDestroy {
   }
   onChange(val){
     this.current_dashboard_type = val;
-    this.setBoardType();
-    this.addLogout();
+    if(navItems.hasOwnProperty(this.current_dashboard_type))
+    {
+      this.setBoardType();
+      this.addLogout();
+    }
     this.router.navigateByUrl('/dashboard');
     localStorage.setItem('dashboard', this.current_dashboard_type);
   }

@@ -155,7 +155,7 @@ export class FacilityComponent implements OnInit {
         document.head.appendChild(script); 
     },
     err => {
-      this.router.navigateByUrl('/404');
+      
     })
   }
 

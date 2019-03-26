@@ -70,6 +70,11 @@ export class OshaService {
             },
             error: (response) => {
                 this.loading_submit = false;
+                if(response.status === 401)
+                {
+                    this.authenticationService.logout();
+                    location.reload(true);
+                }
             }
         });
     }
@@ -97,6 +102,11 @@ export class OshaService {
             },
             error: (response) => {
                 this.loading_submit = false;
+                if(response.status === 401)
+                {
+                    this.authenticationService.logout();
+                    location.reload(true);
+                }
             }
         });
     }
