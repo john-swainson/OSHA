@@ -134,3 +134,21 @@ table thead tr {
     z-index: 1200;
     border: 1px solid royalblue;
 }
+
+/* modal animation */
+.modal-content{
+    animation-name: example;
+    animation-duration: 0.3s;
+
+    background-color: white;
+	border-radius: 0.3125rem;
+	box-shadow: 0 0 2.5rem rgba(0,0,0,0.5);
+}
+
+@keyframes example {
+    0%   {transform: scale(0.2)}
+    30%  {transform: scale(0.4)}
+    60%  {transform: scale(0.6)}  
+    100% {transform: scale(1)}
+}
+

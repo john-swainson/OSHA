@@ -221,18 +221,18 @@ export class FacilityComponent implements OnInit {
         this.set_values(null);
       else
         this.set_values(index);  
-      this.modalService.open(content, { size: 'lg' });
     }
     else if (mode == 1) // show modal
     {
       this.view_index = index;
-      this.modalService.open(content, { size: 'lg' });
     }
     else if (mode == 2) // edit modal
     {
       this.set_values(index);
-      this.modalService.open(content, { size: 'lg' });
     }  
+
+    // const modalRef = this.modalService.open(content, {windowClass: 'modal-holder', centered: true});
+    this.modalService.open(content, { size: 'lg' });
   }
 
   set_values(index){

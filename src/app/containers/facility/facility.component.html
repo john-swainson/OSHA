@@ -4,10 +4,10 @@
         <h2 class="text-primary">{{replace_space(tableName) | titlecase}} Management</h2>
     </div>
     <div class="col-12">
-        <a (click)="open(create, 0)" href="javascript:void(0)" class="btn btn-primary float-left" routerLinkActive="active" *ngIf="can_insert==1">
+        <button (click)="open(create, 0)" href="javascript:void(0)" class="trigger mx-0 btn-primary" routerLinkActive="active" *ngIf="can_insert==1">
             <i class="fa fa-plus" aria-hidden="true"></i>
             Create new {{replace_space(tableName) | titlecase}}
-        </a>
+        </button>
     </div>
 </div>
 <div class="row mt-1">  
@@ -37,9 +37,9 @@
                             <span *ngIf="objects.data[id][remove__c(item.name)] == 'false'">No</span>
                         </a>
                         
-                        <a *ngIf="index!=0 && item.type != 'reference' && item.type != 'boolean' ">
-                            <p [innerHtml]="objects.data[id][remove__c(item.name)]"></p>
-                        </a>
+                        <div *ngIf="index!=0 && item.type != 'reference' && item.type != 'boolean' ">
+                            <p class="line_3_description" [innerHtml]="objects.data[id][remove__c(item.name)]" title={{objects.data[id][remove__c(item.name)]}}></p>
+                        </div>
                     </td>
                     <td>
                         <a (click)="open(create, 2, id)" href="javascript:void(0)" *ngIf="can_edit==1">Edit </a>  
@@ -149,3 +149,19 @@
         </form>
     </div>
 </ng-template>
+
+<div data-modal="trigger-1" class="modal">
+	<article class="content-wrapper">
+		<button class="close"></button>
+		<header class="modal-header">
+			<h2>This is a modal 1</h2>
+		</header>
+		<div class="content">
+			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.</p>
+		</div>
+		<footer class="modal-footer">
+			<button class="action">Accept</button>
+			<button class="action">Decline</button>
+		</footer>
+	</article>
+</div>
