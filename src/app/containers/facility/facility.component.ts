@@ -37,7 +37,8 @@ export class FacilityComponent implements OnInit {
   can_edit: number = 0;
   can_insert: number = 0;
   can_delete: number = 0;
-  
+  //===== tab =================
+  incident_tabs = ['Incident', 'Breach'];
   constructor(private alertService: AlertService, public oshaService: OshaService,
               config: NgbModalConfig, private modalService: NgbModal, private formBuilder: FormBuilder,
               private route:ActivatedRoute, private router:Router, public authenticationService: AuthenticationService) {

@@ -71,18 +71,46 @@
             <div class="col-md-4">
             </div>
         </div>
-        <div *ngFor="let item of view_display_order" class="form-group row">
-            <label class="col-md-4 col-form-label"> {{item.label}} </label>
-            <div class="col-md-8">
-                <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
-            
-                <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
-                        value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
+        <div *ngIf="tableName=='security_incident'">
+            <ngb-tabset>
+                <ngb-tab *ngFor="let tab of incident_tabs" title="{{tab}}">
+                    <ng-template ngbTabContent>
+                        <div *ngFor="let item of view_display_order;let index=index" class="form-group row my-0">
+                            <div class="col-12 my-2" *ngIf="(index < 14&&tab=='Incident')||(index>=14&&tab=='Breach')">
+                                <div class="row">
+                                    <label class="col-md-4 col-form-label"> {{item.label}} </label>
+                                    <div class="col-md-8">
+                                        <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
+                                    
+                                        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
+                                                value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
+                                        
+                                        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
+                                                value="" [class.disabled]="true" />
+                                        
+                                        <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+        <div *ngIf="tableName!='security_incident'">
+            <div *ngFor="let item of view_display_order" class="form-group row">
+                <label class="col-md-4 col-form-label"> {{item.label}} </label>
+                <div class="col-md-8">
+                    <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
                 
-                <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
-                        value="" [class.disabled]="true" />
-                
-                <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+                    <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
+                            value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
+                    
+                    <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
+                            value="" [class.disabled]="true" />
+                    
+                    <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+                </div>
             </div>
         </div>
     </div>
@@ -99,44 +127,93 @@
     <div class="modal-body">
         <ngb-alert *ngIf="oshaService.error_alert!=''" (close)="oshaService.error_alert = ''">{{oshaService.error_alert}}</ngb-alert>
         <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="form-horizontal ng-untouched ng-pristine ng-valid">
-            <div *ngFor="let item of insert_display_order" class="form-group">
-                <div class="row" *ngIf="item.type!='root'">
-                    <label class="col-md-4 col-form-label" for="Name_of_facility">{{item.label}}</label>
-                    <div class="col-md-8">
-                        
-                        <!-- Add field by item.type -->
-                        <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
-                                type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
-                        
-                        <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
-                        
-                        <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} [checked]="f[remove__c(item.name)].value=='true'" class="form-check-label"/>
-                        
-                        <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
-                            <input [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
-                            <mat-datepicker-toggle matSuffix [for]="picker">
-                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-                            </mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
+            <div *ngIf="tableName=='security_incident'">
+                <ngb-tabset>
+                    <ngb-tab *ngFor="let tab of incident_tabs" title="{{tab}}">
+                        <ng-template ngbTabContent>
+                            <div *ngFor="let item of insert_display_order; let index=index;" class="form-group">
+                                <div class="row" *ngIf="(item.type!='root')&&((index < 14&&tab=='Incident')||(index>=14&&tab=='Breach'))">
+                                    <label class="col-md-4 col-form-label" for="Name_of_facility">{{item.label}}</label>
+                                    <div class="col-md-8">
+                                        
+                                        <!-- Add field by item.type -->
+                                        <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
+                                                type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
+                                        
+                                        <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
+                                        
+                                        <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} [checked]="f[remove__c(item.name)].value=='true'" class="form-check-label"/>
+                                        
+                                        <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
+                                            <input [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
+                                            <mat-datepicker-toggle matSuffix [for]="picker">
+                                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
 
-                        <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} 
-                                class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
-                            <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
-                        </select> 
+                                        <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} 
+                                                class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                            <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
+                                        </select> 
 
-                        <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control" 
-                                [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
-                            <option *ngFor="let key of make_picklist(item.type_value)" [value]="key">{{key}}</option>
-                        </select> 
+                                        <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control" 
+                                                [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                            <option *ngFor="let key of make_picklist(item.type_value)" [value]="key">{{key}}</option>
+                                        </select> 
 
-                        <span class="help-block"><small>{{item.inlineHelpText}}</small></span>
-                        <div *ngIf="submitted && f[remove__c(item.name)].errors" class="invalid-feedback">
-                            <div *ngIf="f[remove__c(item.name)].errors">{{print(remove__c(item.name), f[remove__c(item.name)].errors)}}</div>
-                            <!--<div *ngIf="f[remove__c(item.name)].errors.required">required</div>-->
-                        </div>
-                    </div>   
-                </div>    
+                                        <span class="help-block"><small>{{item.inlineHelpText}}</small></span>
+                                        <div *ngIf="submitted && f[remove__c(item.name)].errors" class="invalid-feedback">
+                                            <div *ngIf="f[remove__c(item.name)].errors">{{print(remove__c(item.name), f[remove__c(item.name)].errors)}}</div>
+                                            <!--<div *ngIf="f[remove__c(item.name)].errors.required">required</div>-->
+                                        </div>
+                                    </div>   
+                                </div>    
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+            <div *ngIf="tableName!='security_incident'">
+                <div *ngFor="let item of insert_display_order" class="form-group">
+                    <div class="row" *ngIf="item.type!='root'">
+                        <label class="col-md-4 col-form-label" for="Name_of_facility">{{item.label}}</label>
+                        <div class="col-md-8">
+                            
+                            <!-- Add field by item.type -->
+                            <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
+                                    type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
+                            
+                            <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
+                            
+                            <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} [checked]="f[remove__c(item.name)].value=='true'" class="form-check-label"/>
+                            
+                            <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
+                                <input [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
+                                <mat-datepicker-toggle matSuffix [for]="picker">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+                            <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} 
+                                    class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
+                            </select> 
+
+                            <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control" 
+                                    [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                <option *ngFor="let key of make_picklist(item.type_value)" [value]="key">{{key}}</option>
+                            </select> 
+
+                            <span class="help-block"><small>{{item.inlineHelpText}}</small></span>
+                            <div *ngIf="submitted && f[remove__c(item.name)].errors" class="invalid-feedback">
+                                <div *ngIf="f[remove__c(item.name)].errors">{{print(remove__c(item.name), f[remove__c(item.name)].errors)}}</div>
+                                <!--<div *ngIf="f[remove__c(item.name)].errors.required">required</div>-->
+                            </div>
+                        </div>   
+                    </div>    
+                </div>
             </div>
             
             <div class="form-group col-md-12">
@@ -149,19 +226,3 @@
         </form>
     </div>
 </ng-template>
-
-<div data-modal="trigger-1" class="modal">
-	<article class="content-wrapper">
-		<button class="close"></button>
-		<header class="modal-header">
-			<h2>This is a modal 1</h2>
-		</header>
-		<div class="content">
-			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.</p>
-		</div>
-		<footer class="modal-footer">
-			<button class="action">Accept</button>
-			<button class="action">Decline</button>
-		</footer>
-	</article>
-</div>
