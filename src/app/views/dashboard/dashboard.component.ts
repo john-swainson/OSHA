@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService, OshaService } from '../../_services';
+import { AlertService, OshaService, DashboardService } from '../../_services';
 import { Router } from '@angular/router';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
@@ -25,7 +25,8 @@ export class DashboardComponent implements OnInit {
   public dashboardItems = dashboardItems;
   public org_name: string = '';
 
-  constructor(private alertService: AlertService, private oshaService: OshaService) {
+  constructor(private alertService: AlertService, private oshaService: OshaService, 
+              public dashboardService: DashboardService) {
     
     let org_words = localStorage.getItem('org_name').split(' ');
     let temp_org = '';
@@ -53,42 +54,54 @@ export class DashboardComponent implements OnInit {
     let index = 0;
     for(var item of this.dashboardItems[this.current_dashboard_type]) {
       
+
       let table_name = item.url.replace( '/', '' );
       item.isloading = true;
-      
-      this.oshaService.get_object_fields(table_name, index, this.current_dashboard_type).subscribe( data=>{
-
-        let api_url = data.fields[0].api_url_value;
-        this.oshaService.get_objects(api_url, data.index, data.type).subscribe(res => {
-       
+      if(table_name == 'dashboard_type') //For Hipaa
+      {
+        this.dashboardService.get_dashboard_type(item.url_type, item.url_filter, index, this.current_dashboard_type).subscribe( res => {
+          
           this.dashboardItems[res.type][res.index].isloading = false;
-          // Integer
-          if(this.dashboardItems[res.type][res.index].type == 'integer'){
-    
-            let message = res.message;
-            this.dashboardItems[res.type][res.index].data = message.split(' ')[0];
-          }
-          // Date
-          else if(this.dashboardItems[res.type][res.index].type == 'date'){
-            var date='1945-05-09';
-            // Review_Date
-            for(var key in res.data) {
-              if( new Date(date).valueOf() < new Date(res.data[key].Review_Date).valueOf() )
-              {
-                date = res.data[key].Review_Date;
-              }
-            }
-            if(res.data.length == 0)
-              date = '';
-            this.dashboardItems[res.type][res.index].data = date;
-          }
-        },
-        err=>{
-          console.log(err);
-        })
+          this.dashboardItems[res.type][res.index].data = res.data.length;
+        }, err => {
 
-      });
+        })
+      }
+      else // For Osha
+      {
+        this.oshaService.get_object_fields(table_name, index, this.current_dashboard_type).subscribe( data=>{
+
+          let api_url = data.fields[0].api_url_value;
+          this.oshaService.get_objects(api_url, data.index, data.type).subscribe(res => {
+         
+            this.dashboardItems[res.type][res.index].isloading = false;
+            // Integer
+            if(this.dashboardItems[res.type][res.index].type == 'integer'){
       
+              let message = res.message;
+              this.dashboardItems[res.type][res.index].data = message.split(' ')[0];
+            }
+            // Date
+            else if(this.dashboardItems[res.type][res.index].type == 'date'){
+              var date='1945-05-09';
+              // Review_Date
+              for(var key in res.data) {
+                if( new Date(date).valueOf() < new Date(res.data[key].Review_Date).valueOf() )
+                {
+                  date = res.data[key].Review_Date;
+                }
+              }
+              if(res.data.length == 0)
+                date = '';
+              this.dashboardItems[res.type][res.index].data = date;
+            }
+          },
+          err=>{
+            console.log(err);
+          })
+  
+        });
+      }
       index++;
     }
   }

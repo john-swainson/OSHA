@@ -1,0 +1,223 @@
+<div class="row">
+    <div class="col-12">
+        <ngb-alert *ngIf="oshaService.success_alert!=''" (close)="oshaService.success_alert = ''">{{oshaService.success_alert}}</ngb-alert>
+        <h2 class="text-primary">{{replace_space(tableName) | titlecase}} Management</h2>
+    </div>
+    <div class="col-12">
+        <button (click)="open(create, 0)" href="javascript:void(0)" class="trigger mx-0 btn-primary" routerLinkActive="active" *ngIf="can_insert==1">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Create new {{replace_space(tableName) | titlecase}}
+        </button>
+    </div>
+</div>
+<div class="row mt-1">  
+    <div class="col-12">
+        <ngx-loading [show]="is_loading"></ngx-loading>
+        <h1 class="text-center" *ngIf="is_loading==false&&filtered_labels.length==0">No data was found</h1>
+        <table datatable class="row-border hover table-bordered" *ngIf="filtered_labels.length>0 && filtered_objects.length>0">
+            <thead>
+                <tr class="text-center" class="text-center">
+                    <th *ngFor="let item of filtered_labels">{{item.label}}</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let object of filtered_objects" class="text-center">  
+                    <td *ngFor="let label of filtered_labels; let index=index;">
+                        <a *ngIf="index==0" (click)="open(view, 1, object.Id)" href="javascript:void(0)" > {{object[label.key]}} </a>
+                        
+                        <div *ngIf="index!=0">
+                          <p class="line_3_description" title={{object[label.key]}}>{{object[label.key]}}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <a (click)="open(create, 2, object.Id)" href="javascript:void(0)" *ngIf="can_edit==1">Edit </a>  
+                        <a (click)="delete(object.Id)" href="javascript:void(0)" *ngIf="can_delete==1">| Del</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+
+<ng-template #view let-c="close" let-d="dismiss">
+    <div class="modal-header bg-primary">
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==1">Detailed information</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row mb-3">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-2 col-sm-6 col-12">
+                <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="open(create, 2, view_index)" type="button">
+                    <i class="far fa-edit" aria-hidden="true"></i>
+                    Edit
+                </button>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12">
+                <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="open(create, 0, view_index)" type="button">
+                    <i class="far fa-copy" aria-hidden="true"></i>
+                    Copy
+                </button>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        <div *ngIf="tableName=='security_incident'">
+            <ngb-tabset>
+                <ngb-tab *ngFor="let tab of incident_tabs" title="{{tab}}">
+                    <ng-template ngbTabContent>
+                        <div *ngFor="let item of view_display_order;let index=index" class="form-group row my-0">
+                            <div class="col-12 my-2" *ngIf="(index < 14&&tab=='Incident')||(index>=14&&tab=='Breach')">
+                                <div class="row">
+                                    <label class="col-md-4 col-form-label text-right ellipsis" title={{item.label}}> {{item.label}} </label>
+                                    <div class="col-md-8">
+                                        <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
+                                    
+                                        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
+                                                value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
+                                        
+                                        <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
+                                                value="" [class.disabled]="true" />
+                                        
+                                        <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+        <div *ngIf="tableName!='security_incident'">
+            <div *ngFor="let item of view_display_order" class="form-group row">
+                <label class="col-md-4 col-12 col-form-label text-right ellipsis" title={{item.label}}> {{item.label}} </label>
+                <div class="col-md-8 col-12">
+                    <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
+                
+                    <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
+                            value="{{references[item.name]['data'][objects.data[view_index][remove__c(item.name)]][remove__c(afterDot(item.type_value))]}}" [class.disabled]="true" />
+                    
+                    <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] == null" type="text" class="form-control" 
+                            value="" [class.disabled]="true" />
+                    
+                    <input *ngIf="item.type!='boolean'&&item.type!='reference'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #create let-c="close" let-d="dismiss">
+    <div class="modal-header bg-success">
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==0">Create New {{replace_space(tableName) | titlecase}}</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="mode==2">Edit {{replace_space(tableName) | titlecase}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <ngb-alert *ngIf="oshaService.error_alert!=''" (close)="oshaService.error_alert = ''">{{oshaService.error_alert}}</ngb-alert>
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="form-horizontal ng-untouched ng-pristine ng-valid">
+            <div *ngIf="tableName=='security_incident'">
+                <ngb-tabset>
+                    <ngb-tab *ngFor="let tab of incident_tabs" title="{{tab}}">
+                        <ng-template ngbTabContent>
+                            <div *ngFor="let item of insert_display_order; let index=index;" class="form-group">
+                                <div class="row" *ngIf="(item.type!='root')&&((index < 14&&tab=='Incident')||(index>=14&&tab=='Breach'))">
+                                    <label class="col-md-4 col-form-label text-right ellipsis" title={{item.label}}>{{item.label}}</label>
+                                    <div class="col-md-8">
+                                        
+                                        <!-- Add field by item.type -->
+                                        <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
+                                                type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
+                                        
+                                        <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
+                                        
+                                        <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} [checked]="f[remove__c(item.name)].value=='true'" class="form-check-label"/>
+                                        
+                                        <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
+                                            <input [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
+                                            <mat-datepicker-toggle matSuffix [for]="picker">
+                                                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+
+                                        <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} 
+                                                class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                            <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
+                                        </select> 
+
+                                        <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control" 
+                                                [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                            <option *ngFor="let key of make_picklist(item.type_value)" [value]="key">{{key}}</option>
+                                        </select> 
+
+                                        <span class="help-block"><small>{{item.inlineHelpText}}</small></span>
+                                        <div *ngIf="submitted && f[remove__c(item.name)].errors" class="invalid-feedback">
+                                            <div *ngIf="f[remove__c(item.name)].errors">{{print(remove__c(item.name), f[remove__c(item.name)].errors)}}</div>
+                                            <!--<div *ngIf="f[remove__c(item.name)].errors.required">required</div>-->
+                                        </div>
+                                    </div>   
+                                </div>    
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+            <div *ngIf="tableName!='security_incident'">
+                <div *ngFor="let item of insert_display_order" class="form-group">
+                    <div class="row" *ngIf="item.type!='root'">
+                        <label class="col-md-4 col-form-label text-right ellipsis" title={{item.label}}>{{item.label}}</label>
+                        <div class="col-md-8">
+                            
+                            <!-- Add field by item.type -->
+                            <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
+                                    type="text" formControlName={{remove__c(item.name)}} class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"/>
+                            
+                            <textarea *ngIf="item.type=='textarea'" type="text" formControlName={{remove__c(item.name)}} class="form-control text-area" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }"></textarea>
+                            
+                            <input *ngIf="item.type=='boolean'" type="checkbox" formControlName={{remove__c(item.name)}} [checked]="f[remove__c(item.name)].value=='true'" class="form-check-label"/>
+                            
+                            <mat-form-field *ngIf="item.type=='datetime'||item.type=='date'" class="example-full-width">
+                                <input [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }" matInput formControlName={{remove__c(item.name)}} [matDatepicker]="picker" placeholder="Choose a date" >
+                                <mat-datepicker-toggle matSuffix [for]="picker">
+                                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+                            <select *ngIf="item.type=='reference' && references.hasOwnProperty(item.name)" formControlName={{remove__c(item.name)}} 
+                                    class="form-control" [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                <option *ngFor="let key of make_keys(item.name)" [value]="key">{{references[item.name]['data'][key][remove__c(afterDot(item.type_value))]}}</option>
+                            </select> 
+
+                            <select *ngIf="item.type=='picklist'" formControlName={{remove__c(item.name)}} class="form-control" 
+                                    [ngClass]="{ 'is-invalid': submitted && f[remove__c(item.name)].errors }">
+                                <option *ngFor="let key of make_picklist(item.type_value)" [value]="key">{{key}}</option>
+                            </select> 
+
+                            <span class="help-block"><small>{{item.inlineHelpText}}</small></span>
+                            <div *ngIf="submitted && f[remove__c(item.name)].errors" class="invalid-feedback">
+                                <div *ngIf="f[remove__c(item.name)].errors">{{print(remove__c(item.name), f[remove__c(item.name)].errors)}}</div>
+                                <!--<div *ngIf="f[remove__c(item.name)].errors.required">required</div>-->
+                            </div>
+                        </div>   
+                    </div>    
+                </div>
+            </div>
+            
+            <div class="form-group col-md-12">
+                <button *ngIf="mode!=1" [disabled]="loading_submit" type="submit" class="btn btn-primary float-right">
+                    <i class="far fa-save"></i>
+                    Save
+                    <img *ngIf="oshaService.loading_submit" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </button>   
+            </div>
+        </form>
+    </div>
+</ng-template>

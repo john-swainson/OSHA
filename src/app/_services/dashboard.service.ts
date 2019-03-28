@@ -61,4 +61,15 @@ export class DashboardService {
         };
         return this.http.get( queryURL, optionsH ).map((res: any) => res);
     }
+
+    get_dashboard_type(type, filter, index = null, dash_type = null):Observable<any>{
+        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud/dashboard_data?type=${type}&filter=${filter}&org_id=${localStorage.getItem('org_id')}`;
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        let optionsH = {
+            headers:headers
+        };
+        return this.http.get( queryURL, optionsH ).map((res: any) =>{ return {data:res, index, type:dash_type}});
+    } 
 }

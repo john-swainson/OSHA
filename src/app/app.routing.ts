@@ -85,6 +85,11 @@ export const routes: Routes = [
         loadChildren: './views/widgets/widgets.module#WidgetsModule'
       },
       { 
+        path: 'dashboard_type', 
+        loadChildren:'./containers/dashboard_type/dashboard_type.module#DashboardTypeModule',
+        canActivate: [AuthGuard] 
+      },
+      { 
         path: '**', 
         loadChildren:'./containers/facility/facility.module#FacilityModule',
         canActivate: [AuthGuard] 

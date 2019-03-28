@@ -260,7 +260,7 @@ export const dashboardItems: any={
     'HIPAA':[
         // Top
         {
-            'url': '/change_request',
+            'url': '/dashboard_type',
             'name': 'OPEN CHANGE REQUESTS',
             'icon': 'icon-user-follow',
             'isloading': false,
@@ -269,6 +269,8 @@ export const dashboardItems: any={
             'pos': 'top',
             'width': 'col-sm-6 col-md-6 col-xl-3',
             'bg_color': 'bg-warning',
+            'url_type': 'change_request__c',
+            'url_filter': 'open_change_request',
         },
         {
             'url': '/media_sanitization',
@@ -293,7 +295,7 @@ export const dashboardItems: any={
             'bg_color': 'bg-info'
         },
         {
-            'url': '/security_incident',
+            'url': '/dashboard_type',
             'name': 'OPEN BREACH INCIDENTS',
             'icon': 'icon-speedometer',
             'isloading': false,
@@ -301,10 +303,12 @@ export const dashboardItems: any={
             'type': 'integer',
             'pos': 'top',
             'width': 'col-sm-6 col-md-6 col-xl-2',
-            'bg_color': 'bg-danger'
+            'bg_color': 'bg-danger',
+            'url_type': 'security_incident__c',
+            'url_filter': 'open_breach_incident',
         },
         {
-            'url': '/vendor_review',
+            'url': '/dashboard_type',
             'name': 'FAILED BAA REVIEWS',
             'icon': 'icon-speech',
             'isloading': false,
@@ -313,6 +317,8 @@ export const dashboardItems: any={
             'pos': 'top',
             'width': 'col-sm-6 col-md-6 col-xl-2',
             'bg_color': 'bg-primary',
+            'url_type': 'vendor_review__c',
+            'url_filter': 'review_failed',
         },
         // Left
         {

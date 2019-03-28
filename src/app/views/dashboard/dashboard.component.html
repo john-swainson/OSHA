@@ -5,19 +5,19 @@
     </div>
   </div>
   <div class="row">
-    <div *ngFor="let item of dashboardItems[current_dashboard_type]" [routerLink]="[item.url]" class="{{item.width}}">
+    <div *ngFor="let item of dashboardItems[current_dashboard_type]" [routerLink]="[item.url]" [queryParams]="{type:item.url_type, filter:item.url_filter}" routerLinkActive="active" queryParamsHandling="merge" class="{{item.width}}">
       <div class="card text-white {{item.bg_color}}" *ngIf="item.pos=='top'">
         <div class="card-body">
           <div class="h1 text-muted text-right mb-4">
             <i class="{{item.icon}}"></i>
           </div>
           <div *ngIf="item.isloading==false" class="h4 mb-0">{{item.data}}</div>
-          <div *ngIf="item.isloading==true" class="h4 mb-0">
+          <div *ngIf="item.isloading==true" class="h4 mb-0"> 
             <div class="spinner-border spinner-border-sm text-light" role="status">
               <span class="sr-only">Loading...</span>
             </div>
           </div>
-          <small class="text-muted text-uppercase font-weight-bold">{{item.name}}</small>
+          <small class="text-uppercase font-weight-bold widget-font-size">{{item.name}}</small>
           <div class="progress progress-white progress-xs mt-3">
             <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
           </div>

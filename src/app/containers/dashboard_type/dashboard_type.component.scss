@@ -1,0 +1,85 @@
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #737373;
+}
+
+::ng-deep .cdk-overlay-container {
+    z-index: 1200 !important;
+}
+
+//========= Beautiful Modal
+$base-duration: 0.25s;
+
+// Colors
+$primary: slategray;
+$accent: tomato;
+$white: whitesmoke;
+$green: #2ecc71;
+$red: #e74c3c;
+
+// Breakpoints
+$sm: 20rem;
+$med: 48rem;
+$lg: 64rem;
+
+.trigger {
+	margin: 0 0.75rem;
+	padding: 0.425rem 1.25rem;
+	border: none;
+	border-radius: 0.25rem;
+	box-shadow: 0 0.0625rem 0.1875rem rgba(0,0,0,0.12), 0 0.0625rem 0.125rem rgba(0,0,0,0.24);
+	transition: all $base-duration cubic-bezier(.25,.8,.25,1);
+	font-size: 0.875rem;
+	font-weight: 300;
+	
+	i {
+		margin-right: 0.3125rem;
+	}
+	
+	&:hover {
+		box-shadow: 0 0.875rem 1.75rem rgba(0,0,0,0.25), 0 0.625rem 0.625rem rgba(0,0,0,0.22);
+	}
+}
+
+.modal {
+    &.show .modal-dialog {
+        transition: 0.25s all;
+        opacity: 0;
+        transform: translate(0, 5vh);
+    }
+
+    &.custom-show .modal-dialog {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+.line_3_description{
+	display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+}
+
+.text-area{
+    height: 150px;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+  
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
+}
