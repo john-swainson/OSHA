@@ -9,7 +9,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'width': 'col-xs-12 col-sm-6  col-md-15',
             'bg_color': 'bg-success',
         },
         {
@@ -20,7 +20,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'width': 'col-xs-12 col-sm-6 col-md-15',
             'bg_color': 'bg-warning',
         },
         {
@@ -31,7 +31,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'width': 'col-xs-12 col-sm-6 col-md-15',
             'bg_color': 'bg-primary'
         },
         {
@@ -42,7 +42,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'width': 'col-xs-12 col-sm-6 col-md-15',
             'bg_color': 'bg-danger'
         },
         {
@@ -53,7 +53,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'width': 'col-xs-12 col-sm-6 col-md-15',
             'bg_color': 'bg-info',
         },
         // Left
@@ -267,7 +267,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'width': 'col-xs-12 col-sm-6  col-md-15',
             'bg_color': 'bg-warning',
             'url_type': 'change_request__c',
             'url_filter': 'open_change_request',
@@ -280,7 +280,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-3',
+            'width': 'col-xs-12 col-sm-6  col-md-15',
             'bg_color': 'bg-success',
         },
         {
@@ -291,7 +291,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'width': 'col-xs-12 col-sm-6  col-md-15',
             'bg_color': 'bg-info'
         },
         {
@@ -302,7 +302,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'width': 'col-xs-12 col-sm-6  col-md-15',
             'bg_color': 'bg-danger',
             'url_type': 'security_incident__c',
             'url_filter': 'open_breach_incident',
@@ -315,7 +315,7 @@ export const dashboardItems: any={
             'data': -1,
             'type': 'integer',
             'pos': 'top',
-            'width': 'col-sm-6 col-md-6 col-xl-2',
+            'width': 'col-xs-12 col-sm-6  col-md-15',
             'bg_color': 'bg-primary',
             'url_type': 'vendor_review__c',
             'url_filter': 'review_failed',
