@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService, OshaService, DashboardService } from '../../_services';
-import { Router } from '@angular/router';
-import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+import { AlertService, OshaService, DashboardService, EnterpriseService } from '../../_services';
 import { dashboardItems } from '../../_dashboard';
 
 @Component({
@@ -26,7 +23,7 @@ export class DashboardComponent implements OnInit {
   public org_name: string = '';
 
   constructor(private alertService: AlertService, private oshaService: OshaService, 
-              public dashboardService: DashboardService) {
+              public dashboardService: DashboardService, public enterpriseService: EnterpriseService) {
     
     let org_words = localStorage.getItem('org_name').split(' ');
     let temp_org = '';
@@ -47,7 +44,10 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
+    this.enterpriseService.get_oauth().subscribe( res => {
+      console.log(res);
+    });
+    // this.enterpriseService.get_oauth();
   }
 
   doDashboard(){
