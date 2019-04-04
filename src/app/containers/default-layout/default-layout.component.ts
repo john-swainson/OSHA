@@ -15,7 +15,7 @@ export class DefaultLayoutComponent implements OnDestroy {
   public element: HTMLElement;
 
   //Dashboard
-  public dashboard_switch=['OSHA', 'HIPAA', 'PCI'];
+  public dashboard_switch=['OSHA', 'HIPAA', 'ENTERPRISE', 'PCI'];
   public current_dashboard_type; // default OSHA
 
   constructor(private router: Router, private authenticationService: AuthenticationService, private oshaService: OshaService

@@ -378,6 +378,242 @@ export const navItems: any = {
         },
       ]
     },
+  ],
+  'ENTERPRISE':[
+    {
+      name: 'Dashboard',
+      url: '/dashboard',
+      icon: 'icon-speedometer',
+      badge: {
+        variant: 'info',
+        text: 'NEW'
+      }
+    },
+    {
+      name: 'Training',
+      url: '/ic_post_exposure_management',
+      icon: 'icon-drop'
+    },
+    {
+      name: 'Manage Organization',
+      url: '/ic_preventing_transmission',
+      icon: 'icon-bulb',
+      children: [
+        {
+          name: 'Organization',
+          url: '/organization_info',
+        },
+        {
+          name: 'Security Reminders',
+          url: '/reminders',
+        },
+        {
+          name: 'Media Sanitization Authority',
+          url: '/media_sanitization_authority',
+        },
+        {
+          name: 'Security Devices',
+          url: '/device_registry',
+        },
+      ]
+    },
+    {
+      name: 'Customer Management',
+      url: '/ic_engineering_controls',
+      icon: 'icon-microphone',
+      children: [
+        {
+          name: 'Leads',
+          url: '/lead',
+        },
+        {
+          name: 'Customer Organizations',
+          url: '/organization_info',
+        },
+        {
+          name: 'Market Offerings',
+          url: '/market_offering',
+        }
+      ]
+    },
+    {
+      name: 'HIPAA Contacts',
+      url: '/ic_contact_dermatitis',
+      icon: 'icon-graph',
+      children: [
+        {
+          name: 'Contacts',
+          url: '/hipaa_contact',
+        },
+        {
+          name: 'HIPAA Sanctions',
+          url: '/hipaa_warning',
+        },
+        {
+          name: 'System Access',
+          url: '/system_access',
+        },
+        {
+          name: 'Groups',
+          url: '/group',
+        },
+        {
+          name: 'Group Contacts',
+          url: '/group_contact',
+        }
+      ]
+    },
+    {
+      name: 'Policies and Procedures',
+      url: '/policy_and_procedure',
+      icon: 'icon-calculator'
+    },
+    {
+      name: 'Change Request',
+      url: '/change_request',
+      icon: 'icon-feed'
+    },
+    {
+      name: 'Security Incident',
+      url: '/security_incident',
+      icon: 'icon-people'
+    },
+    {
+      name: 'Hardware Management',
+      url: '/safety_data_sheet',
+      icon: 'icon-badge',
+      children: [
+        {
+          name: 'Hardware Inventory',
+          url: '/hardware_inventory',
+        },
+        {
+          name: 'Security Test Results',
+          url: '/security_test',
+        },
+        {
+          name: 'Media Sanitization Requests',
+          url: '/media_sanitization_request',
+        },
+      ]
+    },
+    {
+      name: 'Software Inventory',
+      url: '/software_inventory',
+      icon: 'icon-compass'
+    },
+    {
+      name: 'Website Management',
+      url: '/ic_work_practice',
+      icon: 'icon-options',
+      children: [
+        {
+          name: 'Websites',
+          url: '/website',
+        },
+        {
+          name: 'Websites Software Inventory',
+          url: '/website_software_inventory',
+        },
+        {
+          name: 'Websites Review',
+          url: '/website_review',
+        },
+      ]
+    },
+    {
+      name: 'Facility',
+      url: '/',
+      icon: 'icon-disc',
+      children: [
+        {
+          name: 'Manage Facilities',
+          url: '/facility',
+        },
+        {
+          name: 'Team Members',
+          url: '/team_members',
+        },
+        {
+          name: 'Risk Assignment Vulnerability',
+          url: '/risk_assessment_review',
+        },
+        {
+          name: 'Manage Rooms',
+          url: '/rooms',
+        },
+        {
+          name: 'Backup Procedures',
+          url: '/backup_procedure',
+        },
+        {
+          name: 'NPP Extra',
+          url: '/npp_extra',
+        },
+        {
+          name: 'Risk Matrix',
+          url: '/risk_matrix',
+        },
+        {
+          name: 'Security Tool Setting',
+          url: '/security_tool_setting',
+        },
+      ]
+    },
+    {
+      name: 'Internet Service Provider',
+      url: '/ic_unwrapped_instruments',
+      icon: 'icon-bell',
+      children: [
+        {
+          name: 'Manage ISP',
+          url: '/isp_communication',
+        },
+        {
+          name: 'Manage ISP Circuit IDs',
+          url: '/isp_circuit_id',
+        },
+      ]
+    },
+    {
+      name: 'Vendors',
+      url: '/ic_implantable_devices',
+      icon: 'icon-globe',
+      children: [
+        {
+          name: 'Manage Vendors',
+          url: '/vendors',
+        },
+        {
+          name: 'Manage Vendor Breaches',
+          url: '/vendor_breaches',
+        },
+        {
+          name: 'Manage Vendor Reviews',
+          url: '/vendor_review',
+        } 
+      ]
+    },
+    {
+      name: 'Threat Source',
+      url: '/threat_sources',
+      icon: 'icon-drawer'
+    },
+    {
+      name: 'Custom Software',
+      url: '/ic_sterilization_disinfection',
+      icon: 'icon-frame',
+      children: [
+        {
+          name: 'Custom Inventory',
+          url: '/custom_software',
+        },
+        {
+          name: 'Software Audit',
+          url: '/custom_software_audit',
+        },
+      ]
+    },
   ]
 };
 
