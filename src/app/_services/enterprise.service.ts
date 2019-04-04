@@ -20,7 +20,7 @@ export class EnterpriseService {
     }
 
     get_oauth(){
-        const queryString = require('querystring');
+        const queryString = require('query-string');
         let queryURL = this.apiUrl + '/oauth2/token';
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');

@@ -69,6 +69,7 @@
     "ngx-spinner": "^7.0.0",
     "path": "^0.12.7",
     "popper": "^1.0.1",
+    "query-string": "^6.4.2",
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.4.0",
     "simple-line-icons": "^2.4.1",

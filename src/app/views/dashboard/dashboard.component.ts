@@ -44,10 +44,10 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.enterpriseService.get_oauth().subscribe( res => {
-      console.log(res);
-    });
-    // this.enterpriseService.get_oauth();
+    // this.enterpriseService.get_oauth().subscribe( res => {
+    //   console.log(res);
+    // });
+    this.enterpriseService.get_oauth();
   }
 
   doDashboard(){
