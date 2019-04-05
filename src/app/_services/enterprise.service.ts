@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map'
 import { User } from '../_models';
 import { environment } from '../../environments/environment';
+import { text } from '@angular/core/src/render3';
 
 @Injectable({ providedIn: 'root' })
 
@@ -23,7 +24,7 @@ export class EnterpriseService {
         const queryString = require('query-string');
         let queryURL = this.apiUrl + '/oauth2/token';
         let headers = new HttpHeaders();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        //headers.append('Content-Type', 'application/x-www-form-urlencoded');
         let optionsH = { headers:headers };
         let form = {'grant_type': environment.grant_type, 'client_id': environment.client_id,
                     'client_secret': environment.client_secret, 'username': environment.username,
@@ -31,19 +32,27 @@ export class EnterpriseService {
 
         // return this.http.post( queryURL, queryString.stringify(form), optionsH ).map((res: any) => res);
         jQuery.ajax({
-            url: queryURL,
+            url: "https://hipaacomplete--dev1.cs41.my.salesforce.com/services/oauth2/token",
             type: "POST",
             data: queryString.stringify(form),
-            dataType: "json",
-            headers: {         
-                "Content-Type": "application/x-www-form-urlencoded"   
+            dataType: "text",
+            async: false,
+            crossDomain: true,
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            accepts: {
+                "Accept": "application/x-www-form-urlencoded; charset=utf-8"
             },
             success: (response) => {
-               console.log(response); 
+                console.log(response); 
+            },
+            complete: (response) => {
+                console.log(response); 
             },
             error: (response) => {
-               
-            }
-        });
+                console.log(response);
+            },
+        }).done(function( data, textStatus, jqXHR ) {
+            debugger;
+        });;
     }
 }
