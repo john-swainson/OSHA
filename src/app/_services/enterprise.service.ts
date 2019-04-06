@@ -26,33 +26,32 @@ export class EnterpriseService {
         let headers = new HttpHeaders();
         //headers.append('Content-Type', 'application/x-www-form-urlencoded');
         let optionsH = { headers:headers };
-        let form = {'grant_type': environment.grant_type, 'client_id': environment.client_id,
-                    'client_secret': environment.client_secret, 'username': environment.username,
-                    'password': environment.password};
+        let form = {
+            grant_type: environment.grant_type, 
+            client_id: environment.client_id,
+            client_secret: environment.client_secret, 
+            username: environment.username,
+            password: environment.password
+        };
 
         // return this.http.post( queryURL, queryString.stringify(form), optionsH ).map((res: any) => res);
+        // console.log(queryString.stringify(form));
         jQuery.ajax({
             url: "https://hipaacomplete--dev1.cs41.my.salesforce.com/services/oauth2/token",
             type: "POST",
             data: queryString.stringify(form),
-            dataType: "text",
-            async: false,
             crossDomain: true,
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            accepts: {
-                "Accept": "application/x-www-form-urlencoded; charset=utf-8"
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/json",
             },
             success: (response) => {
-                console.log(response); 
-            },
-            complete: (response) => {
                 console.log(response); 
             },
             error: (response) => {
                 console.log(response);
             },
-        }).done(function( data, textStatus, jqXHR ) {
-            debugger;
-        });;
+        });
+        
     }
 }
