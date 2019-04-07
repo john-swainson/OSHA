@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { AlertService, AuthenticationService } from '../../_services';
+import { AlertService, AuthenticationService, EnterpriseService } from '../../_services';
 import { ToastsManager } from 'ng6-toastr';
 
 @Component({
@@ -27,7 +27,8 @@ export class LoginComponent {
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
         public toastr: ToastsManager,
-        public vcr: ViewContainerRef, 
+        public vcr: ViewContainerRef,
+        public enterpriseService: EnterpriseService, 
     ) 
     {
         this.toastr.setRootViewContainerRef(vcr);
@@ -86,7 +87,9 @@ export class LoginComponent {
           .pipe(first())
           .subscribe(
               data => {
-                console.log("logged in");
+                this.enterpriseService.get_oauth().subscribe( res => {
+                    console.log(res);
+                });
                 if(data.hasOwnProperty('error')){
                   this.alertService.error(data.error);   
                   this.toastr.error(data.error);  

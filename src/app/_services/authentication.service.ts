@@ -62,6 +62,7 @@ export class AuthenticationService {
         localStorage.removeItem('org_name');
         localStorage.removeItem('contact_name');
         localStorage.removeItem('dashboard');
+        localStorage.removeItem('forceToken');
         this.currentUserSubject.next(null);
     }
 }

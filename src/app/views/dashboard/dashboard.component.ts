@@ -21,6 +21,9 @@ export class DashboardComponent implements OnInit {
   public current_dashboard_type; // default OSHA
   public dashboardItems = dashboardItems;
   public org_name: string = '';
+  // Enterprise Totals
+  public force_totals: any = [];
+  public force_children: any = [];
 
   constructor(private alertService: AlertService, private oshaService: OshaService, 
               public dashboardService: DashboardService, public enterpriseService: EnterpriseService) {
@@ -44,10 +47,13 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.enterpriseService.get_oauth().subscribe( res => {
-    //   console.log(res);
-    // });
-    this.enterpriseService.get_oauth();
+    this.enterpriseService.get_children_totals().subscribe( data=> {
+      if(data.totalSize == 1){
+        this.force_totals = data.records[0];
+        this.force_children = this.force_totals.Partners__r;
+        console.log(this.force_children.records[0].Organization__r.Name);  
+      }
+    });
   }
 
   doDashboard(){
@@ -104,5 +110,11 @@ export class DashboardComponent implements OnInit {
       }
       index++;
     }
+  }
+  remove__c(string){
+    return string.trim().replace(/\__c/gi, "");
+  }
+  replace_space(string){
+    return string.replace(/\_/gi, " ");
   }
 }
