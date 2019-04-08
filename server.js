@@ -23,9 +23,16 @@ const https = require('https')
 const request = require('request')
 const queryString = require('query-string')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 // Serve static files
 app.use(express.static(__dirname + '/dist/'))
 app.use(cors())
+
+// support parsing of application/json type post data
+app.use(bodyParser.json());
+
+//support parsing of application/x-www-form-urlencoded post data
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -33,9 +40,11 @@ app.use(function(req, res, next) {
   next();
 });
 
+process.env.force_url = 'https://hipaacomplete--dev1.cs41.my.salesforce.com/services'
+
 app.get('/oauth2/auth', function(req, res) {
   request.post( { headers: {'content-type' : 'application/x-www-form-urlencoded'}, 
-                  url: 'https://hipaacomplete--dev1.cs41.my.salesforce.com/services/oauth2/token', 
+                  url: `${process.env.force_url}/oauth2/token`, 
                   body: queryString.stringify({
                     grant_type: 'password', 
                     client_id: '3MVG98EE59.VIHmwm4v0e01Xh4GkXAFFiQjl8GLNmA_u8hN7AM2dbd1iYR8LSNhWWQ4cwa03W1E.Tb5X3q7JZ',
@@ -44,6 +53,18 @@ app.get('/oauth2/auth', function(req, res) {
                     password: 'Cyntexa@123WqcLKkd0BpSdG8fKqkAHzwbZ'
                   })
                 }
+              ,
+              function(error, response, body){
+                res.status(200).send(JSON.parse(body));
+              }
+  ); 
+});
+
+app.post('/force/queryALL', function(req, res) {
+  request.get( { 
+                  headers: {'Content-Type' : 'application/x-www-form-urlencoded', 'Authorization': `Bearer ${req.body.access_token}`}, 
+                  url: `${process.env.force_url}/data/v45.0/queryAll/?q=${req.body.query}`, 
+               }
               ,
               function(error, response, body){
                 res.status(200).send(JSON.parse(body));

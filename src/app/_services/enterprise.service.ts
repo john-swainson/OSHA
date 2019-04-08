@@ -43,21 +43,22 @@ export class EnterpriseService {
 
     get_children_totals(){
         let force = this.currentForceSubject.value;
-        let queryURL = this.apiUrl+'/data/v45.0/queryAll/?q=';
+        let queryURL = '';
         let parent_selects = 'Id,Name';
         let children_selects = 'Organization__r.Id,Organization__r.Name';
         for(let item of this.total_fields){
             parent_selects += `,${item}`;
             children_selects += `,Organization__r.${item}`;
         }
-        queryURL += `SELECT+${parent_selects},(SELECT+${children_selects}+from+partners__r)+FROM+organization_info__c+where+id='${localStorage.getItem('org_id')}'`;
+        queryURL = `SELECT+${parent_selects},(SELECT+${children_selects}+from+partners__r)+FROM+organization_info__c+where+id='${localStorage.getItem('org_id')}'`;
 
         let headers = new HttpHeaders();
-        headers = headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        headers = headers.append('Content-Type', 'application/json');
         headers = headers.append('Authorization', `Bearer ${force.access_token}`);
         let optionsH = {
             headers:headers
         };
-        return this.http.get( queryURL, optionsH ).map((res: any) => res);
+        let body = {query: queryURL, access_token: force.access_token}
+        return this.http.post( `${environment.server_url}/force/queryALL`, body, optionsH ).map((res: any) => res);
     }
 }
