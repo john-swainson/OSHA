@@ -11,4 +11,6 @@ export const environment = {
   client_secret: '5F0EFA9A8FB1696226E71B165EAF14B7C037E211758B06FBC09E764E3B1019E0',
   username: 'hello42@cyntexa.com',
   password: 'Cyntexa@123WqcLKkd0BpSdG8fKqkAHzwbZ',
+  // Local API URL
+  server_url: 'http://localhost:5000',
 };

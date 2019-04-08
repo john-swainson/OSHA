@@ -30,21 +30,7 @@ export class EnterpriseService {
     }
 
     get_oauth(){
-        // const queryString = require('query-string');
-        // let queryURL = this.apiUrl + '/oauth2/token';
-        // let header = new HttpHeaders();
-        // header = header.set('Content-Type', 'application/x-www-form-urlencoded');
-        // header = header.set('Accept', 'application/x-www-form-urlencoded');
-        // let optionsH = { headers: header };
-        // let form = {
-        //     grant_type: environment.grant_type, 
-        //     client_id: environment.client_id,
-        //     client_secret: environment.client_secret, 
-        //     username: environment.username,
-        //     password: environment.password
-        // };
-
-        return this.http.get( 'http://localhost:5000/oauth2/auth' ).map((res: any) => {
+        return this.http.get( `${environment.server_url}/oauth2/auth` ).map((res: any) => {
 
             if (res && res.access_token){
                 localStorage.setItem('forceToken', JSON.stringify(res));
@@ -52,23 +38,6 @@ export class EnterpriseService {
             }
             return res;
         });
-        // console.log(queryString.stringify(form));
-        // jQuery.ajax({
-        //     url: "https://hipaacomplete--dev1.cs41.my.salesforce.com/services/oauth2/token",
-        //     type: "POST",
-        //     data: queryString.stringify(form),
-        //     crossDomain: true,
-        //     headers: {
-        //         "Content-Type": "application/x-www-form-urlencoded",
-        //         "Accept": "application/json",
-        //     },
-        //     success: (response) => {
-        //         console.log(response); 
-        //     },
-        //     error: (response) => {
-        //         console.log(response);
-        //     },
-        // });  
     }
 
     get_children_totals(){
