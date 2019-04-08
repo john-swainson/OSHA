@@ -87,16 +87,16 @@ export class LoginComponent {
           .pipe(first())
           .subscribe(
               data => {
-                this.enterpriseService.get_oauth().subscribe( res => {
-                    console.log(res);
-                });
                 if(data.hasOwnProperty('error')){
                   this.alertService.error(data.error);   
                   this.toastr.error(data.error);  
                 }
                 else
                 {
-                    this.router.navigate([this.returnUrl]);
+                    this.enterpriseService.get_oauth().subscribe( res => {
+                        console.log(res);
+                        this.router.navigate([this.returnUrl]);
+                    }); 
                 }
                 this.loading = false; 
               },

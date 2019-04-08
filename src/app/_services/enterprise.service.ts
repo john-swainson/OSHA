@@ -13,7 +13,7 @@ import { query } from '@angular/animations';
 
 export class EnterpriseService {
 
-    private currentForceSubject: BehaviorSubject<Force>;
+    public currentForceSubject: BehaviorSubject<Force>;
     public currentForce: Observable<Force>;
 
     apiUrl: String = environment.salesforce_url;
