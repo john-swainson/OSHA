@@ -33,6 +33,7 @@ export class EnterpriseService {
         return this.http.get( `${environment.server_url}/oauth2/auth` ).map((res: any) => {
 
             if (res && res.access_token){
+                localStorage.removeItem('forceToken');
                 localStorage.setItem('forceToken', JSON.stringify(res));
                 this.currentForceSubject.next(res);
             }
