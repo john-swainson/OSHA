@@ -34,6 +34,7 @@ export class EnterpriseService {
         let queryURL = this.apiUrl + '/oauth2/token';
         let header = new HttpHeaders();
         header = header.set('Content-Type', 'application/x-www-form-urlencoded');
+        header = header.set('Accept', 'application/x-www-form-urlencoded');
         let optionsH = { headers: header };
         let form = {
             grant_type: environment.grant_type, 
@@ -43,14 +44,14 @@ export class EnterpriseService {
             password: environment.password
         };
 
-        return this.http.post( queryURL, queryString.stringify(form), optionsH ).map((res: any) => {
+        // return this.http.post( queryURL, queryString.stringify(form), optionsH ).map((res: any) => {
 
-            if (res && res.access_token){
-                localStorage.setItem('forceToken', JSON.stringify(res));
-                this.currentForceSubject.next(res);
-            }
-            return res;
-        });
+        //     if (res && res.access_token){
+        //         localStorage.setItem('forceToken', JSON.stringify(res));
+        //         this.currentForceSubject.next(res);
+        //     }
+        //     return res;
+        // });
         // console.log(queryString.stringify(form));
         // jQuery.ajax({
         //     url: "https://hipaacomplete--dev1.cs41.my.salesforce.com/services/oauth2/token",
@@ -67,7 +68,23 @@ export class EnterpriseService {
         //     error: (response) => {
         //         console.log(response);
         //     },
-        // });  
+        // });
+        console.log("Hello");  
+        jQuery.post("https://hipaacomplete--dev1.cs41.my.salesforce.com/services/oauth2/token",
+        {
+            grant_type: environment.grant_type,
+            dataType : 'jsonp',
+            crossOrigin : true,   /// Add this option 
+            headers : {Accept : "application/json","Access-Control-Allow-Origin" : "*"},
+            client_id: environment.client_id,
+            client_secret: environment.client_secret,
+            username: environment.username,
+            password: environment.password
+        },
+        function(data,status){
+            //my_function(data);
+            console.log(data);
+        });
     }
 
     get_children_totals(){

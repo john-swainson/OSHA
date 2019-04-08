@@ -93,10 +93,11 @@ export class LoginComponent {
                 }
                 else
                 {
-                    this.enterpriseService.get_oauth().subscribe( res => {
-                        console.log(res);
-                        this.router.navigate([this.returnUrl]);
-                    }); 
+                    // this.enterpriseService.get_oauth().subscribe( res => {
+                    //     console.log(res);
+                    //     this.router.navigate([this.returnUrl]);
+                    // });
+                    this.enterpriseService.get_oauth(); 
                 }
                 this.loading = false; 
               },
