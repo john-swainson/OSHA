@@ -1,7 +1,8 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-md-12">
-      <h1 class="cyan">{{org_name}}'s Dashboard</h1>
+      <h1 *ngIf="current_dashboard_type!='ENTERPRISE'" class="cyan">{{org_name}}'s Dashboard</h1>
+      <h1 *ngIf="current_dashboard_type=='ENTERPRISE'&&force_totals.hasOwnProperty('Name')" class="cyan">{{force_totals.Name}}'s Dashboard</h1>
     </div>
   </div>
   <div class="row">
@@ -88,16 +89,17 @@
         </div><!--/.col-->
       </div>
     </div>
-    <div class="col-12" *ngIf="force_children.totalSize>0"> <!--/.Enterprise Children-->
+    <div class="col-12"> <!--/.Enterprise Children-->
       <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-header text-white bg-warning">
               <i class="fa fa-group fa-fw"></i>
               Children Organizations
-              <strong class="float-right">Children Count: {{force_children.totalSize}}</strong>
+              <strong *ngIf="force_children != null" class="float-right">Children Count: {{force_children.totalSize}}</strong>
+              <strong *ngIf="force_children == null" class="float-right">Children Count: 0</strong>
             </div>
-            <div class="card-body">
+            <div class="card-body" *ngIf="force_children != null">
               <table datatable class="row-border hover table-bordered">
                 <thead>
                   <tr class="text-center" class="text-center">
@@ -107,9 +109,9 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let record of force_children.records" class="text-center">
-                    <td>{{record.Organization__r.Name}}</td>
+                    <td><a target="_blank" [routerLink]="['/dashboard']" [queryParams]="{child:record.Organization__r.Id}">{{record.Organization__r.Name}}</a></td>
                     <td>
-                      <button class="btn btn-sm btn-info text-white" type="button">View</button>
+                      <a target="_blank" [routerLink]="['/dashboard']" [queryParams]="{child:record.Organization__r.Id}" ><button class="btn btn-sm btn-info text-white" type="button">View</button></a>
                     </td>
                   </tr>
                 </tbody>

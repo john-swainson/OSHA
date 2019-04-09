@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertService, OshaService, DashboardService, EnterpriseService } from '../../_services';
 import { dashboardItems } from '../../_dashboard';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   templateUrl: 'dashboard.component.html',
@@ -23,10 +24,12 @@ export class DashboardComponent implements OnInit {
   public org_name: string = '';
   // Enterprise Totals
   public force_totals: any = [];
-  public force_children: any = [];
+  public force_children: any = null;
+  public child_org_id:string = '';
 
   constructor(private alertService: AlertService, private oshaService: OshaService, 
-              public dashboardService: DashboardService, public enterpriseService: EnterpriseService) {
+              public dashboardService: DashboardService, public enterpriseService: EnterpriseService,
+              private route:ActivatedRoute, private router:Router) {
     
     let org_words = localStorage.getItem('org_name').split(' ');
     let temp_org = '';
@@ -44,14 +47,37 @@ export class DashboardComponent implements OnInit {
         }
       }
     );
+
+    //=== Get child organziation id ===
+    route.queryParams.subscribe(params=>{
+      if(params.hasOwnProperty('child'))
+        this.child_org_id = params.child
+    });
+    //==================================
+    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+      return false;
+    };
+    
+    this.router.events.subscribe((evt) => {
+        if (evt instanceof NavigationEnd) {
+            this.router.navigated = false;
+            window.scrollTo(0, 0);
+        }
+    });
   }
 
   ngOnInit(): void {
-    this.enterpriseService.get_children_totals().subscribe( data=> {
+    this.enterpriseService.get_children_totals(this.child_org_id).subscribe( data=> {
       if(data.totalSize == 1){
-        this.force_totals = data.records[0];
-        this.force_children = this.force_totals.Partners__r;
-        console.log(this.force_children.records[0].Organization__r.Name);  
+        this.force_totals = data.records[0]
+        this.force_children = this.force_totals.Partners__r
+        console.log(this.force_totals)
+      }
+    },
+    err=>{
+      if(err == "Bad Request"){
+        this.router.navigateByUrl('/dashboard');
+        
       }
     });
   }
