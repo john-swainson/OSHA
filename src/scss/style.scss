@@ -181,3 +181,32 @@ table thead tr {
 .sidebar .nav-dropdown.open {
     background: rgba(0, 0, 0, 0.8);
 }
+
+.breadcrumb-item{
+    display: none;
+}
+
+.breadcrumb-mine{
+    a {
+        color: #20a8d8;
+        text-decoration: none;
+        background-color: transparent;
+        -webkit-text-decoration-skip: objects;
+    }
+    ::before{
+        display: inline-block;
+        padding-right: .5rem;
+        padding-left: .3rem;
+        color: #73818f;
+        content: "/";
+    }
+}
+
+.breadcrumb{
+    border-style: none;
+}
+.breadcrumb li:first-child{
+    ::before{
+        display: none;
+    }
+}

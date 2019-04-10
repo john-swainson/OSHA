@@ -65,13 +65,14 @@ export class EnterpriseService {
 
         queryURL = `SELECT+${parent_selects},(SELECT+${children_selects}+from+partners__r)+FROM+organization_info__c+where+id='${child_org_id}'`
 
-        let headers = new HttpHeaders()
-        headers = headers.append('Content-Type', 'application/json')
-        headers = headers.append('Authorization', `Bearer ${force.access_token}`)
-        let optionsH = {
-            headers:headers
-        };
         let body = {query: queryURL, access_token: force.access_token}
-        return this.http.post( `${environment.server_url}/force/queryALL`, body, optionsH ).map((res: any) => res)
+        return this.http.post( `${environment.server_url}/force/queryALL`, body ).map((res: any) => res)
+    }
+
+    get_breadcrumb_path(child_id, parent_id){
+        let force = this.currentForceSubject.value
+
+        let body = {childid: child_id, parentid: parent_id, access_token: force.access_token}
+        return this.http.post( `${environment.server_url}/force/getbreadcrumb`, body).map((res: any) => res) 
     }
 }

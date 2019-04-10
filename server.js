@@ -73,12 +73,13 @@ app.post('/force/queryALL', function(req, res) {
   ); 
 });
 
-app.post('/force/getAllParents', function(req, res) {
+app.post('/force/getbreadcrumb', function(req, res) {
   request.post( { 
                   headers: {'Content-Type' : 'application/x-www-form-urlencoded', 'Authorization': `Bearer ${req.body.access_token}`}, 
                   url: `${process.env.force_url}/apexrest/getParentRec`, 
                   body: queryString.stringify({
-                    id: `${req.body.id}`,
+                    childid: `${req.body.childid}`,
+                    parentid: `${req.body.parentid}`,
                   })
                }
               ,
