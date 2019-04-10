@@ -20,7 +20,11 @@ export class EnterpriseService {
 
     total_fields: String[] =  [ 'Total_Last_Employee_HIPAA_Training__c', 'Total_No_of_Breaches_This_Year__c', 'Total_No_of_Trainings_Due__c',
                                 'Total_Number_of_Business_Associates__c', 'Total_Number_of_Unsigned_BAA__c', 'Total_Open_Breach_Incidents__c',
-                                'Total_Open_Change_Requests__c', 'Total_Open_Security_Incidents__c', 'Total_Over_500_Breaches__c',  'Total_Under_500_Breaches__c']; 
+                                'Total_Open_Change_Requests__c', 'Total_Open_Security_Incidents__c', 'Total_Over_500_Breaches__c',  'Total_Under_500_Breaches__c'] 
+
+    enterprise_fields: String[] =  [ 'Last_Employee_HIPAA_Training__c', 'No_of_Breaches_This_Year__c', 'No_of_Trainings_Due__c',
+                                'Number_of_Business_Associates__c', 'Number_of_Unsigned_BAA__c', 'Open_Breach_Incidents__c',
+                                'Open_Change_Requests__c', 'Open_Security_Incidents__c', 'Over_500_Breaches__c',  'Under_500_Breaches__c']
 
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
         private router: Router, private alertService: AlertService) {
@@ -46,6 +50,7 @@ export class EnterpriseService {
             child_org_id = localStorage.getItem('org_id')
 
         let force = this.currentForceSubject.value
+
         let queryURL = ''
         let parent_selects = 'Id,Name'
         let children_selects = 'Organization__r.Id,Organization__r.Name'
@@ -53,6 +58,11 @@ export class EnterpriseService {
             parent_selects += `,${item}`
             children_selects += `,Organization__r.${item}`
         }
+        for(let item of this.enterprise_fields){
+            parent_selects += `,${item}`
+            children_selects += `,Organization__r.${item}`
+        }
+
         queryURL = `SELECT+${parent_selects},(SELECT+${children_selects}+from+partners__r)+FROM+organization_info__c+where+id='${child_org_id}'`
 
         let headers = new HttpHeaders()

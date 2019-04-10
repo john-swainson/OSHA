@@ -90,6 +90,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard] 
       },
       { 
+        path: 'enterprise', 
+        loadChildren:'./containers/enterprise/enterprise.module#EnterpriseModule',
+        canActivate: [AuthGuard] 
+      },
+      { 
         path: '**', 
         loadChildren:'./containers/facility/facility.module#FacilityModule',
         canActivate: [AuthGuard] 

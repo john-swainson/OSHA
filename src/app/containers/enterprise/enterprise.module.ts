@@ -4,8 +4,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
-import { DashboardComponent } from './dashboard.component';
-import { DashboardRoutingModule } from './dashboard-routing.module';
+import { EnterpriseComponent } from './enterprise.component';
+import { EnterpriseRoutingModule } from './enterprise-routing.module';
 import { CommonModule } from '@angular/common';  
 import { DataTablesModule } from 'angular-datatables';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,12 +14,12 @@ import { BrowserModule } from '@angular/platform-browser';
   imports: [
     CommonModule,
     FormsModule,
-    DashboardRoutingModule,
+    EnterpriseRoutingModule,
     ChartsModule,
     BsDropdownModule,
     DataTablesModule,
     ButtonsModule.forRoot()
   ],
-  declarations: [ DashboardComponent ]
+  declarations: [ EnterpriseComponent ]
 })
-export class DashboardModule { }
+export class EnterpriseModule { }

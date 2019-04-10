@@ -18,10 +18,10 @@ export const navItems: any = {
       name: 'Dashboard',
       url: '/dashboard',
       icon: 'icon-speedometer',
-      badge: {
-        variant: 'info',
-        text: 'NEW'
-      }
+      // badge: {
+      //   variant: 'info',
+      //   text: 'NEW'
+      // }
     },
     {
       title: true,
@@ -148,10 +148,20 @@ export const navItems: any = {
       name: 'Dashboard',
       url: '/dashboard',
       icon: 'icon-speedometer',
-      badge: {
-        variant: 'info',
-        text: 'NEW'
-      }
+      children: [
+        {
+          name: 'Local',
+          url: '/dashboard',
+        },
+        {
+          name: 'Enterprise',
+          url: '/enterprise',
+        },
+      ]
+      // badge: {
+      //   variant: 'info',
+      //   text: 'NEW'
+      // }
     },
     {
       name: 'Training',
