@@ -18,7 +18,7 @@ export class EnterpriseService {
 
     apiUrl: String = environment.salesforce_url;
 
-    total_fields: String[] =  [ 'Total_Last_Employee_HIPAA_Training__c', 'Total_No_of_Breaches_This_Year__c', 'Total_No_of_Trainings_Due__c',
+    total_fields: String[] =  [ 'Total_No_of_Breaches_This_Year__c', 'Total_No_of_Trainings_Due__c',
                                 'Total_Number_of_Business_Associates__c', 'Total_Number_of_Unsigned_BAA__c', 'Total_Open_Breach_Incidents__c',
                                 'Total_Open_Change_Requests__c', 'Total_Open_Security_Incidents__c', 'Total_Over_500_Breaches__c',  'Total_Under_500_Breaches__c'] 
 
