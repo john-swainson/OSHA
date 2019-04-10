@@ -74,14 +74,16 @@ app.post('/force/queryALL', function(req, res) {
 });
 
 app.post('/force/getAllParents', function(req, res) {
-  let old_parent_org_id = req.body.org_id
-  request.get( { 
+  request.post( { 
                   headers: {'Content-Type' : 'application/x-www-form-urlencoded', 'Authorization': `Bearer ${req.body.access_token}`}, 
-                  url: `${process.env.force_url}/data/v45.0/queryAll/?q=SELECT+Id,Organization__r.Id,Organization__r.Name,Partner_Organization__r.Id,Partner_Organization__r.Name+from+Organization_Partner__c+where+Organization__r.Id='${req.body.org_id}'`, 
+                  url: `${process.env.force_url}/apexrest/getParentRec`, 
+                  body: queryString.stringify({
+                    id: `${req.body.id}`,
+                  })
                }
               ,
               function(error, response, body){
-                res.status(response.statusCode).send(JSON.parse(body));
+                res.status(200).send(JSON.parse(body));
               }
   ); 
 });

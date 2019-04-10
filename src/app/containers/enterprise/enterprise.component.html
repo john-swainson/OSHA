@@ -1,0 +1,224 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 *ngIf="current_dashboard_type!='ENTERPRISE'" class="cyan">{{org_name}}'s Dashboard</h1>
+      <h1 *ngIf="current_dashboard_type=='ENTERPRISE'&&force_totals.hasOwnProperty('Name')" class="cyan">{{force_totals.Name}}'s Dashboard</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div *ngFor="let item of dashboardItems[current_dashboard_type]" [routerLink]="[item.url]" [queryParams]="{type:item.url_type, filter:item.url_filter}" routerLinkActive="active" queryParamsHandling="merge" class="{{item.width}}">
+      <div class="card text-white {{item.bg_color}}" *ngIf="item.pos=='top'">
+        <div class="card-body">
+          <div class="h1 text-muted text-right mb-4">
+            <i class="{{item.icon}}"></i>
+          </div>
+          <div *ngIf="item.isloading==false" class="h4 mb-0">{{item.data}}</div>
+          <div *ngIf="item.isloading==true" class="h4 mb-0"> 
+            <div class="spinner-border spinner-border-sm text-light" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <small class="text-uppercase font-weight-bold widget-font-size line_1_description">{{item.name}}</small>
+          <div class="progress progress-white progress-xs mt-3">
+            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="current_dashboard_type=='ENTERPRISE'">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-md-6 col-12">
+          <div class="card">
+            <div class="card-header text-white bg-success">
+              <i class="fa fa-group fa-fw"></i>
+              Enterprise Totals
+            </div>
+            <div class="card-body">
+              <table class="table table-hover table-outline mb-0">
+                <thead class="thead-light">
+                </thead>
+                <tbody>
+                  <tr *ngFor="let field of enterpriseService.total_fields|slice:0:5" [routerLink]="">
+                    <!--<td class="text-center">
+                      <div class="avatar">
+                        <i class="fa fa-fire fa-fw dashboard-fa-size"></i>
+                        <span class="avatar-status badge-success"></span>
+                      </div>
+                    </td>-->
+                    <td>
+                      <div>{{replace_space(remove__c(field))}}</div>
+                    </td>
+                    <td>
+                      <strong *ngIf="force_totals[field]==null" class="float-right">0</strong>
+                      <strong *ngIf="force_totals[field]!=null" class="float-right">{{force_totals[field]}}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+            </div>
+          </div>
+        </div><!--/.col-->
+        <div class="col-md-6 col-12">
+          <div class="card">
+            <div class="card-header text-white bg-info">
+              <i class="fa fa-group fa-fw"></i>
+              Enterprise Totals
+            </div>
+            <div class="card-body">
+              <table class="table table-hover table-outline mb-0">
+                <thead class="thead-light">
+                </thead>
+                <tbody>
+                  <tr *ngFor="let field of enterpriseService.total_fields|slice:5:10" [routerLink]="">
+                    <td>
+                      <div>{{replace_space(remove__c(field))}}</div>
+                    </td>
+                    <td>
+                      <strong *ngIf="force_totals[field]==null" class="float-right">0</strong>
+                      <strong *ngIf="force_totals[field]!=null" class="float-right">{{force_totals[field]}}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+            </div>
+          </div>
+        </div><!--/.col-->
+      </div>
+    </div>
+    <div class="col-12"> <!--/.Enterprise Children-->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header text-white bg-warning">
+              <i class="fa fa-group fa-fw"></i>
+              Children Organizations
+              <strong *ngIf="force_children != null" class="float-right">Children Count: {{force_children.totalSize}}</strong>
+              <strong *ngIf="force_children == null" class="float-right">Children Count: 0</strong>
+            </div>
+            <div class="card-body" *ngIf="force_children != null">
+              <table datatable class="row-border hover table-bordered">
+                <thead>
+                  <tr class="text-center" class="text-center">
+                      <th>Child Organization Name</th>
+                      <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let record of force_children.records" class="text-center">
+                    <td><a target="_blank" [routerLink]="['/dashboard']" [queryParams]="{child:record.Organization__r.Id}">{{record.Organization__r.Name}}</a></td>
+                    <td>
+                      <a target="_blank" [routerLink]="['/dashboard']" [queryParams]="{child:record.Organization__r.Id}" ><button class="btn btn-sm btn-info text-white" type="button">View</button></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!--/.col-->
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="current_dashboard_type!='ENTERPRISE'">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header text-white bg-primary">
+              <i class="fa fa-institution fa-fw"></i>
+              Your Organization
+            </div>
+            <div class="card-body">
+              <table class="table table-hover table-outline mb-0">
+                <thead class="thead-light">
+                </thead>
+                <tbody>         
+                  <tr *ngFor="let item of dashboardItems[current_dashboard_type]" [routerLink]="[item.url]">
+                    <td class="text-center" *ngIf="item.pos=='left'">
+                      <div class="avatar">
+                        <i class="{{item.icon}}"></i>
+                        <span class="avatar-status badge-success"></span>
+                      </div>
+                    </td>
+                    <td *ngIf="item.pos=='left'">
+                      <div>{{item.name}}</div>
+                    </td>
+                    <td *ngIf="item.pos=='left'">
+                      <strong *ngIf="item.isloading==false" class="float-right">{{item.data}}</strong>
+                      <strong *ngIf="item.isloading==true" class="float-right">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>  
+      </div>  
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header text-white bg-danger">
+              <i class="fa fa-exclamation-triangle fa-fw"></i>
+              Activities Due
+            </div>
+            <div class="card-body">
+              <table class="table table-hover table-outline mb-0">
+                <thead class="thead-light">
+                  <tr>
+                    <td>Activity</td>
+                    <td>Date Due</td>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div><!--/.col-->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header text-white bg-success">
+          <i class="fa fa-group fa-fw"></i>
+          Process Review Dates
+        </div>
+        <div class="card-body">
+          <table class="table table-hover table-outline mb-0">
+            <thead class="thead-light">
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of dashboardItems[current_dashboard_type]" [routerLink]="[item.url]">
+                <td class="text-center" *ngIf="item.pos=='right'">
+                  <div class="avatar">
+                    <i class="{{item.icon}}"></i>
+                    <span class="avatar-status badge-success"></span>
+                  </div>
+                </td>
+                <td *ngIf="item.pos=='right'">
+                  <div>{{item.name}}</div>
+                </td>
+                <td *ngIf="item.pos=='right'">
+                  <strong *ngIf="item.isloading==false" class="float-right">{{item.data}}</strong>
+                  <strong *ngIf="item.isloading==true" class="float-right">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+        </div>
+      </div>
+    </div><!--/.col-->
+  </div><!--/.row-->
+</div>
