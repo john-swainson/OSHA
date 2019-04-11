@@ -122,7 +122,7 @@
               <strong *ngIf="force_children == null" class="float-right">Children Count: 0</strong>
             </div>
             <div class="card-body" *ngIf="force_children != null">
-              <table datatable class="row-border hover table-bordered">
+              <table datatable class="row-border hover table-bordered" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display nowrap" style="width:100%">
                 <thead>
                   <tr class="text-center" class="text-center">
                       <th>Child Organization Name</th>

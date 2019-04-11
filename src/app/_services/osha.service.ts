@@ -8,6 +8,7 @@ import { User } from '../_models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { map ,  distinctUntilChanged } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 
@@ -46,86 +47,34 @@ export class OshaService {
         return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res, index, type} });
     }
 
-    add_object(form, api_url): any {
-        this.loading_submit = true;
-        jQuery.ajax({
-            url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}?access_token=` + this.currentUser.access_token,
-            type: "POST",
-            data: JSON.stringify(form),
-            dataType: "json",
-            headers: {          
-                Accept: "application/json; charset=utf-8",
-                //"Content-Type": "application/json; charset=utf-8"   
-            },
-            success: (response) => {
-                response = response[0];
-                
-                if(response['status'] == "success")
-                { 
-                    this.modalService.dismissAll();
-                    this.success_alert = response['message'];
-                }  
-                this.error_alert = response['message'];
-                this.loading_submit = false;
-            },
-            error: (response) => {
-                this.loading_submit = false;
-                if(response.status === 401)
-                {
-                    this.authenticationService.logout();
-                    location.reload(true);
-                }
-            }
-        });
+    add_object(form, api_url): Observable<any> {
+        let body = {base_url: localStorage.getItem('base_url'), api_url: api_url, access_token: this.currentUser.access_token, form: JSON.stringify(form)}
+        return this.http.post( `${environment.server_url}/hipaa/create`, body).map((res: any) => res)
     }
     update_object(form, api_url): any {
-        this.loading_submit = true;
-        jQuery.ajax({
-            url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/?access_token=` + this.currentUser.access_token,
-            type: "POST",
-            data: JSON.stringify(form),
-            dataType: "json",
-            headers: {          
-                Accept: "application/json; charset=utf-8",
-                //"Content-Type": "application/json; charset=utf-8"   
-            },
-            success: (response) => {
-                response = response[0];
-                
-                if(response['status'] == "success")
-                {
-                    this.modalService.dismissAll();
-                    this.success_alert = response['message'];
-                }  
-                this.error_alert = response['message'];
-                this.loading_submit = false;
-            },
-            error: (response) => {
-                this.loading_submit = false;
-                if(response.status === 401)
-                {
-                    this.authenticationService.logout();
-                    location.reload(true);
-                }
-            }
-        });
+
+        let body = {base_url: localStorage.getItem('base_url'), api_url: api_url, access_token: this.currentUser.access_token, form: JSON.stringify(form)}
+        return this.http.post( `${environment.server_url}/hipaa/update`, body).map((res: any) => res)
     }
     delete_object(id, api_url){
-        jQuery.ajax({
-            url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/${id}?access_token=` + this.currentUser.access_token,
-            type: "DELETE",
-            crossDomain: true,
-            headers: {          
-                'Accept': 'application/json',
-                'Access-Control-Max-Age': 'OPTION'
-                // 'Content-Type': 'application/json'
-            },
-            success: (response) => {
-                alert("adsf");
-            },
-            error: (response) => {
-                // this.alertService.error(response['message']);
-            }
-        });
+        // jQuery.ajax({
+        //     url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/${id}?access_token=` + this.currentUser.access_token,
+        //     type: "DELETE",
+        //     crossDomain: true,
+        //     headers: {          
+        //         'Accept': 'application/json',
+        //         'Access-Control-Max-Age': 'OPTION'
+        //         // 'Content-Type': 'application/json'
+        //     },
+        //     success: (response) => {
+        //         alert("adsf");
+        //     },
+        //     error: (response) => {
+        //         // this.alertService.error(response['message']);
+        //     }
+        // });
+
+        let body = {base_url: localStorage.getItem('base_url'), api_url: api_url, access_token: this.currentUser.access_token, id: id}
+        return this.http.post( `${environment.server_url}/hipaa/delete`, body).map((res: any) => res)
     }
 }

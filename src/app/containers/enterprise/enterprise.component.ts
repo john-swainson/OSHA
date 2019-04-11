@@ -16,6 +16,8 @@ export class EnterpriseComponent implements OnInit {
   public selected_total: String = ''
   public is_loading = false
 
+  public dtOptions: any = {};
+
   constructor(private alertService: AlertService, private oshaService: OshaService, 
               public dashboardService: DashboardService, public enterpriseService: EnterpriseService,
               private route:ActivatedRoute, private router:Router) {
@@ -57,6 +59,14 @@ export class EnterpriseComponent implements OnInit {
         
       }
     });
+
+    // Datatable configure
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      scrollX: true,
+      scrollY: '500',
+    };
   }
 
   doDashboard(){

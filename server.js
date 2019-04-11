@@ -29,16 +29,16 @@ app.use(express.static(__dirname + '/dist/'))
 app.use(cors())
 
 // support parsing of application/json type post data
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 //support parsing of application/x-www-form-urlencoded post data
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  next()
+})
 
 // environment variables
 process.env.force_url = 'https://hipaacomplete--dev1.cs41.my.salesforce.com/services'
@@ -56,10 +56,10 @@ app.get('/oauth2/auth', function(req, res) {
                 }
               ,
               function(error, response, body){
-                res.status(response.statusCode).send(JSON.parse(body));
+                res.status(response.statusCode).send(JSON.parse(body))
               }
-  ); 
-});
+  ) 
+})
 
 app.post('/force/queryALL', function(req, res) {
   request.get( { 
@@ -68,10 +68,10 @@ app.post('/force/queryALL', function(req, res) {
                }
               ,
               function(error, response, body){
-                res.status(response.statusCode).send(JSON.parse(body));
+                res.status(response.statusCode).send(JSON.parse(body))
               }
-  ); 
-});
+  )
+})
 
 app.post('/force/getbreadcrumb', function(req, res) {
   request.post( { 
@@ -84,10 +84,49 @@ app.post('/force/getbreadcrumb', function(req, res) {
                }
               ,
               function(error, response, body){
-                res.status(200).send(JSON.parse(body));
+                res.status(200).send(JSON.parse(body))
               }
-  ); 
-});
+  )
+})
+
+//=========== HIPAA, OSHA (Create, Update, Delete) =====================================================================================
+app.post('/hipaa/create', function(req, res){
+  request.post( { 
+                  headers: {'Content-Type' : 'application/json', 'Accept': 'application/json'}, 
+                  url: `https://${req.body.base_url}/api/1.0/index.php/${req.body.api_url}?access_token=${req.body.access_token}`, 
+                  body: req.body.form
+                }
+              ,
+              function(error, response, body){
+                res.status(response.statusCode).send(JSON.parse(body))
+              }
+  )
+})
+
+app.post('/hipaa/update', function(req, res){
+  request.post( { 
+                  headers: {'Content-Type' : 'application/json', 'Accept': 'application/json'}, 
+                  url: `https://${req.body.base_url}/api/1.0/index.php/${req.body.api_url}/?access_token=${req.body.access_token}`,
+                  body: req.body.form
+                }
+              ,
+              function(error, response, body){
+                res.status(response.statusCode).send(JSON.parse(body))
+              }
+  )
+})
+
+app.post('/hipaa/delete', function(req, res){
+  request.delete( { 
+                  headers: {'Accept': 'application/json'}, 
+                  url: `https://${req.body.base_url}/api/1.0/index.php/${req.body.api_url}/${req.body.id}?access_token=${req.body.access_token}`,
+                }
+              ,
+              function(error, response, body){
+                res.status(response.statusCode).send(JSON.parse(body))
+              }
+  )
+})
 
 // Send all requests to index.html
 app.get('/*', function(req, res) {

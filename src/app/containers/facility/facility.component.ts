@@ -142,7 +142,6 @@ export class FacilityComponent implements OnInit {
   }
 
   render_object(){
-    this.oshaService.error_alert = this.oshaService.success_alert = '';
     this.is_loading = true;
     this.oshaService.get_objects(this.api_url_value).subscribe( res => {
         this.objects = res;
@@ -189,7 +188,21 @@ export class FacilityComponent implements OnInit {
         this.f[this.root_field_name].setValue(root_value);
       }
       let request_form = [{"id": "", "data": this.addForm.value}];
-      this.oshaService.add_object(request_form, this.api_url_value);
+      // Call Add API
+      this.oshaService.add_object(request_form, this.api_url_value).subscribe( res => {
+        res = res[0];
+                
+        if(res['status'] == "success")
+        { 
+            this.modalService.dismissAll();
+            this.oshaService.success_alert = res['message'];
+            this.render_object();
+        }  
+        else
+          this.oshaService.error_alert = res['message'];
+        this.loading_submit = false;
+      })
+
       this.addForm.removeControl(this.root_field_name);
       
     }
@@ -198,16 +211,35 @@ export class FacilityComponent implements OnInit {
       let request_form = [{"id": this.index, "data": this.addForm.value}];
       this.oshaService.update_object(request_form, this.api_url_value);
       
+      // Update Add API
+      this.oshaService.update_object(request_form, this.api_url_value).subscribe( res => {
+        res = res[0]
+                
+        if(res['status'] == "success")
+        { 
+            this.modalService.dismissAll()
+            this.oshaService.success_alert = res['message']
+            this.render_object()
+        } 
+        else
+          this.oshaService.error_alert = res['message']
+        this.loading_submit = false
+      })
     } 
-    setTimeout(()=>{ this.render_object(); }, 
-      5000
-    );
-    this.loading_submit = false;
-    
   }
 
   delete(id){
-    this.oshaService.delete_object(id, this.api_url_value);
+    this.oshaService.delete_object(id, this.api_url_value).subscribe( res => {
+             
+      if(res['status'] == "success")
+      { 
+          this.oshaService.success_alert = res['message']
+          this.render_object()
+      } 
+      else
+        this.oshaService.error_alert = res['message']
+      this.loading_submit = false
+    })
   }
 
   get f() { return this.addForm.controls; }
