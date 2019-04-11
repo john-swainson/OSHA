@@ -120,7 +120,7 @@ export class DefaultLayoutComponent implements OnDestroy {
       this.navItems .unshift( { name: localStorage.getItem('contact_name'), 
                                 url: '/logout', 
                                 icon: 'icon-logout', 
-                                badge: { variant: 'danger', text: 'OUT' } } 
+                                badge: { variant: 'danger', text: 'LOGOUT' } } 
       );
     }
   }

@@ -84,8 +84,8 @@
                         <div *ngFor="let item of view_display_order;let index=index" class="form-group row my-0">
                             <div class="col-12 my-2" *ngIf="(index < 14&&tab=='Incident')||(index>=14&&tab=='Breach')">
                                 <div class="row">
-                                    <label class="col-md-4 col-form-label text-right ellipsis" title={{item.label}}> {{item.label}} </label>
-                                    <div class="col-md-8">
+                                    <label class="col-md-3 col-form-label text-left ellipsis" title={{item.label}}> {{item.label}} </label>
+                                    <div class="col-md-9">
                                         <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
                                     
                                         <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
@@ -105,8 +105,8 @@
         </div>
         <div *ngIf="tableName!='security_incident'">
             <div *ngFor="let item of view_display_order" class="form-group row">
-                <label class="col-md-4 col-12 col-form-label text-right ellipsis" title={{item.label}}> {{item.label}} </label>
-                <div class="col-md-8 col-12">
+                <label class="col-md-3 col-12 col-form-label text-left ellipsis" title={{item.label}}> {{item.label}} </label>
+                <div class="col-md-9 col-12">
                     <input *ngIf="item.type=='boolean'" type="checkbox" class="form-check-label" [checked]="objects.data[view_index][remove__c(item.name)]=='true'" [class.disabled]="true"/>
                 
                     <input *ngIf="item.type=='reference' && objects.data[view_index][remove__c(item.name)] != null" type="text" class="form-control" 
@@ -139,8 +139,8 @@
                         <ng-template ngbTabContent>
                             <div *ngFor="let item of insert_display_order; let index=index;" class="form-group">
                                 <div class="row" *ngIf="(item.type!='root')&&((index < 14&&tab=='Incident')||(index>=14&&tab=='Breach'))">
-                                    <label class="col-md-4 col-form-label text-right ellipsis" title={{item.label}}>{{item.label}}</label>
-                                    <div class="col-md-8">
+                                    <label class="col-md-3 col-form-label text-left ellipsis" title={{item.label}}>{{item.label}}</label>
+                                    <div class="col-md-9">
                                         
                                         <!-- Add field by item.type -->
                                         <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
@@ -183,8 +183,8 @@
             <div *ngIf="tableName!='security_incident'">
                 <div *ngFor="let item of insert_display_order" class="form-group">
                     <div class="row" *ngIf="item.type!='root'">
-                        <label class="col-md-4 col-form-label text-right ellipsis" title={{item.label}}>{{item.label}}</label>
-                        <div class="col-md-8">
+                        <label class="col-md-3 col-form-label text-left ellipsis" title={{item.label}}>{{item.label}}</label>
+                        <div class="col-md-9">
                             
                             <!-- Add field by item.type -->
                             <input *ngIf="item.type!='textarea'&&item.type!='boolean'&&item.type!='reference'&&item.type!='datetime'&&item.type!='date'&&item.type!='picklist'" 
