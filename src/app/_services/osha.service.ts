@@ -57,22 +57,6 @@ export class OshaService {
         return this.http.post( `${environment.server_url}/hipaa/update`, body).map((res: any) => res)
     }
     delete_object(id, api_url){
-        // jQuery.ajax({
-        //     url: `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/${id}?access_token=` + this.currentUser.access_token,
-        //     type: "DELETE",
-        //     crossDomain: true,
-        //     headers: {          
-        //         'Accept': 'application/json',
-        //         'Access-Control-Max-Age': 'OPTION'
-        //         // 'Content-Type': 'application/json'
-        //     },
-        //     success: (response) => {
-        //         alert("adsf");
-        //     },
-        //     error: (response) => {
-        //         // this.alertService.error(response['message']);
-        //     }
-        // });
 
         let body = {base_url: localStorage.getItem('base_url'), api_url: api_url, access_token: this.currentUser.access_token, id: id}
         return this.http.post( `${environment.server_url}/hipaa/delete`, body).map((res: any) => res)
