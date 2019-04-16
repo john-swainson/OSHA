@@ -121,25 +121,26 @@ export class DashboardComponent implements OnInit {
                 if( new Date(date).valueOf() < new Date(res.data[key].Review_Date).valueOf() )
                 {
                   date = res.data[key].Review_Date;
+                  let __date = new Date(date);
+                  let month, day;
+    
+                  if(__date.getMonth().toString().length < 2 )
+                    month = '0' + __date.getMonth().toString();
+                  else
+                    month = __date.getMonth();
+                  
+                  if(__date.getDate().toString().length < 2 )
+                    day = '0' + __date.getDate().toString();
+                  else
+                    day = __date.getDate();
+    
+                  date = month + '-' + day + '-' + __date.getFullYear();
                 }
               }
               if(res.data.length == 0)
                 date = '';
-              let __date = new Date(date);
-              let month, day;
 
-              if(__date.getMonth().toString().length < 2 )
-                month = '0' + __date.getMonth().toString();
-              else
-                month = __date.getMonth();
-              
-              if(__date.getDate().toString().length < 2 )
-                day = '0' + __date.getDate().toString();
-              else
-                day = __date.getDate();
-
-              this.dashboardItems[res.type][res.index].data = month + '-' + day + '-' + __date.getFullYear();
-              //this.dashboardItems[res.type][res.index].data = date;
+              this.dashboardItems[res.type][res.index].data = date;
             }
           },
           err=>{

@@ -79,7 +79,7 @@ export class FacilityComponent implements OnInit {
           });
         }
         if(field.items_page_order != '0')
-        {
+        { 
           this.items_page_order.push(field);
         }
         this.can_insert = field.insert;
@@ -137,26 +137,27 @@ export class FacilityComponent implements OnInit {
       }
       //===== Get All Objects ===================
       this.render_object();
-      console.log(this.addForm);
     });
   }
 
   render_object(){
     this.is_loading = true;
     this.oshaService.get_objects(this.api_url_value).subscribe( res => {
-        this.objects = res;
-        this.object_ids = [];
+        this.objects = res
+        this.object_ids = []
         for(var key in res.data) {
-            this.object_ids.push(key); 
+            this.object_ids.push(key)
         }
-        this.is_loading = false;
-        var script = document.createElement('script');
-        script.src = '/assets/js/resize.js';
-        document.head.appendChild(script); 
+        this.is_loading = false
+        var script = document.createElement('script')
+        script.src = '/assets/js/resize.js'
+        document.head.appendChild(script)
     },
     err => {
       
     })
+    this.oshaService.success_alert = ''
+    this.oshaService.error_alert = ''
   }
 
   onSubmit() {
