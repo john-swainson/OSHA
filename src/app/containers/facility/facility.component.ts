@@ -152,12 +152,12 @@ export class FacilityComponent implements OnInit {
         var script = document.createElement('script')
         script.src = '/assets/js/resize.js'
         document.head.appendChild(script)
+        this.oshaService.success_alert = ''
+        this.oshaService.error_alert = ''
     },
     err => {
       
     })
-    this.oshaService.success_alert = ''
-    this.oshaService.error_alert = ''
   }
 
   onSubmit() {
