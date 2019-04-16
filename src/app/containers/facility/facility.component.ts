@@ -21,22 +21,23 @@ export class FacilityComponent implements OnInit {
   view_index: string = '';
   //=====================
   objects: any;
-  object_ids: Array<string> = [];
-  fields: any = [];
-  items_page_order: Array<any> = [];
-  view_display_order: Array<any> = [];
-  insert_display_order: Array<any> = [];
+  object_ids: Array<string> = []
+  fields: any = []
+  items_page_order: Array<any> = []
+  view_display_order: Array<any> = []
+  insert_display_order: Array<any> = []
   //===== reference ======
-  references: Array<any> = [];
+  references: Array<any> = []
   //===== root name ======
-  root_field_name: string = '';
+  root_field_name: string = ''
+  parent_field_name: string = ''
   //===== table name =====
-  tableName: string;  //Table Name
-  api_url_value: string;  //API url path
+  tableName: string  //Table Name
+  api_url_value: string  //API url path
   //===== action requires =====
-  can_edit: number = 0;
-  can_insert: number = 0;
-  can_delete: number = 0;
+  can_edit: number = 0
+  can_insert: number = 0
+  can_delete: number = 0
   //===== tab =================
   incident_tabs = ['Incident', 'Breach'];
   constructor(private alertService: AlertService, public oshaService: OshaService,
@@ -58,85 +59,87 @@ export class FacilityComponent implements OnInit {
 
   ngOnInit() {
       this.oshaService.get_object_fields(this.tableName).subscribe( res=>{
-      this.fields = res.fields;
+      this.fields = res.fields
 
-      this.sort_fields_by('items_page_order');
+      this.sort_fields_by('items_page_order')
       for (let field of this.fields){
-        this.api_url_value = field.api_url_value;
-        if(field.type == 'reference')
+        this.api_url_value = field.api_url_value
+        if(field.type == 'reference' || field.type == 'parent')
         {
-          var temp_url:string = field.type_value;
+          var temp_url:string = field.type_value
 
-          var temp_table_name = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase();
+          var temp_table_name = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase()
     
           this.oshaService.get_object_fields(temp_table_name).subscribe( data=>{
             if(data.fields.length > 0)
             {
               this.oshaService.get_objects(data.fields[0].api_url_value).subscribe( res => {
-                this.references[field.name] = res;
+                this.references[field.name] = res
               });
             }
           });
         }
         if(field.items_page_order != '0')
         { 
-          this.items_page_order.push(field);
+          this.items_page_order.push(field)
         }
-        this.can_insert = field.insert;
-        this.can_edit = field.edit;
-        this.can_delete = field.delete;
+        this.can_insert = field.insert
+        this.can_edit = field.edit
+        this.can_delete = field.delete
       }
 
-      this.sort_fields_by('view_display_order');
+      this.sort_fields_by('view_display_order')
       for (let field of this.fields){
         if(field.view_display_order != '0' && field.type != 'root')
-          this.view_display_order.push(field);
+          this.view_display_order.push(field)
       }
 
-      this.sort_fields_by('insert_display_order');
+      this.sort_fields_by('insert_display_order')
       for (let field of this.fields){
         if(field.insert_display_order != '0')
-          this.insert_display_order.push(field);
+          this.insert_display_order.push(field)
       }
       // console.log(this.items_page_order);
       // console.log(this.view_display_order);
       // console.log(this.insert_display_order);
 
       //===== Initialize Add Form ===============
-      this.addForm = this.formBuilder.group({});
+      this.addForm = this.formBuilder.group({})
       for (let field of this.insert_display_order)
       {
-        let control_name = '';
+        let control_name = ''
         //=== Check Type If root 
         if( field.type != 'root' )
         {
-          control_name = this.remove__c(field.name);
+          control_name = this.remove__c(field.name)
+          if( field.type == 'parent' )
+            this.parent_field_name = this.remove__c(field.name) 
         }
         else
         {
-          this.root_field_name = this.remove__c(field.name);
+          this.root_field_name = this.remove__c(field.name)
           continue;
         }
         
         //=== Add Control to Add Form 
         
-        let validator = [];
+        let validator = []
         if( field.nillable == 0)
         {
-          validator.push(Validators.required);
+          validator.push(Validators.required)
         } 
         if( field.length > 0 )
         {
-          validator.push(Validators.maxLength(field.length));
+          validator.push(Validators.maxLength(field.length))
         }
         if( field.type == 'double')
         {
-          validator.push(Validators.maxLength(5));
+          validator.push(Validators.maxLength(5))
         }
-        this.addForm.addControl(control_name, new FormControl('', validator));
+        this.addForm.addControl(control_name, new FormControl('', validator))
       }
       //===== Get All Objects ===================
-      this.render_object();
+      this.render_object()
     });
   }
 
@@ -209,7 +212,17 @@ export class FacilityComponent implements OnInit {
     }
     else if(this.mode == 2)
     {
+      let parent;
+      if(this.parent_field_name != ''){
+        parent = this.f[this.parent_field_name]
+        this.addForm.removeControl(this.parent_field_name)
+      }
+
       let request_form = [{"id": this.index, "data": this.addForm.value}];
+
+      if(this.parent_field_name != '')
+        this.addForm.addControl(this.parent_field_name, parent)
+
       this.oshaService.update_object(request_form, this.api_url_value);
       
       // Update Add API
