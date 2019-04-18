@@ -40,6 +40,10 @@ export class FacilityComponent implements OnInit {
   can_delete: number = 0
   //===== tab =================
   incident_tabs = ['Incident', 'Breach'];
+  //===== converted ===========
+  is_converted: boolean = false;
+  convert_submitting: boolean = false;
+
   constructor(private alertService: AlertService, public oshaService: OshaService,
               config: NgbModalConfig, private modalService: NgbModal, private formBuilder: FormBuilder,
               private route:ActivatedRoute, private router:Router, public authenticationService: AuthenticationService) {
@@ -265,21 +269,26 @@ export class FacilityComponent implements OnInit {
     if (mode == 0) // create modal
     {
       if(index == '')
-        this.set_values(null);
+        this.set_values(null)
       else
-        this.set_values(index);  
+        this.set_values(index)
     }
     else if (mode == 1) // show modal
     {
-      this.view_index = index;
+      this.view_index = index
+      if( this.tableName == 'lead' )
+      {
+        if( this.objects.data[index]['isConverted'] == 'false')
+          this.is_converted = false
+        else  
+          this.is_converted = true
+      }
     }
     else if (mode == 2) // edit modal
     {
-      this.set_values(index);
+      this.set_values(index)
     }  
-
-    // const modalRef = this.modalService.open(content, {windowClass: 'modal-holder', centered: true});
-    this.modalService.open(content, { size: 'lg' });
+    this.modalService.open(content, { size: 'lg' })
   }
 
   set_values(index){
@@ -337,6 +346,33 @@ export class FacilityComponent implements OnInit {
     }
  
     return ax.length - bx.length;
+  }
+
+  convert_lead(index){
+
+    this.convert_submitting = true;
+    let request_form = [{"id": index, "data": {"isConverted":1}}]
+    // Convert Lead
+    this.oshaService.update_object(request_form, this.api_url_value).subscribe( 
+      res => {
+        res = res[0]
+                
+        if(res['status'] == "success")
+        { 
+            this.modalService.dismissAll()
+            this.oshaService.success_alert = res['message']
+            this.convert_submitting = false;
+            this.render_object()
+        } 
+        else
+          this.oshaService.error_alert = res['message']
+        this.convert_submitting = false
+      }, 
+      err=>{
+        this.convert_submitting = false
+        console.log(err)
+      }
+    )
   }
 
   remove__c(string){

@@ -103,17 +103,15 @@ app.post('/hipaa/create', function(req, res){
   )
 })
 
-app.post('/hipaa/update', function(req, res){
-  request.post( { 
-                  headers: {'Content-Type' : 'application/json', 'Accept': 'application/json'}, 
-                  url: `https://${req.body.base_url}/api/1.0/index.php/${req.body.api_url}/?access_token=${req.body.access_token}`,
-                  body: req.body.form
-                }
-              ,
-              function(error, response, body){
-                res.status(response.statusCode).send(JSON.parse(body))
-              }
-  )
+app.post('/hipaa/update', async (req, res) => {
+  try {
+    var body = await postPromise(req.body.base_url, req.body.api_url, req.body.access_token, req.body.form)
+    console.log(body)
+    res.status(200).send(JSON.parse(body))
+  } catch(error){
+    res.status(400).send(error)
+  }
+  
 })
 
 app.post('/hipaa/delete', function(req, res){
@@ -135,3 +133,22 @@ app.get('/*', function(req, res) {
 
 // default Heroku port
 app.listen(process.env.PORT || 5000, () => console.log('Example app listening on port !'))
+
+function postPromise(base_url, api_url, access_token, form) {
+  return new Promise((resolve, reject) => {
+    request.post( { 
+          headers: {'Content-Type' : 'application/json', 'Accept': 'application/json'}, 
+          url: `https://${base_url}/api/1.0/index.php/${api_url}/?access_token=${access_token}`,
+          body: form
+        }
+      ,
+      function(error, response, body){
+        if (error) {
+          reject(error)
+        } else {
+          resolve(body)
+        } 
+      }
+    )
+  })
+}
