@@ -37,6 +37,7 @@ export class AuthenticationService {
                     localStorage.setItem('base_url', this.base_url);
                     localStorage.setItem('org_name', orgs[2]);
                     localStorage.setItem('contact_name', orgs[1]);
+                    localStorage.setItem('contact_id', orgs[3]);
                     this.currentUserSubject.next(user);
                 }
 
@@ -45,13 +46,15 @@ export class AuthenticationService {
     }
 
     get_org(email: string) {
-        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud/orgs_by_email?email=${email}`;
-        let headers = new HttpHeaders();
-        headers.append('Accept', 'application/json');
-        let optionsH = {
-            headers:headers
-        };
-        return this.http.get( queryURL, optionsH ).map((res: any) => res);
+        const body = new HttpParams()
+            .set('email', email)
+            .set('password', 'bluehippo13');
+
+        return this.http.post<any>(`https://${this.base_url}/api/1.0/getorgs.php`,body.toString(), 
+            { headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')})
+            .pipe(map(orgs => {
+                return orgs;
+            }));
     }
 
     logout() {

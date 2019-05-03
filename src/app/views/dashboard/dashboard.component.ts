@@ -71,7 +71,6 @@ export class DashboardComponent implements OnInit {
       if(data.totalSize == 1){
         this.force_totals = data.records[0]
         this.force_children = this.force_totals.Partners__r
-        console.log(this.force_totals)
       }
     },
     err=>{

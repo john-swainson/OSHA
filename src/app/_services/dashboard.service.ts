@@ -18,7 +18,7 @@ export class DashboardService {
     }
 
     get_all_devices(): Observable<any>{
-        let queryURL = `https://${this.authenticationService.base_url}/api/1.0/index.php/device-registry/all?access_token=` + this.currentUser.access_token;
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/index.php/device-registry/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
@@ -30,7 +30,7 @@ export class DashboardService {
     }
 
     get_all_facilities(): Observable<any>{
-        let queryURL = `https://${this.authenticationService.base_url}/api/1.0/index.php/facility/all?access_token=` + this.currentUser.access_token;
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/index.php/facility/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
@@ -41,7 +41,7 @@ export class DashboardService {
     }
 
     get_all_contacts(): Observable<any>{
-        let queryURL = `https://${this.authenticationService.base_url}/api/1.0/index.php/contact/all?access_token=` + this.currentUser.access_token;
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/index.php/contact/all?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
@@ -52,7 +52,7 @@ export class DashboardService {
     }
 
     get_device_by_id(device_id): Observable<any>{
-        let queryURL = `https://${this.authenticationService.base_url}/api/1.0/index.php/device-registry/${device_id}?access_token=` + this.currentUser.access_token;
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/index.php/device-registry/${device_id}?access_token=` + this.currentUser.access_token;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
@@ -63,7 +63,7 @@ export class DashboardService {
     }
 
     get_dashboard_type(type, filter, index = null, dash_type = null):Observable<any>{
-        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud/dashboard_data?type=${type}&filter=${filter}&org_id=${localStorage.getItem('org_id')}`;
+        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud/dashboard_data?type=${type}&filter=${filter}&org_id=${localStorage.getItem('org_id')}&contact_id=${localStorage.getItem('contact_id')}`;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');

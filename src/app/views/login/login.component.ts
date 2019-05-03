@@ -10,15 +10,16 @@ import { ToastsManager } from 'ng6-toastr';
   templateUrl: 'login.component.html'
 })
 export class LoginComponent { 
-    loginForm: FormGroup;
-    orgForm: FormGroup;
-    loading_org = false;
-    submitted_org = false;
-    loading = false;
-    submitted = false;
-    returnUrl: string;
+    loginForm: FormGroup
+    orgForm: FormGroup
+    loading_org = false
+    submitted_org = false
+    loading = false
+    submitted = false
+    returnUrl: string
     login_url = ["hipaadev.us", "hipaastaging.us", "acceptanceh.us", "hipaacomplete.com"]
-    orgs: any = [];
+    orgs: any = []
+    org_ids: Array<string> = []
 
     constructor(
         private formBuilder: FormBuilder,
@@ -69,8 +70,14 @@ export class LoginComponent {
         this.authenticationService.base_url = this.f_g.url.value;
         this.orgs = [];
         this.authenticationService.get_org(this.f_g.username.value).subscribe( data=> {
-            this.orgs = data;
-            this.loading_org = false;
+            this.orgs = data[0].organizations
+            for( let key in this.orgs )
+            {
+                this.org_ids.push(key)
+                console.log(key)
+                console.log(this.orgs[key].org_name)
+            }
+            this.loading_org = false
         });
     }
 

@@ -142,7 +142,7 @@ function postPromise(base_url, api_url, access_token, form) {
           body: form
         }
       ,
-      function(error, response, body){
+      (error, response, body) => {
         if (error) {
           reject(error)
         } else {

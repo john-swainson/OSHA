@@ -284,7 +284,7 @@ export const dashboardItems: any={
             'bg_color': 'bg-success',
         },
         {
-            'url': '/media_sanitization',
+            'url': '/dashboard_type',
             'name': 'SUBMITTED SANITIZATION',
             'icon': 'icon-pie-chart',
             'isloading': false,
@@ -292,7 +292,9 @@ export const dashboardItems: any={
             'type': 'integer',
             'pos': 'top',
             'width': 'col-xs-12 col-sm-6  col-md-15',
-            'bg_color': 'bg-info'
+            'bg_color': 'bg-info',
+            'url_type': 'media_sanitization__c',
+            'url_filter': 'submitted',
         },
         {
             'url': '/dashboard_type',

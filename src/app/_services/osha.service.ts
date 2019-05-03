@@ -26,8 +26,21 @@ export class OshaService {
         this.currentUser = this.authenticationService.currentUserValue;
     }
 
+    get_stage(){
+        let base_url = localStorage.getItem('base_url')
+        if(base_url == 'hipaadev.us')
+            return 'dev'
+        else if(base_url == 'hipaastaging.us')
+            return 'staging'    
+        else if(base_url == 'hipaacomplete.com')
+            return 'prod'  
+        else if(base_url == 'acceptanceh.us')
+            return 'prod'        
+        return 'dev'
+    }
+
     get_object_fields(tableName, index = null, type = null): Observable<any>{
-        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud?tableName=${tableName}`;
+        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud?tableName=${tableName}&stage=${this.get_stage()}`
         let headers = new HttpHeaders();
         headers.append('Accept', 'application/json');
         let optionsH = {
