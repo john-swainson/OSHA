@@ -74,8 +74,6 @@ export class LoginComponent {
             for( let key in this.orgs )
             {
                 this.org_ids.push(key)
-                console.log(key)
-                console.log(this.orgs[key].org_name)
             }
             this.loading_org = false
         },

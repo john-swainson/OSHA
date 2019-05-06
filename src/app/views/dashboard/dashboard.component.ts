@@ -117,29 +117,30 @@ export class DashboardComponent implements OnInit {
               var date='1945-05-09';
               // Review_Date
               for(var key in res.data) {
-                if( new Date(date).valueOf() < new Date(res.data[key].Review_Date).valueOf() )
+                if( (new Date(date).valueOf() < new Date(res.data[key].Review_Date).valueOf()) && (res.data[key].Review_Date != null) )
                 {
-                  date = res.data[key].Review_Date;
-                  let __date = new Date(date);
-                  let month, day;
+                  date = res.data[key].Review_Date
+                  let __date = new Date(date)
+                  // let month, day
     
-                  if(__date.getMonth().toString().length < 2 )
-                    month = '0' + __date.getMonth().toString();
-                  else
-                    month = __date.getMonth();
+                  // if(__date.getMonth().toString().length < 2 )
+                  //   month = '0' + __date.getMonth().toString()
+                  // else
+                  //   month = __date.getMonth()
                   
-                  if(__date.getDate().toString().length < 2 )
-                    day = '0' + __date.getDate().toString();
-                  else
-                    day = __date.getDate();
+                  // if(__date.getDate().toString().length < 2 )
+                  //   day = '0' + __date.getDate().toString()
+                  // else
+                  //   day = __date.getDate()
     
-                  date = month + '-' + day + '-' + __date.getFullYear();
+                  //date = month + '-' + day + '-' + __date.getFullYear()
+                  date = this.pad(__date.getMonth()+1) + '-' + this.pad(__date.getDate()) + '-' + __date.getFullYear();
                 }
               }
-              if(res.data.length == 0)
-                date = '';
+              if(res.data.length == 0 || date == '1945-05-09')
+                date = ''
 
-              this.dashboardItems[res.type][res.index].data = date;
+              this.dashboardItems[res.type][res.index].data = date
             }
           },
           err=>{
@@ -150,6 +151,10 @@ export class DashboardComponent implements OnInit {
       }
       index++;
     }
+  }
+  pad(n)
+  {
+    return n<10 ? '0'+n : n
   }
   remove__c(string){
     return string.trim().replace(/\__c/gi, "");
