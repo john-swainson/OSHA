@@ -78,6 +78,10 @@ export class LoginComponent {
                 console.log(this.orgs[key].org_name)
             }
             this.loading_org = false
+        },
+        err=>{
+            this.loading_org = false
+            this.toastr.error(err)
         });
     }
 
