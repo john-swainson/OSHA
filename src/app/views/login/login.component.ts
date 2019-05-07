@@ -59,21 +59,29 @@ export class LoginComponent {
     get f_g() { return this.orgForm.controls; }
     
     onOrgSubmit() {
-        this.submitted_org = true;
-
+        this.submitted_org = true
+        this.orgs = []
+        this.org_ids = []
         // stop here if form is invalid
         if (this.orgForm.invalid) {
-            return;
+            return
         }
 
-        this.loading_org = true;
-        this.authenticationService.base_url = this.f_g.url.value;
-        this.orgs = [];
+        this.loading_org = true
+        this.authenticationService.base_url = this.f_g.url.value
+        this.orgs = []
         this.authenticationService.get_org(this.f_g.username.value).subscribe( data=> {
-            this.orgs = data[0].organizations
-            for( let key in this.orgs )
+
+            if(Array.isArray(data))
             {
-                this.org_ids.push(key)
+                this.orgs = data[0].organizations
+                for( let key in this.orgs )
+                {
+                    this.org_ids.push(key)
+                }   
+            }
+            else{
+                this.toastr.error(data.message)    
             }
             this.loading_org = false
         },

@@ -90,11 +90,20 @@ export class DashboardComponent implements OnInit {
       item.isloading = true;
       if(table_name == 'dashboard_type') //For Hipaa
       {
-        this.dashboardService.get_dashboard_type(item.url_type, item.url_filter, index, this.current_dashboard_type).subscribe( res => {
-          
+        this.dashboardService.get_dashboard_type(this.remove__c(item.url_type), item.url_filter, index, this.current_dashboard_type).subscribe( res => {
           this.dashboardItems[res.type][res.index].isloading = false;
-          this.dashboardItems[res.type][res.index].data = res.data.length;
-        }, err => {
+          
+          if (Array.isArray(res.data))
+          {
+            this.dashboardItems[res.type][res.index].data = res.data[0].data.length
+          }
+          else
+          {
+            this.dashboardItems[res.type][res.index].data = 0
+          }
+          
+        }, 
+        err => {
 
         })
       }
@@ -121,19 +130,7 @@ export class DashboardComponent implements OnInit {
                 {
                   date = res.data[key].Review_Date
                   let __date = new Date(date)
-                  // let month, day
-    
-                  // if(__date.getMonth().toString().length < 2 )
-                  //   month = '0' + __date.getMonth().toString()
-                  // else
-                  //   month = __date.getMonth()
-                  
-                  // if(__date.getDate().toString().length < 2 )
-                  //   day = '0' + __date.getDate().toString()
-                  // else
-                  //   day = __date.getDate()
-    
-                  //date = month + '-' + day + '-' + __date.getFullYear()
+
                   date = this.pad(__date.getMonth()+1) + '-' + this.pad(__date.getDate()) + '-' + __date.getFullYear();
                 }
               }

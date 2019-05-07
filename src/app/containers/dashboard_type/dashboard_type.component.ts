@@ -167,14 +167,24 @@ export class DashboardTypeComponent implements OnInit {
         script.src = '/assets/js/resize.js';
         document.head.appendChild(script); 
         //===== Get Filtered Data ===========================================
-        this.dashboardService.get_dashboard_type(this.data_type, this.filter).subscribe( data => {
+        this.dashboardService.get_dashboard_type(this.remove__c(this.data_type), this.filter).subscribe( data => {
         
-          this.filtered_objects = data.data;
-          if(data.data.length > 0){
-            for( let key in data.data[0]){
-              this.filtered_labels.push({ key: key, label: this.get_label_by_field(key) });
+          if (Array.isArray(data.data))
+          {
+            console.log(data.data[0].data)
+            this.filtered_objects = data.data[0].data
+            if(data.data[0].data.length > 0){
+              for( let key in data.data[0].data[0]){
+                this.filtered_labels.push({ key: key, label: this.get_label_by_field(key) })
+              }
             }
+            console.log(this.filtered_labels)
+
           }
+          else{
+            this.filtered_objects = [] 
+          }
+          
           this.is_loading = false;
 
         }, err => {

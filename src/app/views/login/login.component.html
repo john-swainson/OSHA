@@ -36,7 +36,7 @@
                     <span>Connected Organization</span>
                     <select id="organization" formControlName="organization" class="form-control w-100" [ngClass]="{ 'is-invalid': submitted && f.organization.errors }">
                       <!--<option *ngFor="let org in orgs" [value]="org.org_id+'/'+org.full_name__c+'/'+org.org_name__c+'/'+org.contact_id">{{ org.org_name__c }}</option>-->
-                      <option *ngFor="let id of org_ids" [value]="id+'/'+orgs[id].full_name__c+'/'+orgs[id].org_name+'/'+orgs[id].contact_id">{{ orgs[id].org_name }}</option>
+                      <option *ngFor="let id of org_ids" [value]="id+'/'+orgs[id].full_name+'/'+orgs[id].org_name+'/'+orgs[id].contact_id">{{ orgs[id].org_name }}</option>
                     </select> 
                   </div>
                   <div class="input-group mb-4">

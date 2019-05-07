@@ -63,7 +63,7 @@ export class DashboardService {
     }
 
     get_dashboard_type(type, filter, index = null, dash_type = null):Observable<any>{
-        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud/dashboard_data?type=${type}&filter=${filter}&org_id=${localStorage.getItem('org_id')}&contact_id=${localStorage.getItem('contact_id')}`;
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/dashboard.php/${type}/${filter}?access_token=${this.currentUser.access_token}`;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
