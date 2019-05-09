@@ -13,4 +13,5 @@ export const environment = {
   password: 'Cyntexa@123WqcLKkd0BpSdG8fKqkAHzwbZ',
   // Local API URL
   server_url: 'http://localhost:5000',
+  metadata_url: 'osha-metadata.herokuapp.com',
 };

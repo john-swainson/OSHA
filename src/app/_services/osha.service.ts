@@ -40,7 +40,7 @@ export class OshaService {
     }
 
     get_object_fields(tableName, index = null, type = null): Observable<any>{
-        let queryURL = `https://cann-demo-crud.herokuapp.com/index.php/crud?tableName=${tableName}&stage=${this.get_stage()}`
+        let queryURL = `https://${environment.metadata_url}/index.php/crud?tableName=${tableName}&stage=${this.get_stage()}`
         let headers = new HttpHeaders();
         headers.append('Accept', 'application/json');
         let optionsH = {

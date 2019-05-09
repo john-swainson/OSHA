@@ -7,7 +7,8 @@ import { ToastsManager } from 'ng6-toastr';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: 'login.component.html'
+  templateUrl: 'login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent { 
     loginForm: FormGroup
