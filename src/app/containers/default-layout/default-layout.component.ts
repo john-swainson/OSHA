@@ -52,13 +52,14 @@ export class DefaultLayoutComponent implements OnDestroy {
       this.addLogout()
     }
     //======== Adding Breadcrumbs from url ==============================================================
-    this.breadcrumbs = []
-    this.breadcrumbs.push({path: 'dashboard', name: 'Dashboard', child: ''})
+    this.oshaService.breadcrumbs = []
+    this.oshaService.breadcrumbs.push({path: 'dashboard', name: 'Dashboard', child: ''})
 
     let urlTree = this.router.parseUrl(this.router.url)
     let main_path = urlTree.root.children['primary'].segments.map(it => it.path).join('/')
+    
     if(main_path != 'enterprise' && main_path != 'dashboard'){
-      this.breadcrumbs.push({ path: main_path, name: main_path, child: ''})
+      this.oshaService.breadcrumbs.push({ path: main_path, name: main_path, child: ''})
     }
     else if(main_path == 'enterprise')
     {
@@ -69,16 +70,15 @@ export class DefaultLayoutComponent implements OnDestroy {
           let parent_id = localStorage.getItem('org_id')
           this.enterpriseService.get_breadcrumb_path(child_id, parent_id).subscribe( data=> {
             let parent_list = data.reverse()
-            console.log(parent_list);
             for( let item of parent_list ){
               if(item.hasOwnProperty('Partner_Organization__r')){
                 if(item.Partner_Organization__r.Id == localStorage.getItem('org_id'))
-                  this.breadcrumbs.push({path: 'enterprise', name: item.Partner_Organization__r.Name, child: ''})
+                  this.oshaService.breadcrumbs.push({path: 'enterprise', name: item.Partner_Organization__r.Name, child: ''})
                 else
-                  this.breadcrumbs.push({path: 'enterprise', name: item.Partner_Organization__r.Name, child: item.Partner_Organization__r.Id})
+                  this.oshaService.breadcrumbs.push({path: 'enterprise', name: item.Partner_Organization__r.Name, child: item.Partner_Organization__r.Id})
               }
               else if(item.hasOwnProperty('Organization__r')){
-                this.breadcrumbs.push({path: 'enterprise', name: item.Organization__r.Name, child: item.Organization__r.Id})
+                this.oshaService.breadcrumbs.push({path: 'enterprise', name: item.Organization__r.Name, child: item.Organization__r.Id})
               }
             }
           },
@@ -91,7 +91,7 @@ export class DefaultLayoutComponent implements OnDestroy {
         }
         else
         {
-          this.breadcrumbs.push({path: 'enterprise', name: localStorage.getItem('org_name'), child: ''})
+          this.oshaService.breadcrumbs.push({path: 'enterprise', name: localStorage.getItem('org_name'), child: ''})
         }
       })
     }
@@ -147,5 +147,9 @@ export class DefaultLayoutComponent implements OnDestroy {
       temp_org += word.charAt(0).toUpperCase() + word.slice(1) + ' '
     }
     return temp_org
+  }
+
+  hello($event){
+    console.log("heloo")
   }
 }

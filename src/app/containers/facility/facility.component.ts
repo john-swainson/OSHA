@@ -39,7 +39,14 @@ export class FacilityComponent implements OnInit {
   can_insert: number = 0
   can_delete: number = 0
   //===== tab =================
-  incident_tabs = ['Incident', 'Breach'];
+  incident_tabs = ['Incident', 'Breach']
+  change_request_tabs = ['Basic', 'CAB Details']
+
+  has_tab: boolean = false
+  tabs = { 'security_incident': { 'index': 14, tabs: ['Incident', 'Breach']}, 
+           'change_request': { 'index': 6, tabs: ['Basic', 'CAB Details']}
+          }
+   
   //===== converted ===========
   is_converted: boolean = false;
   convert_submitting: boolean = false;
@@ -48,18 +55,23 @@ export class FacilityComponent implements OnInit {
               config: NgbModalConfig, private modalService: NgbModal, private formBuilder: FormBuilder,
               private route:ActivatedRoute, private router:Router, public authenticationService: AuthenticationService) {
       
-      this.tableName = this.router.url.split('/')[1];
+      this.tableName = this.router.url.split('/')[1]
       if(this.tableName == 'logout')
       {
-        this.logout();
+        this.logout()
       }
       //===== Initialize Modal Values ======================
-      this.is_loading = true;
-      this.submitted = false;
-      this.loading_submit = false;
-      this.mode = -1;
-      this.index = '';
-   }
+      this.is_loading = true
+      this.submitted = false
+      this.loading_submit = false
+      this.mode = -1
+      this.index = ''
+      this.has_tab = false
+
+      if( this.tabs.hasOwnProperty(this.tableName)){
+        this.has_tab = true
+      }
+  }
 
   ngOnInit() {
       this.oshaService.get_object_fields(this.tableName).subscribe( res=>{

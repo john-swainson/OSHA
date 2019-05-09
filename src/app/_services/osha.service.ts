@@ -20,6 +20,7 @@ export class OshaService {
     success_alert: string = '';
     current_dashboard_type_subject = new BehaviorSubject<string>({} as string);
     current_dashboard_type = this.current_dashboard_type_subject.asObservable().pipe(distinctUntilChanged());
+    public breadcrumbs: Array<{path: string, name: string, child: string}> = []
 
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
         private router: Router, private alertService: AlertService, private modalService: NgbModal) {
