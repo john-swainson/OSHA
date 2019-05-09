@@ -428,6 +428,7 @@ export class FacilityComponent implements OnInit {
   }
 
   logout() {
+    console.log("hello")
     this.authenticationService.logout();
     this.router.navigate(['/login']);
   }
