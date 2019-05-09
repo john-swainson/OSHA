@@ -20,7 +20,7 @@ export class DefaultLayoutComponent implements OnDestroy {
   // BreadCrumbs
   public breadcrumbs: Array<{path: string, name: string, child: string}> = []
 
-  constructor(private router: Router, private authenticationService: AuthenticationService, private oshaService: OshaService,
+  constructor(private router: Router, private authenticationService: AuthenticationService, public oshaService: OshaService,
               private route:ActivatedRoute, public enterpriseService: EnterpriseService, @Inject(DOCUMENT) _document?: any) {
 
     this.changes = new MutationObserver((mutations) => {
