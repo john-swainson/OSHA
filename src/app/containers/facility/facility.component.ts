@@ -3,6 +3,7 @@ import { AlertService, OshaService, AuthenticationService } from '../../_service
 import { NgbModalConfig, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-facility',
@@ -46,7 +47,20 @@ export class FacilityComponent implements OnInit {
   tabs = { 'security_incident': { 'index': 14, tabs: ['Incident', 'Breach']}, 
            'change_request': { 'index': 6, tabs: ['Basic', 'CAB Details']}
           }
-   
+  //===== additional table and buttons =====
+  featured_view = {
+    'hipaa_contact': {},
+    'hardware_inventory': {},
+  } 
+  exception_log: any;
+  exception_ids: Array<any> = []
+  exception_fields: Array<{field: string, label: string}> = [ {field: 'Name', label: 'Record ID'}, {field: 'Exception_Text', label: 'Log Text'}, 
+                                                              {field: 'Module', label: 'Module'}, {field: 'CreatedDate', label: 'Created Date(PST)'}]
+  login_history: any;    
+  login_ids: Array<any> = []
+  login_fields: Array<{field: string, label: string}> = [ {field: 'emailId', label: 'Email ID'}, {field: 'browser', label: 'Browser'}, 
+                                                          {field: 'ipAddress', label: 'Source IP'}, {field: 'status', label: 'Status'},
+                                                          {field: 'serverurl', label: 'Login URL'}, {field: 'createdDate', label: 'Login Time(PST)'}]
   //===== converted ===========
   is_converted: boolean = false;
   convert_submitting: boolean = false;
@@ -69,7 +83,16 @@ export class FacilityComponent implements OnInit {
       this.has_tab = false
 
       if( this.tabs.hasOwnProperty(this.tableName)){
-        this.has_tab = true
+        this.has_tab = true 
+      }
+      //===== Featured For Hipaa ==========================
+      if( this.tableName == 'hipaa_contact'){
+        this.oshaService.get_objects('login-history').subscribe( res => {
+          this.login_history = res.data
+        });
+        this.oshaService.get_objects('exception-log').subscribe( res => {
+          this.exception_log = res.data
+        });
       }
   }
 
@@ -295,6 +318,19 @@ export class FacilityComponent implements OnInit {
         else  
           this.is_converted = true
       }
+      else if( this.tableName == 'hipaa_contact' ){
+        this.login_ids = [] 
+        this.exception_ids = []
+
+        for(let key in this.login_history) {
+          if(this.login_history[key].hipaaContactId == index)
+            this.login_ids.push(key)
+        }
+        for(let key in this.exception_log) {
+          if(this.exception_log[key].HIPAA_Contact == index)
+            this.exception_ids.push(key)
+        }
+      }
     }
     else if (mode == 2) // edit modal
     {
@@ -385,6 +421,34 @@ export class FacilityComponent implements OnInit {
         console.log(err)
       }
     )
+  }
+
+  reset_password(index){
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Are you sure you want to reset password for this user?",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, rest it!'
+    }).then((result) => {
+      if (result.value){
+        this.oshaService.reset_password(index).subscribe( res => {        
+          Swal.fire(
+            'Reseted!',
+            res.message,
+            'success'
+          )
+        }, err=>{
+            Swal.fire(
+              'Cannot Reset!',
+              'Invalid User ID in OAuth!',
+              'error'
+            )
+        })
+      }
+    })
   }
 
   remove__c(string){

@@ -75,4 +75,9 @@ export class OshaService {
         let body = {base_url: localStorage.getItem('base_url'), api_url: api_url, access_token: this.currentUser.access_token, id: id}
         return this.http.post( `${environment.server_url}/hipaa/delete`, body).map((res: any) => res)
     }
+    reset_password(contact_id):Observable<any>{
+        let form = {"id": contact_id}
+        let body = {base_url: localStorage.getItem('base_url'), api_url: 'system/reset-password', access_token: this.currentUser.access_token, form: JSON.stringify(form)}
+        return this.http.post( `${environment.server_url}/hipaa/reset-password`, body).map((res: any) => res)
+    }
 }

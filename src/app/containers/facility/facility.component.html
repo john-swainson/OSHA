@@ -64,20 +64,26 @@
             </div>
             <div class="col-md-2 col-sm-6 col-12">
                 <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="open(create, 2, view_index)" type="button">
-                    <i class="far fa-edit" aria-hidden="true"></i>
+                    <i class="fa fa-edit" aria-hidden="true"></i>
                     Edit
                 </button>
             </div>
             <div class="col-md-3 col-sm-6 col-12" *ngIf="is_converted==false&&tableName=='lead'">
                 <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="convert_lead(view_index)" type="button">
                     <img *ngIf="convert_submitting" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    <i class="far fa-copy" aria-hidden="true"></i>
+                    <i class="fa fa-copy" aria-hidden="true"></i>
                     Convert Lead
+                </button>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12" *ngIf="tableName=='hipaa_contact'">
+                <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="reset_password(view_index)" type="button">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                    Reset Password
                 </button>
             </div>
             <div class="col-md-2 col-sm-6 col-12">
                 <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="open(create, 0, view_index)" type="button">
-                    <i class="far fa-copy" aria-hidden="true"></i>
+                    <i class="fa fa-copy" aria-hidden="true"></i>
                     Copy
                 </button>
             </div>
@@ -124,6 +130,52 @@
                     
                     <input *ngIf="item.type!='boolean'&&item.type!='reference'&&item.type!='parent'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
                 </div>
+            </div>
+            <div *ngIf="this.tableName == 'hipaa_contact'" class="row">
+                <div class="card col-12">
+                    <div class="card-header text-white bg-success">
+                        <i class="fa fa-user fa-fw"></i>
+                        Login
+                    </div>
+                    <div class="card-body">
+                        <table datatable class="row-border hover table-bordered">
+                            <thead>
+                                <tr class="text-center" class="text-center">
+                                <th *ngFor="let field of exception_fields">{{field.label}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let id of exception_ids" class="text-center">  
+                                    <td *ngFor="let field of exception_fields">
+                                        {{exception_log[id][field.field]}}
+                                    </td>
+                                </tr>   
+                            </tbody>
+                        </table>
+                    </div>
+                </div>    
+                <div class="card col-12">
+                    <div class="card-header text-white bg-success">
+                        <i class="fa fa-user fa-fw"></i>
+                        Login History
+                    </div>
+                    <div class="card-body">
+                        <table datatable class="row-border hover table-bordered">
+                            <thead>
+                                <tr class="text-center" class="text-center">
+                                <th *ngFor="let field of login_fields">{{field.label}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let id of login_ids" class="text-center">  
+                                    <td *ngFor="let field of login_fields">
+                                        {{login_history[id][field.field]}}
+                                    </td>
+                                </tr>   
+                            </tbody>
+                        </table>
+                    </div>
+                </div>    
             </div>
         </div>
     </div>

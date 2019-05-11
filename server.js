@@ -126,6 +126,19 @@ app.post('/hipaa/delete', function(req, res){
   )
 })
 
+app.post('/hipaa/reset-password', function(req, res){
+  request.post( { 
+                  headers: {'Content-Type' : 'application/json', 'Accept': 'application/json'}, 
+                  url: `https://${req.body.base_url}/api/1.0/index.php/${req.body.api_url}?access_token=${req.body.access_token}`, 
+                  body: req.body.form
+                }
+              ,
+              function(error, response, body){
+                res.status(response.statusCode).send(JSON.parse(body))
+              }
+  )
+})
+
 // Send all requests to index.html
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + '/dist/index.html'));
