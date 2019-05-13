@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject } from '@angular/core';
 import { AlertService, OshaService, AuthenticationService } from '../../_services';
-import { NgbModalConfig, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalConfig, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2'
@@ -48,10 +48,6 @@ export class FacilityComponent implements OnInit {
            'change_request': { 'index': 6, tabs: ['Basic', 'CAB Details']}
           }
   //===== additional table and buttons =====
-  featured_view = {
-    'hipaa_contact': {},
-    'hardware_inventory': {},
-  } 
   exception_log: any;
   exception_ids: Array<any> = []
   exception_fields: Array<{field: string, label: string}> = [ {field: 'Name', label: 'Record ID'}, {field: 'Exception_Text', label: 'Log Text'}, 
@@ -61,6 +57,16 @@ export class FacilityComponent implements OnInit {
   login_fields: Array<{field: string, label: string}> = [ {field: 'emailId', label: 'Email ID'}, {field: 'browser', label: 'Browser'}, 
                                                           {field: 'ipAddress', label: 'Source IP'}, {field: 'status', label: 'Status'},
                                                           {field: 'serverurl', label: 'Login URL'}, {field: 'createdDate', label: 'Login Time(PST)'}]
+                                                          
+  location_history: any;    
+  location_ids: Array<any> = []
+  location_fields: Array<{field: string, label: string}> = [ {field: 'Name', label: 'Record No'}, {field: 'Facility_Name', label: 'Facility Name'}, 
+                                                          {field: 'Room_Name', label: 'Room Name'}, {field: 'Start Date', label: 'Date_Start'},
+                                                          {field: 'Date_End', label: 'End Date'}, {field: 'Comments', label: 'Comments'}]   
+  location_rooms: any;
+  location_room_ids: Array<string> = []   
+  locationForm: FormGroup;        
+  active_modal_ref: NgbModalRef;                                                  
   //===== converted ===========
   is_converted: boolean = false;
   convert_submitting: boolean = false;
@@ -92,6 +98,20 @@ export class FacilityComponent implements OnInit {
         });
         this.oshaService.get_objects('exception-log').subscribe( res => {
           this.exception_log = res.data
+        });
+      }
+      else if ( this.tableName == 'hardware_inventory'){
+        this.oshaService.get_objects('location-history').subscribe( res => {
+          this.location_history = res.data
+        });
+        this.oshaService.get_objects('room').subscribe( res => {
+          this.location_rooms = res.data
+        });
+        this.locationForm = this.formBuilder.group({
+          Room: ['', Validators.required],
+          Date_Start: [''],
+          Comments: [''],
+          Hardware_Inventory: ['', Validators.required]
         });
       }
   }
@@ -296,6 +316,7 @@ export class FacilityComponent implements OnInit {
   }
 
   get f() { return this.addForm.controls; }
+  get f_location() { return this.locationForm.controls; }
 
   open(content, mode, index = '') {
     this.modalService.dismissAll();
@@ -329,6 +350,18 @@ export class FacilityComponent implements OnInit {
         for(let key in this.exception_log) {
           if(this.exception_log[key].HIPAA_Contact == index)
             this.exception_ids.push(key)
+        }
+      }
+      else if( this.tableName == 'hardware_inventory')
+      {
+        this.location_ids = []
+        for(let key in this.location_history) {
+          if(this.location_history[key].Hardware_Inventory == index)
+            this.location_ids.push(key)
+        }
+        this.location_room_ids = []
+        for(let key in this.location_rooms) {
+          this.location_room_ids.push(key)
         }
       }
     }
@@ -423,6 +456,11 @@ export class FacilityComponent implements OnInit {
     )
   }
 
+  create_new_location(index, content){
+    this.f_location.Hardware_Inventory.setValue(index)
+    this.active_modal_ref = this.modalService.open(content)
+  }
+
   reset_password(index){
     Swal.fire({
       title: 'Are you sure?',
@@ -448,6 +486,46 @@ export class FacilityComponent implements OnInit {
             )
         })
       }
+    })
+  }
+
+  save_location_history()
+  {
+    this.submitted = true
+    // stop here if form is invalid
+    if (this.locationForm.invalid && this.locationForm.errors != null) {
+      return
+    }
+    this.loading_submit = true
+    let request_form = [{"id": "", "data": this.locationForm.value}]
+    console.log(request_form)
+    // Call Add API
+    this.oshaService.add_object(request_form, 'location-history').subscribe( res => {
+      res = res[0]
+                
+      if(res['status'] == "success")
+      { 
+          this.active_modal_ref.dismiss()
+
+          Swal.fire(
+            'Success!',
+            res['message'],
+            'success'
+          )
+
+          this.oshaService.get_objects('location-history').subscribe( res => {
+            this.location_history = res.data
+            this.location_ids = []
+            for(let key in this.location_history) {
+              if(this.location_history[key].Hardware_Inventory == this.f_location.Hardware_Inventory.value)
+                this.location_ids.push(key)
+            }
+          });
+      }  
+      else
+        this.oshaService.error_alert = res['message']
+      this.loading_submit = false
+      this.submitted = false
     })
   }
 

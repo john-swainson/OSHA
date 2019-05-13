@@ -81,6 +81,12 @@
                     Reset Password
                 </button>
             </div>
+            <div class="col-md-3 col-sm-6 col-12" *ngIf="tableName=='hardware_inventory'">
+                <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="create_new_location(view_index, new_location)" type="button">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                    Create New Location Entry
+                </button>
+            </div>
             <div class="col-md-2 col-sm-6 col-12">
                 <button aria-pressed="true" class="btn btn-sm btn-square btn-block btn-success active trigger" (click)="open(create, 0, view_index)" type="button">
                     <i class="fa fa-copy" aria-hidden="true"></i>
@@ -177,6 +183,30 @@
                     </div>
                 </div>    
             </div>
+            <div *ngIf="this.tableName == 'hardware_inventory'" class="row">
+                <div class="card col-12">
+                    <div class="card-header text-white bg-success">
+                        <i class="fa fa-user fa-fw"></i>
+                        Location History
+                    </div>
+                    <div class="card-body">
+                        <table datatable class="row-border hover table-bordered">
+                            <thead>
+                                <tr class="text-center" class="text-center">
+                                <th *ngFor="let field of location_fields">{{field.label}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let id of location_ids" class="text-center">  
+                                    <td *ngFor="let field of location_fields">
+                                        {{location_history[id][field.field]}}
+                                    </td>
+                                </tr>   
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>    
         </div>
     </div>
 </ng-template>
@@ -290,4 +320,46 @@
             </div>
         </form>
     </div>
+</ng-template>
+
+<ng-template #new_location let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Location Entry</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="locationForm" (ngSubmit)="save_location_history()" class="form-horizontal ng-untouched ng-pristine ng-valid row">
+        <label class="col-md-3 col-form-label text-left ellipsis">Select Room</label>
+        <div class="col-md-9">
+            <select class="form-control" formControlName="Room" [ngClass]="{ 'is-invalid': submitted && f_location.Room.errors }">
+                <option *ngFor="let id of location_room_ids" [value]="id">{{location_rooms[id].Name}}</option>
+            </select> 
+            <div *ngIf="submitted && f_location.Room.errors" class="invalid-feedback">
+                <div *ngIf="f_location.Room.errors.required">Room is required</div>
+            </div>
+        </div>
+        <label class="col-md-3 col-form-label text-left ellipsis">Start Date</label>
+        <div class="col-md-9">
+            <mat-form-field class="example-full-width">
+                <input matInput formControlName="Date_Start" [matDatepicker]="picker" placeholder="Choose a date" >
+                <mat-datepicker-toggle matSuffix [for]="picker">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <label class="col-md-3 col-form-label text-left ellipsis">Comments</label>
+        <div class="col-md-9">
+            <textarea type="text" formControlName="Comments" class="form-control"></textarea>
+        </div>
+        <div class="form-group col-12 mt-2">
+            <button [disabled]="loading_submit" class="btn btn-primary px-4 float-right">
+                <img *ngIf="loading_submit" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                Save
+            </button>
+        </div>
+    </form>    
+  </div>
 </ng-template>
