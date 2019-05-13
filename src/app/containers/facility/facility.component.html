@@ -188,6 +188,9 @@
                     <div class="card-header text-white bg-success">
                         <i class="fa fa-user fa-fw"></i>
                         Location History
+                        <button aria-pressed="true" class="btn btn-primary btn-circle active float-right" (click)="create_new_location(view_index, new_location)" type="button">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
                     </div>
                     <div class="card-body">
                         <table datatable class="row-border hover table-bordered">
