@@ -24,7 +24,9 @@ export class OshaService {
 
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
         private router: Router, private alertService: AlertService, private modalService: NgbModal) {
-        this.currentUser = this.authenticationService.currentUserValue;
+        this.authenticationService.currentUserSubject.subscribe(res=>{
+            this.currentUser = res
+        });
     }
 
     get_stage(){

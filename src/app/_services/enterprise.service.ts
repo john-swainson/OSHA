@@ -15,6 +15,7 @@ export class EnterpriseService {
 
     public currentForceSubject: BehaviorSubject<Force>;
     public currentForce: Observable<Force>;
+    currentUser: User;
 
     apiUrl: String = environment.salesforce_url;
 
@@ -31,6 +32,9 @@ export class EnterpriseService {
 
             this.currentForceSubject = new BehaviorSubject<Force>(JSON.parse(localStorage.getItem('forceToken')));
             this.currentForce = this.currentForceSubject.asObservable();
+            this.authenticationService.currentUserSubject.subscribe(res=>{
+                this.currentUser = res
+            });
     }
 
     get_oauth(){
@@ -44,29 +48,51 @@ export class EnterpriseService {
             return res;
         });
     }
+    
+    get_parent_totals(parent_id){
+        if(parent_id == '')
+            parent_id = localStorage.getItem('org_id')
 
-    get_children_totals(child_org_id){
-        if(child_org_id == '')
-            child_org_id = localStorage.getItem('org_id')
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/entdashboard.php/parent/${parent_id}?access_token=` + this.currentUser.access_token
+        let headers = new HttpHeaders()
+        headers.append('Content-Type', 'application/json')
+        headers.append('Accept', 'application/json')
+        let optionsH = {
+            headers:headers
+        };
+        return this.http.get( queryURL, optionsH ).map((res: any) => res)
+    }
 
-        let force = this.currentForceSubject.value
+    get_children_totals(parent_id){
+        if(parent_id == '')
+            parent_id = localStorage.getItem('org_id')
 
-        let queryURL = ''
-        let parent_selects = 'Id,Name'
-        let children_selects = 'Organization__r.Id,Organization__r.Name'
-        for(let item of this.total_fields){
-            parent_selects += `,${item}`
-            children_selects += `,Organization__r.${item}`
-        }
-        for(let item of this.enterprise_fields){
-            parent_selects += `,${item}`
-            children_selects += `,Organization__r.${item}`
-        }
+        // let force = this.currentForceSubject.value
 
-        queryURL = `SELECT+${parent_selects},(SELECT+${children_selects}+from+partners__r)+FROM+organization_info__c+where+id='${child_org_id}'`
+        // let queryURL = ''
+        // let parent_selects = 'Id,Name'
+        // let children_selects = 'Organization__r.Id,Organization__r.Name'
+        // for(let item of this.total_fields){
+        //     parent_selects += `,${item}`
+        //     children_selects += `,Organization__r.${item}`
+        // }
+        // for(let item of this.enterprise_fields){
+        //     parent_selects += `,${item}`
+        //     children_selects += `,Organization__r.${item}`
+        // }
 
-        let body = {query: queryURL, access_token: force.access_token}
-        return this.http.post( `${environment.server_url}/force/queryALL`, body ).map((res: any) => res)
+        // queryURL = `SELECT+${parent_selects},(SELECT+${children_selects}+from+partners__r)+FROM+organization_info__c+where+id='${child_org_id}'`
+
+        // let body = {query: queryURL, access_token: force.access_token}
+        // return this.http.post( `${environment.server_url}/force/queryALL`, body ).map((res: any) => res)
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/entdashboard.php/children/${parent_id}?access_token=` + this.currentUser.access_token
+        let headers = new HttpHeaders()
+        headers.append('Content-Type', 'application/json')
+        headers.append('Accept', 'application/json')
+        let optionsH = {
+            headers:headers
+        };
+        return this.http.get( queryURL, optionsH ).map((res: any) => res)
     }
 
     get_breadcrumb_path(child_id, parent_id){
@@ -75,4 +101,6 @@ export class EnterpriseService {
         let body = {childid: child_id, parentid: parent_id, access_token: force.access_token}
         return this.http.post( `${environment.server_url}/force/getbreadcrumb`, body).map((res: any) => res) 
     }
+
+
 }

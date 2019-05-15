@@ -7,7 +7,7 @@ $(document).ready(function(){
 });
 
 (function () {
-    var thElm;
+    var thElm;  
     var startOffset;
 
     Array.prototype.forEach.call(

@@ -45,19 +45,21 @@ export class EnterpriseComponent implements OnInit {
 
   ngOnInit(): void {
     this.is_loading = true;
-    this.enterpriseService.get_children_totals(this.child_org_id).subscribe( data=> {
-      this.is_loading = false;
-      if(data.totalSize == 1){
-        this.force_totals = data.records[0]
-        this.force_children = this.force_totals.Partners__r
-        console.log(this.force_children)
-      }
-    },
-    err=>{
-      if(err == "Bad Request"){
-        this.router.navigateByUrl('/dashboard')
-        
-      }
+    this.enterpriseService.get_parent_totals(this.child_org_id).subscribe( res=> {
+
+        if(res.hasOwnProperty('data')){
+
+          this.force_totals = res.data[0]
+          
+          this.enterpriseService.get_children_totals(this.child_org_id).subscribe( child_res => {
+            if(child_res.hasOwnProperty('data')){
+              this.force_children = child_res.data
+              console.log(this.force_children)
+            }
+            this.is_loading = false;
+          })
+          console.log(this.force_totals)
+        }
     });
 
     // Datatable configure
