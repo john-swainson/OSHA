@@ -83,4 +83,16 @@ export class EnterpriseComponent implements OnInit {
   remove_total(string){
     return string.replace(/\Total_/gi, "")
   }
+  view_child(child_id){
+    this.enterpriseService.get_parent_totals(child_id).subscribe( res=> {
+      if(res.hasOwnProperty('data')){
+        let bread = JSON.parse(localStorage.getItem('ent_breadcrumb'))
+        if(this.child_org_id == '')
+          bread[child_id] = {name: res.data[0].name, parent_id: localStorage.getItem('org_id')}
+        else
+          bread[child_id] = {name: res.data[0].name, parent_id: this.child_org_id}
+        localStorage.setItem('ent_breadcrumb', JSON.stringify(bread))
+      }
+    })
+  }
 }

@@ -38,6 +38,11 @@ export class AuthenticationService {
                     localStorage.setItem('org_name', orgs[2]);
                     localStorage.setItem('contact_name', orgs[1]);
                     localStorage.setItem('contact_id', orgs[3]);
+    
+                    let breadcrumb = {}
+                    breadcrumb[orgs[0]] = {name: orgs[2], parent_id: ''}
+                    localStorage.setItem('ent_breadcrumb', JSON.stringify(breadcrumb))
+                    
                     this.currentUserSubject.next(user);
                 }
 
@@ -59,13 +64,15 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('org_id');
-        localStorage.removeItem('base_url');
-        localStorage.removeItem('org_name');
-        localStorage.removeItem('contact_name');
-        localStorage.removeItem('dashboard');
-        localStorage.removeItem('forceToken');
+        localStorage.removeItem('currentUser')
+        localStorage.removeItem('org_id')
+        localStorage.removeItem('base_url')
+        localStorage.removeItem('org_name')
+        localStorage.removeItem('contact_name')
+        localStorage.removeItem('dashboard')
+        localStorage.removeItem('forceToken')
+        localStorage.removeItem('ent_breadcrumb')
+        localStorage.removeItem('contact_id')
         this.currentUserSubject.next(null);
     }
 }
