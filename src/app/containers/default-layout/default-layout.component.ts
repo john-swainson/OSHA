@@ -52,61 +52,7 @@ export class DefaultLayoutComponent implements OnDestroy {
       this.setBoardType()
       this.addLogout()
     }
-    //======== Adding Breadcrumbs from url ==============================================================
-    this.oshaService.breadcrumbs = []
-    this.oshaService.breadcrumbs.push({path: 'dashboard', name: 'Dashboard', child: ''})
-
-    let urlTree = this.router.parseUrl(this.router.url)
-    let main_path = urlTree.root.children['primary'].segments.map(it => it.path).join('/')
-    
-    if(main_path != 'enterprise' && main_path != 'dashboard'){
-      this.oshaService.breadcrumbs.push({ path: main_path, name: main_path, child: ''})
-    }
-    else if(main_path == 'enterprise')
-    {
-      this.route.queryParams.subscribe(params=>{
-        if(params.hasOwnProperty('child'))
-        {
-          // let child_id = params.child
-          // let parent_id = localStorage.getItem('org_id')
-          // this.enterpriseService.get_breadcrumb_path(child_id, parent_id).subscribe( data=> {
-          //   let parent_list = data.reverse()
-          //   for( let item of parent_list ){
-          //     if(item.hasOwnProperty('Partner_Organization__r')){
-          //       if(item.Partner_Organization__r.Id == localStorage.getItem('org_id'))
-          //         this.oshaService.breadcrumbs.push({path: 'enterprise', name: item.Partner_Organization__r.Name, child: ''})
-          //       else
-          //         this.oshaService.breadcrumbs.push({path: 'enterprise', name: item.Partner_Organization__r.Name, child: item.Partner_Organization__r.Id})
-          //     }
-          //     else if(item.hasOwnProperty('Organization__r')){
-          //       this.oshaService.breadcrumbs.push({path: 'enterprise', name: item.Organization__r.Name, child: item.Organization__r.Id})
-          //     }
-          //   }
-          // },
-          // err=>{
-          //   if(err == "Bad Request"){
-          //     this.router.navigateByUrl('/dashboard')
-              
-          //   }
-          // })
-          this.oshaService.breadcrumbs = []
-          let bread = JSON.parse(localStorage.getItem('ent_breadcrumb'))
-          let loop_id = params.child
-
-          while(bread[loop_id].parent_id != ''){
-            this.oshaService.breadcrumbs.push({path: 'enterprise', name: bread[loop_id].name, child: loop_id})
-            loop_id = bread[loop_id].parent_id
-          }
-          this.oshaService.breadcrumbs.push({path: 'enterprise', name: localStorage.getItem('org_name'), child: ''})
-          this.oshaService.breadcrumbs.push({path: 'dashboard', name: 'Dashboard', child: ''})
-          this.oshaService.breadcrumbs.reverse()
-        }
-        else
-        {
-          this.oshaService.breadcrumbs.push({path: 'enterprise', name: localStorage.getItem('org_name'), child: ''})
-        }
-      })
-    }
+    this.oshaService.generate_breadcrumb()
   }
 
   ngOnDestroy(): void {

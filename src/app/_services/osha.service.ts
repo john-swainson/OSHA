@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AlertService, AuthenticationService } from '../_services';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map'
 import { User } from '../_models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,8 +22,8 @@ export class OshaService {
     current_dashboard_type = this.current_dashboard_type_subject.asObservable().pipe(distinctUntilChanged());
     public breadcrumbs: Array<{path: string, name: string, child: string}> = []
 
-    constructor(private http: HttpClient, private authenticationService: AuthenticationService, 
-        private router: Router, private alertService: AlertService, private modalService: NgbModal) {
+    constructor(private http: HttpClient, private authenticationService: AuthenticationService,
+        private router: Router, private alertService: AlertService, private modalService: NgbModal, private route:ActivatedRoute) {
         this.authenticationService.currentUserSubject.subscribe(res=>{
             this.currentUser = res
         });
@@ -81,5 +81,68 @@ export class OshaService {
         let form = {"id": contact_id}
         let body = {base_url: localStorage.getItem('base_url'), api_url: 'system/reset-password', access_token: this.currentUser.access_token, form: JSON.stringify(form)}
         return this.http.post( `${environment.server_url}/hipaa/reset-password`, body).map((res: any) => res)
+    }
+    get_parent_totals(parent_id){
+        if(parent_id == '')
+            parent_id = localStorage.getItem('org_id')
+
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/entdashboard.php/parent/${parent_id}?access_token=` + this.currentUser.access_token
+        let headers = new HttpHeaders()
+        headers.append('Content-Type', 'application/json')
+        headers.append('Accept', 'application/json')
+        let optionsH = {
+            headers:headers
+        };
+        return this.http.get( queryURL, optionsH ).map((res: any) => res)
+    }
+    generate_breadcrumb(){
+        //======== Adding Breadcrumbs from url ==============================================================
+        this.breadcrumbs = []
+        this.breadcrumbs.push({path: 'dashboard', name: 'Dashboard', child: ''})
+
+        let urlTree = this.router.parseUrl(this.router.url)
+        let main_path = urlTree.root.children['primary'].segments.map(it => it.path).join('/')
+        
+        if(main_path != 'enterprise' && main_path != 'dashboard'){
+            this.breadcrumbs.push({ path: main_path, name: main_path, child: ''})
+        }
+        else if(main_path == 'enterprise')
+        {
+            this.route.queryParams.subscribe(params=>{
+                if(params.hasOwnProperty('child'))
+                {
+                    this.breadcrumbs = []
+                    let bread = JSON.parse(localStorage.getItem('ent_breadcrumb'))
+            
+                    let loop_id = params.child
+                    let parent_id = params.parent
+                    
+                    this.get_parent_totals(loop_id).subscribe( res=> {
+                            if(res.hasOwnProperty('data')){
+                            let bread = JSON.parse(localStorage.getItem('ent_breadcrumb'))
+                            if(parent_id == '')
+                                bread[loop_id] = {name: res.data[0].name, parent_id: localStorage.getItem('org_id')}
+                            else
+                                bread[loop_id] = {name: res.data[0].name, parent_id: parent_id}
+                            localStorage.setItem('ent_breadcrumb', JSON.stringify(bread))
+
+                            bread = JSON.parse(localStorage.getItem('ent_breadcrumb'))
+                            while(bread[loop_id].parent_id != ''){
+                                this.breadcrumbs.push({path: 'enterprise', name: bread[loop_id].name, child: loop_id})
+                                loop_id = bread[loop_id].parent_id
+                            }
+                            this.breadcrumbs.push({path: 'enterprise', name: localStorage.getItem('org_name'), child: ''})
+                            this.breadcrumbs.push({path: 'dashboard', name: 'Dashboard', child: ''})
+                            this.breadcrumbs.reverse()
+                        }
+                    })
+                }
+                else
+                {
+                    this.breadcrumbs.push({path: 'enterprise', name: localStorage.getItem('org_name'), child: ''})
+                }
+            })
+        }
+        console.log(this.breadcrumbs)
     }
 }

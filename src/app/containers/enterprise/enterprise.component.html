@@ -132,10 +132,10 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let record of force_children" class="text-center">
-                    <td><a target="_blank" [routerLink]="['/enterprise']" [queryParams]="{child:record.id}" (click)="view_child(record.id)">{{record.name}}</a></td>
+                    <td><a target="_blank" [routerLink]="['/enterprise']" [queryParams]="{child:record.id, parent: child_org_id}" (click)="view_child(record.id)">{{record.name}}</a></td>
                     <td>{{record[selected_total]}}</td>
                     <td>
-                      <a target="_blank" [routerLink]="['/enterprise']" [queryParams]="{child:record.id}" (click)="view_child(record.id)"><button class="btn btn-sm btn-info text-white" type="button">View</button></a>
+                      <a target="_blank" [routerLink]="['/enterprise']" [queryParams]="{child:record.id, parent: child_org_id}" (click)="view_child(record.id)"><button class="btn btn-sm btn-info text-white" type="button">View</button></a>
                     </td>
                   </tr>
                 </tbody>
