@@ -24,6 +24,9 @@ const request = require('request')
 const queryString = require('query-string')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const FormData = require('form-data');
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' })
 // Serve static files
 app.use(express.static(__dirname + '/dist/'))
 app.use(cors())
@@ -33,6 +36,8 @@ app.use(bodyParser.json())
 
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }))
+
+
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
@@ -112,6 +117,46 @@ app.post('/hipaa/update', async (req, res) => {
     res.status(400).send(error)
   }
   
+})
+//=========== (File Upload and Get Notes) =====================================================================================
+app.post('/hipaa/get_all_notes', function(req, res){
+
+  request.post( { 
+                  headers: {'Content-Type' : 'application/json', 'Accept': 'application/json'}, 
+                  url: `https://${req.body.base_url}/api/1.0/index.php/note/all/?access_token=${req.body.access_token}`, 
+                  body: JSON.stringify({"ParentId": req.body.parent_id})
+                }
+              ,
+              function(error, response, body){
+                res.status(response.statusCode).send(JSON.parse(body))
+              }
+  )
+})
+
+app.post('/hipaa/upload_file', upload.single('file'), async (req, res) => {
+
+  fs = require('fs');
+  fs.readFile(req.file.path, function (err, data) {
+    if (err) throw err;
+    
+    // let fileY = new File([new Uint8Array(data)], req.file.originalname, {type: req.file.mimetype})
+    var areq = request.post( { 
+        headers: {'Accept': 'application/json'}, 
+        url: `https://${req.body.base_url}/api/1.0/upload.php/${req.body.api_url}/${req.body.id}?access_token=${req.body.access_token}`,         
+      }
+      ,
+      function(error, response, body){        
+        res.status(response.statusCode).send(JSON.parse(body))
+        fs.unlink(req.file.path, function() {
+          console.log("REMOVED")     
+        });
+      }
+    )
+
+    let form = areq.form();
+    form.append('file', data, {filename: req.file.originalname, contentType: req.file.mimetype}) ;   
+  }); 
+
 })
 
 app.post('/hipaa/delete', function(req, res){

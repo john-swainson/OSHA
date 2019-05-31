@@ -137,6 +137,12 @@
                     <input *ngIf="item.type!='boolean'&&item.type!='reference'&&item.type!='parent'" class="form-control" value="{{objects.data[view_index][remove__c(item.name)]}}" [class.disabled]="true"/>
                 </div>
             </div>
+            <div *ngIf="this.tableName == 'policy_and_procedure'" class="row">
+                <label class="col-md-3 col-12 col-form-label text-left ellipsis" title="Policies and Procedures"> Policies and Procedures </label>
+                <div class="col-md-9 col-12" *ngIf="noteAll">
+                    <a target="_blank" href={{noteAll[noteId].Body}}>{{noteAll[noteId].Title}}</a>
+                </div>
+            </div>
             <div *ngIf="this.tableName == 'hipaa_contact'" class="row">
                 <div class="card col-12">
                     <div class="card-header text-white bg-success">
@@ -311,6 +317,12 @@
                             </div>
                         </div>   
                     </div>    
+                </div>
+                <div class="row form-group" *ngIf="tableName=='policy_and_procedure'">
+                    <label class="col-md-3 col-form-label text-left ellipsis" title="Policies and Procedures File">Policies and Procedures File</label>
+                    <div class="col-md-9">
+                        <input type="file" class="bg-white" id="file" (change)="handleFileInput($event.target.files)">
+                    </div>
                 </div>
             </div>
             

@@ -63,13 +63,17 @@ export class FacilityComponent implements OnInit {
   location_fields: Array<{field: string, label: string}> = [ {field: 'Name', label: 'Record No'}, {field: 'Facility_Name', label: 'Facility Name'}, 
                                                           {field: 'Room_Name', label: 'Room Name'}, {field: 'Start Date', label: 'Date_Start'},
                                                           {field: 'Date_End', label: 'End Date'}, {field: 'Comments', label: 'Comments'}]   
-  location_rooms: any;
+  location_rooms: any
   location_room_ids: Array<string> = []   
-  locationForm: FormGroup;        
-  active_modal_ref: NgbModalRef;                                                  
+  locationForm: FormGroup    
+  active_modal_ref: NgbModalRef                                                
   //===== converted ===========
-  is_converted: boolean = false;
-  convert_submitting: boolean = false;
+  is_converted: boolean = false
+  convert_submitting: boolean = false
+  //===== file upload =========
+  fileToUpload: File = null
+  noteAll: any = null
+  noteId: string = null
 
   constructor(private alertService: AlertService, public oshaService: OshaService,
               config: NgbModalConfig, private modalService: NgbModal, private formBuilder: FormBuilder,
@@ -263,6 +267,12 @@ export class FacilityComponent implements OnInit {
         }  
         else
           this.oshaService.error_alert = res['message'];
+
+        if(this.fileToUpload != null){
+          this.oshaService.upload_file(this.fileToUpload, 'policy-and-procedure', res.data.id).subscribe( res => {
+            this.fileToUpload = null
+          })
+        }    
         this.loading_submit = false;
       })
 
@@ -296,6 +306,12 @@ export class FacilityComponent implements OnInit {
         } 
         else
           this.oshaService.error_alert = res['message']
+
+        if(this.fileToUpload != null){
+          this.oshaService.upload_file(this.fileToUpload, 'policy-and-procedure', this.index).subscribe( res => {
+            this.fileToUpload = null
+          })
+        }  
         this.loading_submit = false
       })
     } 
@@ -363,6 +379,17 @@ export class FacilityComponent implements OnInit {
         for(let key in this.location_rooms) {
           this.location_room_ids.push(key)
         }
+      }
+      else if( this.tableName == 'policy_and_procedure')
+      {
+        this.noteAll = null
+        this.noteId = null
+        this.oshaService.get_all_notes(this.index).subscribe( res => {
+          this.noteAll = res.data
+          let keys = Object.keys(res.data)
+          this.noteId = keys[0]
+        })
+        
       }
     }
     else if (mode == 2) // edit modal
@@ -498,7 +525,6 @@ export class FacilityComponent implements OnInit {
     }
     this.loading_submit = true
     let request_form = [{"id": "", "data": this.locationForm.value}]
-    console.log(request_form)
     // Call Add API
     this.oshaService.add_object(request_form, 'location-history').subscribe( res => {
       res = res[0]
@@ -546,32 +572,35 @@ export class FacilityComponent implements OnInit {
       return `${control_name} has wrong length! Required length: ${err.maxlength.requiredLength}`;
     }
     else if(err.hasOwnProperty('required')){
-      return `${control_name} is required!`;
+      return `${control_name} is required!`
     }
   }
   make_keys(item_name){
-    let _keys: Array<string> = [];
+    let _keys: Array<string> = []
     for(var key in this.references[item_name].data) {
-      _keys.push(key);
+      _keys.push(key)
     }
-    return _keys;
+    return _keys
   }
   make_picklist(string){
-    return string.split('||');
+    return string.split('||')
   }
 
   get_field_type(string){
     for(let item of this.insert_display_order){
       if(string == this.remove__c(item.name)){
-        return item.type;
+        return item.type
       }
     }
-    return '';
+    return ''
   }
 
   logout() {
-    console.log("hello")
-    this.authenticationService.logout();
-    this.router.navigate(['/login']);
+    this.authenticationService.logout()
+    this.router.navigate(['/login'])
+  }
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0)
   }
 }

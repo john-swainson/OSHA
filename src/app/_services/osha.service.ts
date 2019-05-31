@@ -95,6 +95,23 @@ export class OshaService {
         };
         return this.http.get( queryURL, optionsH ).map((res: any) => res)
     }
+    upload_file(file, api_url, object_id){
+        // let form = {"file": file}
+        let formData = new FormData()
+        formData.append('base_url', localStorage.getItem('base_url'))
+        formData.append('api_url', api_url);
+        formData.append('access_token', this.currentUser.access_token)
+        formData.append('id', object_id)
+        formData.append('file', file)
+        return this.http.post( `${environment.server_url}/hipaa/upload_file`, formData).map((res: any) => res)
+    }
+    get_all_notes(object_id){
+        let formData = {}
+        formData['base_url'] = localStorage.getItem('base_url')
+        formData['access_token'] = this.currentUser.access_token
+        formData['parent_id'] = object_id
+        return this.http.post( `${environment.server_url}/hipaa/get_all_notes`, formData).map((res: any) => res)
+    }
     generate_breadcrumb(){
         //======== Adding Breadcrumbs from url ==============================================================
         this.breadcrumbs = []
@@ -143,6 +160,5 @@ export class OshaService {
                 }
             })
         }
-        console.log(this.breadcrumbs)
     }
 }
