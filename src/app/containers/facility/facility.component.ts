@@ -61,8 +61,17 @@ export class FacilityComponent implements OnInit {
   location_history: any;    
   location_ids: Array<any> = []
   location_fields: Array<{field: string, label: string}> = [ {field: 'Name', label: 'Record No'}, {field: 'Facility_Name', label: 'Facility Name'}, 
-                                                          {field: 'Room_Name', label: 'Room Name'}, {field: 'Start Date', label: 'Date_Start'},
+                                                          {field: 'Room_Name', label: 'Room Name'}, {field: 'Date_Start', label: 'Start Date'},
                                                           {field: 'Date_End', label: 'End Date'}, {field: 'Comments', label: 'Comments'}]   
+  
+  baas: any;    
+  baas_ids: Array<any> = []
+  baa_insert_display_order: Array<any> = []
+  baaForm: FormGroup    
+  baas_fields: Array<{field: string, label: string}> = [ {field: 'Display_Filename', label: 'File Name'}, {field: 'Date_BAA_Signed', label: 'Date BAA Signed'}, 
+                                                          {field: 'Date_BAA_Expires', label: 'Date BAA Expires'}, {field: 'BAA_Active', label: 'Active'},
+                                                          {field: 'Comments', label: 'Comments'}]                                                         
+  
   location_rooms: any
   location_room_ids: Array<string> = []   
   locationForm: FormGroup    
@@ -117,6 +126,23 @@ export class FacilityComponent implements OnInit {
           Comments: [''],
           Hardware_Inventory: ['', Validators.required]
         });
+      }
+      else if( this.tableName == 'vendors'){
+        this.oshaService.get_object_fields('baa').subscribe( res => {
+
+          for (let field of res.fields){
+            if(field.insert_display_order != '0')
+              this.baa_insert_display_order.push(field)
+          }
+          this.baaForm = this.formBuilder.group({
+            BAA_Active: ['', Validators.required],
+            Comments: [''],
+            Date_BAA_Expires: ['', Validators.required],
+            Date_BAA_Signed: ['', Validators.required],
+            Display_Filename: [''],
+            Vendor: ['', Validators.required],
+          });
+        })
       }
   }
 
@@ -268,11 +294,7 @@ export class FacilityComponent implements OnInit {
         else
           this.oshaService.error_alert = res['message'];
 
-        if(this.fileToUpload != null){
-          this.oshaService.upload_file(this.fileToUpload, 'policy-and-procedure', res.data.id).subscribe( res => {
-            this.fileToUpload = null
-          })
-        }    
+        this.upload_file('policy-and-procedure', res.data.id)
         this.loading_submit = false;
       })
 
@@ -307,11 +329,11 @@ export class FacilityComponent implements OnInit {
         else
           this.oshaService.error_alert = res['message']
 
-        if(this.fileToUpload != null){
-          this.oshaService.upload_file(this.fileToUpload, 'policy-and-procedure', this.index).subscribe( res => {
-            this.fileToUpload = null
-          })
-        }  
+        // if(this.fileToUpload != null){
+        //   this.oshaService.upload_file(this.fileToUpload, 'policy-and-procedure', this.index).subscribe( res => {
+        //     this.fileToUpload = null
+        //   })
+        // }  
         this.loading_submit = false
       })
     } 
@@ -333,6 +355,7 @@ export class FacilityComponent implements OnInit {
 
   get f() { return this.addForm.controls; }
   get f_location() { return this.locationForm.controls; }
+  get f_baa() { return this.baaForm.controls; }
 
   open(content, mode, index = '') {
     this.modalService.dismissAll();
@@ -387,9 +410,16 @@ export class FacilityComponent implements OnInit {
         this.oshaService.get_all_notes(this.index).subscribe( res => {
           this.noteAll = res.data
           let keys = Object.keys(res.data)
-          this.noteId = keys[0]
+          this.noteId = keys[keys.length-1]
         })
-        
+      }
+      else if(this.tableName == 'vendors'){
+        this.baas_ids = []
+        this.baas = []
+        this.oshaService.get_objects_by_field('baa', {'vendor': this.view_index}).subscribe( res => {
+          this.baas = res.data
+          this.baas_ids = Object.keys(res.data)
+        })
       }
     }
     else if (mode == 2) // edit modal
@@ -487,6 +517,10 @@ export class FacilityComponent implements OnInit {
     this.f_location.Hardware_Inventory.setValue(index)
     this.active_modal_ref = this.modalService.open(content)
   }
+  create_new_baa(index, content){
+    this.f_baa.Vendor.setValue(index)
+    this.active_modal_ref = this.modalService.open(content)
+  }
 
   reset_password(index){
     Swal.fire({
@@ -553,6 +587,52 @@ export class FacilityComponent implements OnInit {
       this.loading_submit = false
       this.submitted = false
     })
+  }
+  save_baa(){
+    this.submitted = true
+    // stop here if form is invalid
+    if (this.baaForm.invalid && this.baaForm.errors != null) {
+      return
+    }
+    this.loading_submit = true
+    let request_form = [{"id": "", "data": this.baaForm.value}]
+    // Call Add API
+    this.oshaService.add_object(request_form, 'baa').subscribe( res => {
+      res = res[0]
+                
+      if(res['status'] == "success")
+      { 
+          this.active_modal_ref.dismiss()
+
+          Swal.fire(
+            'Success!',
+            res['message'],
+            'success'
+          )
+          
+          this.upload_file('baa', res.data.id)
+
+          this.baas_ids = []
+          this.baas = []
+          this.oshaService.get_objects_by_field('baa', {'vendor': this.view_index}).subscribe( res => {
+            this.baas = res.data
+            this.baas_ids = Object.keys(res.data)
+          })
+      }  
+      else
+        this.oshaService.error_alert = res['message']
+      this.loading_submit = false
+      this.submitted = false
+    })
+  }
+
+  upload_file(url, id){
+
+    if(this.fileToUpload != null){
+      this.oshaService.upload_file(this.fileToUpload, url, id).subscribe( res => {
+        this.fileToUpload = null
+      })
+    }  
   }
 
   remove__c(string){

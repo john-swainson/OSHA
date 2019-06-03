@@ -62,6 +62,18 @@ export class OshaService {
         };
         return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res, index, type} });
     }
+    get_objects_by_field(api_url, params): Observable<any>{
+        let queryURL = `https://${localStorage.getItem('base_url')}/api/1.0/index.php/${api_url}/?access_token=` + this.currentUser.access_token
+        queryURL += '&' + this.encodeQueryData(params)
+        
+        let headers = new HttpHeaders()
+        headers.append('Content-Type', 'application/json')
+        headers.append('Accept', 'application/json')
+        let optionsH = {
+            headers:headers
+        };
+        return this.http.get( queryURL, optionsH ).map((res: any) => { return {...res} })
+    }
 
     add_object(form, api_url): Observable<any> {
         let body = {base_url: localStorage.getItem('base_url'), api_url: api_url, access_token: this.currentUser.access_token, form: JSON.stringify(form)}
@@ -161,4 +173,10 @@ export class OshaService {
             })
         }
     }
+    encodeQueryData(data) {
+        const ret = [];
+        for (let d in data)
+          ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        return ret.join('&');
+     }
 }
