@@ -16,7 +16,7 @@ export class DefaultLayoutComponent implements OnDestroy {
   public element: HTMLElement
 
   // Dashboard Type
-  public dashboard_switch=['OSHA', 'HIPAA', 'PCI']
+  public dashboard_switch=['OSHA', 'HIPAA', 'PCI', 'Circle of Friends']
   public current_dashboard_type; // default OSHA
   // BreadCrumbs
   public breadcrumbs: Array<{path: string, name: string, child: string}> = []

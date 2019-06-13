@@ -442,4 +442,40 @@ export const dashboardItems: any={
             'pos': 'right'
         },
     ],
+    'Circle of Friends':[
+        // Top
+        {
+            'url': '/dashboard_type',
+            'name': 'OPEN CHANGE REQUESTS',
+            'icon': 'icon-user-follow',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'top',
+            'width': 'col-xs-12 col-sm-6  col-md-15',
+            'bg_color': 'bg-warning',
+            'url_type': 'change_request__c',
+            'url_filter': 'open_change_request',
+        },
+        // Left
+        {
+            'url': '/ic_engineering_controls',
+            'name': 'Last Date of Yearly Risk Analysis',
+            'icon': 'fa fa-fire fa-fw dashboard-fa-size',
+            'isloading': false,
+            'data': -1,
+            'type': 'date',
+            'pos': 'left'
+        },
+         // Right
+         {
+            'url': '/vendors',
+            'name': 'Active Business Associates (BAs)',
+            'icon': 'fa fa-bank fa-fw dashboard-fa-size',
+            'isloading': false,
+            'data': -1,
+            'type': 'integer',
+            'pos': 'right'
+        },
+    ],
 }
