@@ -142,6 +142,16 @@ export const navItems: any = {
       url: '/ic_digital_radiography',
       icon: 'icon-envelope'
     },
+    {
+      name: 'Check List',
+      url: '/checklist',
+      icon: 'icon-drawer'
+    },
+    {
+      name: 'Check List Items',
+      url: '/checklist_item',
+      icon: 'icon-compass'
+    },
   ],
   'HIPAA':[
     {
@@ -387,6 +397,16 @@ export const navItems: any = {
           url: '/custom_software_audit',
         },
       ]
+    },
+    {
+      name: 'Check List',
+      url: '/checklist',
+      icon: 'icon-drawer'
+    },
+    {
+      name: 'Check List Items',
+      url: '/checklist_item',
+      icon: 'icon-compass'
     },
   ],
   'Circle of Friends':[

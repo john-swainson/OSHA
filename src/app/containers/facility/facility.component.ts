@@ -151,12 +151,12 @@ export class FacilityComponent implements OnInit {
       this.fields = res.fields
 
       this.sort_fields_by('items_page_order')
+      debugger;
       for (let field of this.fields){
         this.api_url_value = field.api_url_value
         if(field.type == 'reference' || field.type == 'parent')
         {
           var temp_url:string = field.type_value
-
           var temp_table_name = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase()
     
           this.oshaService.get_object_fields(temp_table_name).subscribe( data=>{
