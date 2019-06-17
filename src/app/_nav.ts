@@ -487,7 +487,7 @@ export const navItems: any = {
     },
     {
       name: 'Patient Info',
-      url: '/pci_dss',
+      url: '/hipaa_contact',
       icon: 'icon-drawer'
     },
     {

@@ -151,7 +151,6 @@ export class FacilityComponent implements OnInit {
       this.fields = res.fields
 
       this.sort_fields_by('items_page_order')
-      debugger;
       for (let field of this.fields){
         this.api_url_value = field.api_url_value
         if(field.type == 'reference' || field.type == 'parent')
@@ -530,7 +529,7 @@ export class FacilityComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, rest it!'
+      confirmButtonText: 'Yes, reset it!'
     }).then((result) => {
       if (result.value){
         this.oshaService.reset_password(index).subscribe( res => {        

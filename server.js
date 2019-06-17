@@ -172,6 +172,7 @@ app.post('/hipaa/delete', function(req, res){
 })
 
 app.post('/hipaa/reset-password', function(req, res){
+  console.log(req.body)
   request.post( { 
                   headers: {'Content-Type' : 'application/json', 'Accept': 'application/json'}, 
                   url: `https://${req.body.base_url}/api/1.0/index.php/${req.body.api_url}?access_token=${req.body.access_token}`, 
