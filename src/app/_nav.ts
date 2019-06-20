@@ -493,7 +493,17 @@ export const navItems: any = {
     {
       name: 'Telehealth Session',
       url: '/telehealth_session',
-      icon: 'icon-feed'
+      icon: 'icon-feed',
+      children: [
+        {
+          name: 'Manage Telehealth Session',
+          url: '/telehealth_session',
+        },
+        {
+          name: 'Rooms',
+          url: '/rooms',
+        },
+      ]
     },
   ]
 };
