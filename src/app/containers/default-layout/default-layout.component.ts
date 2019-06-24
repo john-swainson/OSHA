@@ -75,7 +75,7 @@ export class DefaultLayoutComponent implements OnDestroy {
           return;
         } 
       }
-      this.navItems .unshift( { name: localStorage.getItem('contact_name'), 
+      this.navItems.unshift( { name: localStorage.getItem('contact_name'), 
                                 url: '/logout', 
                                 icon: 'icon-logout', 
                                 badge: { variant: 'danger', text: 'LOGOUT' } } 
