@@ -487,7 +487,7 @@ export const navItems: any = {
     },
     {
       name: 'Patient Info',
-      url: '/patient-info',
+      url: '/patient_info',
       icon: 'icon-drawer'
     },
     {
