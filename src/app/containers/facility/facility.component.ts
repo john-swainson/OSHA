@@ -157,7 +157,8 @@ export class FacilityComponent implements OnInit {
         {
           var temp_url:string = field.type_value
           var temp_table_name = this.remove__c(temp_url.substring(0, temp_url.indexOf('.'))).toLowerCase()
-    
+          if (temp_table_name == 'room')
+            temp_table_name = 'rooms'
           this.oshaService.get_object_fields(temp_table_name).subscribe( data=>{
             if(data.fields.length > 0)
             {
@@ -187,9 +188,6 @@ export class FacilityComponent implements OnInit {
         if(field.insert_display_order != '0')
           this.insert_display_order.push(field)
       }
-      // console.log(this.items_page_order);
-      // console.log(this.view_display_order);
-      // console.log(this.insert_display_order);
 
       //===== Initialize Add Form ===============
       this.addForm = this.formBuilder.group({})
