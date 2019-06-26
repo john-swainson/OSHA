@@ -487,7 +487,7 @@ export const navItems: any = {
     },
     {
       name: 'Patient Info',
-      url: '/hipaa_contact',
+      url: '/patient-info',
       icon: 'icon-drawer'
     },
     {
