@@ -7,8 +7,8 @@ export const environment = {
   username: 'hello42@cyntexa.com',
   password: 'Cyntexa@123WqcLKkd0BpSdG8fKqkAHzwbZ',
   // Local API URL
-  server_url: 'https://devosha.herokuapp.com',
+  // server_url: 'https://devosha.herokuapp.com',
   // My herokou URL 
-  // server_url: 'https://cann-demo.herokuapp.com'
+  server_url: 'https://cann-demo.herokuapp.com',
   metadata_url: 'osha-metadata.herokuapp.com'
 };
