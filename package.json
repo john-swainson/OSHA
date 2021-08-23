@@ -1,16 +1,16 @@
 {
   "name": "demo-osha",
   "version": "2.4.0",
-  "description": "CoreUI Free Angular 2+ Admin Template",
+  "description": "OSHA",
   "author": {
-    "name": "Łukasz Holeczek",
+    "name": "John Swainson",
     "url": "http://holeczek.pl",
     "github": "https://github.com/mrholek",
     "twitter": "https://twitter.com/lukaszholeczek"
   },
   "contributors": [
     {
-      "name": "Andrzej Kopański",
+      "name": "John Swainson",
       "url": "https://github.com/xidedix"
     }
   ],
