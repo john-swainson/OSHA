@@ -279,6 +279,10 @@ export const navItems: any = {
           name: 'Media Sanitization Requests',
           url: '/media_sanitization_request',
         },
+        {
+          name: 'Media Reveal Requests',
+          url: '/media_reveal_request',
+        },
       ]
     },
     {
